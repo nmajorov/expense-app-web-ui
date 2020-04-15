@@ -1,19 +1,21 @@
 import React from "react";
+import Table from 'react-bootstrap/Table'
 import RowComponent from "./RowComponent";
-import ProjectViewCard from "./ProjectViewCard";
-import { Project } from "../../types/Project";
 import { store } from "../../store/ConfigStore";
-import { RhoneAppState } from "../../store/Store";
+import { AppState } from "../../store/Store";
 import { ThunkDispatch } from "redux-thunk";
-import ProjectThunkAction  from "../../actions/ProjectThunkAction";
+import ProjectThunkAction  from "../../actions/ExpensesThunkActions";
 import { connect } from "react-redux";
-import { RhoneAction } from "../../actions/RhoneAction";
+import { RhoneAction } from "../../actions/AppAction";
 import {TimeInMilliseconds} from "../../types/Common";
+import { Expense } from "../../types/Expense";
+
+
 
 type ProjectsStates = {};
 
 interface OwnProps {
-  projects: Array<Project>;
+  expenses: Array<Expense>;
 }
 
 interface StateProps {
@@ -21,7 +23,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  getProject: () => any;
+  getExpenses: () => any;
   pollInterval: TimeInMilliseconds;
   setLastRefreshAt: (lastRefreshAt: TimeInMilliseconds) => void;
   
@@ -34,7 +36,6 @@ type Props = StateProps & OwnProps & DispatchProps;
  *
  */
 class DashBoardContainer extends React.Component<Props, ProjectsStates> {
-  
   private pollTimeoutRef?: number;
 
   constructor(props) {
@@ -44,9 +45,8 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
 
   componentDidMount() {
     if (store.getState().projectState.projects.length === 0) {
-        this.scheduleNextPollingInterval(0);
+      this.scheduleNextPollingInterval(0);
     }
-
   }
 
   componentDidUpdate(prev: Props) {
@@ -55,7 +55,6 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
     if (prev.pollInterval !== curr.pollInterval) {
       this.scheduleNextPollingIntervalFromProps();
     }
-
   }
 
   private scheduleNextPollingInterval(pollInterval: number) {
@@ -63,16 +62,18 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
     this.removePollingIntervalTimer();
 
     if (pollInterval === 0 || pollInterval === undefined) {
-      this.loadProjectsFromBackend()
+      this.loadExpensesFromBackend();
     } else {
       // We are using setTimeout instead of setInterval because we have more control over it
       // e.g. If a request takes much time, the next interval will fire up anyway and is
       // possible that it will take much time as well. Instead wait for it to timeout/error to
       // try again.
-      this.pollTimeoutRef = window.setTimeout(this.loadProjectsFromBackend, pollInterval);
+      this.pollTimeoutRef = window.setTimeout(
+        this.loadExpensesFromBackend,
+        pollInterval
+      );
     }
   }
-
 
   private removePollingIntervalTimer() {
     if (this.pollTimeoutRef) {
@@ -81,9 +82,8 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
     }
   }
 
-
   private scheduleNextPollingIntervalFromProps() {
-    console.log("this.props.pollInterval " + this.props.pollInterval )
+    console.log("this.props.pollInterval " + this.props.pollInterval);
     if (this.props.pollInterval > 0) {
       this.scheduleNextPollingInterval(this.props.pollInterval);
     } else {
@@ -91,33 +91,54 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
     }
   }
 
+  private loadExpensesFromBackend = () => {
+    this.props.getExpenses();
+    this.scheduleNextPollingIntervalFromProps();
+  };
 
-  
-
-
-
-  private loadProjectsFromBackend = () => {
-    this.props.getProject()
-    this.scheduleNextPollingIntervalFromProps()
+  /**
+   * render table with expenses
+   */
+  private renderExpensesTable() {
+    return (
+      <Table striped bordered hover size="sm">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Created</th>
+            <th>Last Modified</th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.props.expenses.map((pr) => {
+            return (
+              <tr>
+                <td>{pr.id}</td>
+                <td>{pr.description}</td>
+                <td>{pr.amount}</td>
+                <td>{pr.amount}</td>
+                <td>{pr.createdAT}</td>
+                <td>{pr.tstamp}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </Table>
+    );
   }
+
   /**
    * render element on the page
    */
   render() {
     return (
       <div id="main list">
+        <RowComponent></RowComponent>
         <RowComponent>
-          
-        </RowComponent>
-        <RowComponent>
-          {this.props.projects.length > 0 ? (
-            this.props.projects.map(pr => {
-              return (
-                <div className="col-xl-3 col-md-6 mb-4" key={pr.id}>
-                  <ProjectViewCard name={pr.name} id={pr.id} key={pr.id}  branch={pr.branch} />
-                </div>
-              );
-            })
+          {this.props.expenses.length > 0 ? (
+            this.renderExpensesTable()
           ) : (
             <div className="col-xl-3 col-md-6 mb-4">
               No expenses is available at the moment.
@@ -129,17 +150,17 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
   } //end of render
 }
 
-const mapStateToProps = (state: RhoneAppState) => {
+const mapStateToProps = (state: AppState) => {
   return {
-    projects: state.projectState.projects,
-    pollInterval: state.projectState.pollInterval
+    expenses: state.expensesState.expenses,
+    pollInterval: state.expensesState.pollInterval
   };
 };
 
 const mapDispatchToProps = (
-  dispatch: ThunkDispatch<RhoneAppState, void, RhoneAction>
+  dispatch: ThunkDispatch<AppState, void, RhoneAction>
 ) => ({
-  getProject: () => {
+  getExpenses: () => {
     dispatch(ProjectThunkAction.fetchProjectsData());
   }
 });

@@ -18,12 +18,17 @@ type FormState = {
   ref: string;
   errorType?: string;
 };
+
+
 //some info or error messages
 const messages: any[] = [];
+
+
+
 /**
  * main content wrapper
  */
-class AddProjectForm extends React.Component<FormProps, FormState> {
+class AddExpensesForm extends React.Component<FormProps, FormState> {
   constructor(props: FormProps) {
     super(props);
     this.state = { repo: "" ,ref: "master"};
@@ -197,4 +202,4 @@ class AddProjectForm extends React.Component<FormProps, FormState> {
   }
 }
 
-export default withRouter(AddProjectForm);
+export default withRouter(AddExpensesForm);

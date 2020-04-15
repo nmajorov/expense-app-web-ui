@@ -1,9 +1,9 @@
 
 
 import { ProjectDetailViewState } from "../store/Store";
-import { RhoneAction } from "../actions/RhoneAction";
+import { RhoneAction } from "../actions/AppAction";
 import { getType } from "typesafe-actions";
-import { Project } from "../types/Project";
+import { Project } from "../types/Expense";
 import { ProjectDetailViewActions } from "../actions/ProjectDetailViewAction";
 import { Build } from "../types/Build";
 import { MILLISECONDS } from "../types/Common";

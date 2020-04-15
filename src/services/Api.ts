@@ -1,11 +1,9 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 
 import { HTTP_VERBS } from '../types/Common';
 /** API URLs */
 import {backEndUrl as url} from "../utils/backendUrl";
-import { Version } from '../types/Version';
-import { Project } from '../types/Project';
-import {Build} from '../types/Build';
+import { Expense } from '../types/Expense';
 
 export const ANONYMOUS_USER = 'anonymous';
 
@@ -43,7 +41,6 @@ export const getAppHealth = (
   );
 };
 
-**/
 
 
 export const getErrorMsg = (msg: string, error: AxiosError) => {
@@ -60,36 +57,29 @@ export const getErrorMsg = (msg: string, error: AxiosError) => {
   }
   return errorMessage;
 };
+**/
 
-export const getRhoneVersion = () => {
-  return newRequest<Version>(HTTP_VERBS.GET, url + "/version", {}, {});
-};
 
-/**
- * fetch all available projects
- * 
- */
-export const fetchProjects = () => {
-  return newRequest<Array<Project>>(HTTP_VERBS.GET,url + "/projects",{},{})
-}
 
 /**
- * fetch all available projects
- * 
+ * fetch all available expenses  
  */
-export const deleteProject = (projectID:string) => {
-  return newRequest<Array<Project>>(HTTP_VERBS.POST,url + "/project/delete",{},{id:projectID})
+export const fetchExpenses = () => {
+  return newRequest<Array<Expense>>(HTTP_VERBS.GET,url + "/services/app/expenses",{},{})
 }
 
 
-export const getBuildsForProject = (projectID:string) => {
-   return newRequest<Array<Build>>(HTTP_VERBS.GET,url+"/project/builds/" + projectID ,{},{})
+export const deleteExpense = (ID:string) => {
+  //return newRequest<Array<any>>(HTTP_VERBS.POST,url + "/project/delete",{},{id:projectID})
 }
 
-export const fetchProject= (projectID) =>{
-  return newRequest<Project>(HTTP_VERBS.GET,url+ "/project/show/"  +projectID,{},{})
+
+
+/**
+ * fetch an expense by id
+ * @param expenseID an expense by id
+ */
+export const fetchExpense= (expenseID) =>{
+  return newRequest<Expense>(HTTP_VERBS.GET,url+ "/services/app/expenses/"  +expenseID,{},{})
 }
 
-export const callStartBuild= (projectID) => {
-  return newRequest(HTTP_VERBS.POST,url + "/project/run",{id:projectID},{})
-}

@@ -1,6 +1,6 @@
 import { constants as C } from "../utils";
 import { VersionPopUpState } from "../store/Store";
-import { RhoneAction } from "../actions/RhoneAction";
+import { RhoneAction } from "../actions/AppAction";
 import { Version } from "../types/Version";
 
 export const VERSION_POPUP_INITIAL_STATE: VersionPopUpState = {

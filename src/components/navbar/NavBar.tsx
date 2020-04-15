@@ -16,7 +16,7 @@ import { ThunkDispatch } from "redux-thunk";
 import { Version } from "../../types/Version";
 import { RhoneAppState } from "../../store/Store";
 import { store } from "../../store/ConfigStore";
-import { RhoneAction } from "../../actions/RhoneAction";
+import { RhoneAction } from "../../actions/AppAction";
 import {GetVersionActions} from "../../actions/GetVersionAction";
 import GetVersionThunkActions from "../../actions/GetVersionThunkAction";
 import RhoneAlert from "../Alert";

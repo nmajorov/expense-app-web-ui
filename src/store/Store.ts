@@ -1,42 +1,25 @@
-import { Version } from "../types/Version";
 
-import { Project } from "../types/Project";
+import { Expense } from "../types/Expense";
 import { TimeInMilliseconds } from "../types/Common";
-import { Build } from "../types/Build";
 import { AlertMessage } from "../types/AlertTypes";
 
 /**
- * 
- * state of version pop-up in navigation
- *
+ * state of  warning or info messages
  */
-export interface VersionPopUpState {
-    version : Version;
-    showModal: boolean;
-
-}
-
 export interface AlertsState{
     alertMessage: AlertMessage;
 }
 
-export interface ProjectsState {
-    projects: Array<Project>
+/**
+ * state of expenses in dashboard
+ */
+export interface ExpensesState {
+    expenses: Array<Expense>;
     pollInterval: TimeInMilliseconds;
 }
 
-export interface ProjectDetailViewState{
-    project: Project;
-    builds: Array<Build>;
-    pollInterval: TimeInMilliseconds;
-    disableStartBuild: boolean;
-}
 
-export interface RhoneAppState {
-    
-    versionPopUpState: VersionPopUpState;
-    projectState: ProjectsState;
-    projectDetailViewState: ProjectDetailViewState;
+export interface AppState {
+    expensesState: ExpensesState;
     alertState: AlertsState;
 }
-  

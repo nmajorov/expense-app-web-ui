@@ -23,9 +23,7 @@ const App: React.FC = () => {
                         <div className="container-fluid">
                               <Router>
                                     <Switch>
-                                          <Route path="/about">
-
-                                          </Route>
+                                          
                                           <Route path="/add-expenses">
                                                 <AddProjectForm type="git" />
                                           </Route>
@@ -38,14 +36,7 @@ const App: React.FC = () => {
 
                                           }
                                           />
-                                          <Route exact path="/build/:id" render={(props) =>{
-                                                let id =  props.location.pathname.replace("/build/","");
-                                                return (
-                                                      <BuildView buildID={id} />
-                                                )
-                                          }}/>
                                           <Route path="/">
-
                                                 <DashBoard />
                                           </Route>
 

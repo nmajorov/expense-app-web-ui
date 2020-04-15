@@ -1,6 +1,6 @@
 import { constants as C } from "../utils";
 import { AlertsState } from "../store/Store";
-import { RhoneAction } from "../actions/RhoneAction";
+import { RhoneAction } from "../actions/AppAction";
 import { AlertMessage, MessageType } from "../types/AlertTypes";
 
 export const ALERT_MESSAGE_INITIAL_STATE: AlertsState = {

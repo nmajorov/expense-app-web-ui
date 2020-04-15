@@ -1,48 +1,47 @@
 import { ThunkDispatch } from "redux-thunk";
-import { RhoneAppState } from "../store/Store"
-import { Project } from "../types/Project";
-import { RhoneAction } from "./RhoneAction";
-import { ProjectActions } from "./ProjectAction";
+import { AppState } from "../store/Store"
+import { Expense } from "../types/Expense";
+import { AppAction } from "./AppAction";
+import { ExpensesAction } from "./ExpensesAction";
 import * as API from '../services/Api';
 import { AlertActions } from "./AlertAction";
 import {AlertMessage,MessageType} from "../types/AlertTypes";
 
-const ProjectThunkActions = {
-  fetchProjectsData: (
+const ExpensesThunkActions = {
+  fetchExpensesData: (
 
   ) => {
-    return (dispatch: ThunkDispatch<RhoneAppState, undefined, RhoneAction>, getState: () => RhoneAppState) => {
+    return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
       return API.fetchProjects().then(
         response => {
           const objArray = response.data;
-          console.log("created objArray" + objArray)
-          const data: Array<Project> = [] ; 
+          const data: Array<Expense> = [] ; 
           objArray.forEach(element => {
             data.push(
                 {
-                  branch : element.branch,
+                  description : element.description,
                   id : element.id,
-                  language : element.language,
-                  name : element.name
+                  amount : element.amount,
+                  createdAT : element.createdAT,
+                  tstamp: element.tstamp
                 }
                 
              )
-            // console.log("builds size: "+ self.state.builds.length)
+            
          });
-         // console.log("fetchProjects data: " + data )
-          dispatch(ProjectActions.fetchActionSuccess(data))
+          dispatch(ExpensesAction.fetchActionSuccess(data))
           dispatch(AlertActions.remoteMessage(""))
         },
         error => {
           
           let emsg: string;
           if (error.response && error.response.data && error.response.data.error) {
-            emsg = 'Cannot load the projects: ' + error.response.data.error;
+            emsg = 'Cannot load the expenses: ' + error.response.data.error;
           } else {
-            emsg = 'Cannot load the projects: ' + error.toString();
+            emsg = 'Cannot load the expenses: ' + error.toString();
           }
         
-          dispatch(ProjectActions.fetchError(emsg))
+          dispatch(ExpensesAction.fetchError(emsg))
           let alertMessage: AlertMessage = { 
             content: emsg,
             show_notification: true,
@@ -70,4 +69,4 @@ const ProjectThunkActions = {
   }
 }
 
-export default ProjectThunkActions;
+export default ExpensesThunkActions;

@@ -1,12 +1,12 @@
 import { ThunkDispatch } from "redux-thunk";
 import { RhoneAppState } from "../store/Store"
-import { RhoneAction } from "./RhoneAction";
+import { RhoneAction } from "./AppAction";
 import * as API from '../services/Api';
 import { ProjectDetailViewActions } from "./ProjectDetailViewAction";
 import { Build } from "../types/Build";
 import { AlertActions } from "./AlertAction";
 import { MessageType, AlertMessage } from "../types/AlertTypes";
-import { ProjectActions } from "./ProjectAction";
+import { ProjectActions } from "./ExpensesAction";
 
 const ProjectDetailViewThunkAction = {
   fetchProjectDetails: (id: string) => {

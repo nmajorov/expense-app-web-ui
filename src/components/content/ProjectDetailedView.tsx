@@ -12,12 +12,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import { Build } from "../../types/Build";
-import { Project } from "../../types/Project";
+import { Project } from "../../types/Expense";
 import ProjectDetailViewThunkAction from "../../actions/ProjectDetailViewThunkAction";
 import { RhoneAppState } from "../../store/Store";
 import { ThunkDispatch } from "redux-thunk";
 import { TimeInMilliseconds } from "../../types/Common";
-import { RhoneAction } from "../../actions/RhoneAction";
+import { RhoneAction } from "../../actions/AppAction";
 import { store } from "../../store/ConfigStore";
 
 export interface ProjectProps {

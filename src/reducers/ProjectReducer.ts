@@ -1,10 +1,10 @@
 
 
 import { ProjectsState } from "../store/Store";
-import { RhoneAction } from "../actions/RhoneAction";
-import { ProjectActions } from "../actions/ProjectAction";
+import { RhoneAction } from "../actions/AppAction";
+import { ProjectActions } from "../actions/ExpensesAction";
 import { getType } from "typesafe-actions";
-import { Project } from "../types/Project";
+import { Project } from "../types/Expense";
 import { MILLISECONDS } from "../types/Common";
 
 export const PROJECTS_INITIAL_STATE: ProjectsState = {
