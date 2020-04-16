@@ -1,7 +1,7 @@
 import React from "react";
 import { AppState } from "../store/Store";
 import { connect } from "react-redux";
-import { store } from "../store/ConfigStore";
+// import { store } from "../store/ConfigStore";
 import {AlertMessage,MessageType} from "../types/AlertTypes"
 import { Alert } from "react-bootstrap";
 

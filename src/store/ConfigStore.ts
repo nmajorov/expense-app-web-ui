@@ -5,11 +5,12 @@ import { createStore, compose, applyMiddleware } from 'redux';
 import rootReducer from '../reducers';
 import thunk from 'redux-thunk';
 import { ALERT_MESSAGE_INITIAL_STATE } from "../reducers/AlertMessagesReducer";
-
+import {EXPENSES_INITIAL_STATE} from "../reducers/ExpensesReducer";
 
 
 const initialStore: AppState = {
-  alertState: ALERT_MESSAGE_INITIAL_STATE
+  alertState: ALERT_MESSAGE_INITIAL_STATE,
+  expensesState: EXPENSES_INITIAL_STATE
   
 }
 
