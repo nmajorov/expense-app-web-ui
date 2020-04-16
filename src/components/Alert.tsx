@@ -1,5 +1,5 @@
 import React from "react";
-import { RhoneAppState } from "../store/Store";
+import { AppState } from "../store/Store";
 import { connect } from "react-redux";
 import { store } from "../store/ConfigStore";
 import {AlertMessage,MessageType} from "../types/AlertTypes"
@@ -67,7 +67,7 @@ class AlertContainer extends React.PureComponent<Props, State> {
 }
 
 
-const mapStateToProps  = (state: RhoneAppState) => {
+const mapStateToProps  = (state: AppState) => {
   return {
     message : state.alertState.alertMessage
   }

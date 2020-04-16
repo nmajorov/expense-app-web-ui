@@ -1,6 +1,6 @@
 import { constants as C } from "../utils";
 import { AlertsState } from "../store/Store";
-import { RhoneAction } from "../actions/AppAction";
+import { AppAction } from "../actions/AppAction";
 import { AlertMessage, MessageType } from "../types/AlertTypes";
 
 export const ALERT_MESSAGE_INITIAL_STATE: AlertsState = {
@@ -15,7 +15,7 @@ export const ALERT_MESSAGE_INITIAL_STATE: AlertsState = {
 }
 
 
-const alertMessageReducer = (state: AlertsState = ALERT_MESSAGE_INITIAL_STATE, action: RhoneAction): AlertsState => {
+const alertMessageReducer = (state: AlertsState = ALERT_MESSAGE_INITIAL_STATE, action: AppAction): AlertsState => {
   const newState: AlertsState = {
     ...state
   };

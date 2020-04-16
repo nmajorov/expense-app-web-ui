@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
 //import * as serviceWorker from './serviceWorker';
-import  {Spinner}  from './components/content'
+//import  {Spinner}  from './components/content'
 import { Provider } from 'react-redux';
 import {store} from './store/ConfigStore';
 
@@ -12,7 +12,6 @@ import {store} from './store/ConfigStore';
 ReactDOM.render(
     <Provider store={store}>
         <App /> 
-        <Spinner/>
     </Provider>,
      document.getElementById('root'));
      

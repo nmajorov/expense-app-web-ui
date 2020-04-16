@@ -9,7 +9,7 @@ import { Form, Button } from "react-bootstrap";
 import {backEndUrl} from "../../utils";
 
 interface FormProps extends RouteComponentProps {
-  type: "git";
+
 }
 
 type FormState = {
@@ -55,98 +55,16 @@ class AddExpensesForm extends React.Component<FormProps, FormState> {
     });
   };
 
-  private AlertWrongInput(props) {
-    return (
-      <Alert key="e" variant={props.variant} show={props.show}>
-        <p>{props.error}</p>
-      </Alert>
-    );
-  }
+
 
   private handleSubmit(event: FormEvent) {
     event.preventDefault();
-
-    let repoForm = this.state.repo;
-    let branch = this.state.ref
-    console.log("branch  " + branch)
-    if (branch === undefined || branch === ""){
-      branch = "master"
-      console.log("set branch  " + branch)
-
-    }
-
-    if (
-      repoForm != null &&
-      (repoForm.startsWith("git:") ||
-        repoForm.startsWith("https://") ||
-        repoForm.startsWith("ssh://") ||
-        repoForm.startsWith("file://"))
-    ) {
-      //sending request
-      const params = new URLSearchParams();
-      params.append("type", this.props.type);
-      params.append("ref", branch);
-
-      params.append("url", repoForm);
-      var self = this;
-      trackPromise(
-        axios
-          .post(backEndUrl +"/project/new", params)
-          .then(function(response) {
-            //all good redirect
-            self.props.history.push("/");
-          })
-          .catch(function(error) {
-            var errorMessage = "error";
-
-            messages.push(errorMessage);
-
-            console.log(error.status);
-
-            if (error.response === undefined) {
-              errorMessage += ": network error";
-            }
-
-            if (error.response != null && error.response.status !== 200) {
-              var found = error.response.data.match(
-                "configuration file is not found"
-              );
-              if (found != null) {
-                errorMessage += ": no rhone config found in this repository";
-              }
-            }
-
-            self.setState({
-              errorInput: errorMessage,
-              errorType: "danger"
-            });
-          })
-      );
-    } else {
-      let errorMessage = "git url is not valid !";
-
-      messages.push(1);
-
-      this.setState({
-        repo: this.state.repo,
-        errorInput: errorMessage,
-        errorType: "warning"
-      });
-    }
   }
 
   render() {
     return (
       <div id="addForm">
-        <RowComponent>
-          <div className="col-lg-6">
-            <this.AlertWrongInput
-              error={this.state.errorInput}
-              variant={this.state.errorType}
-              show={messages.length > 0}
-            />
-          </div>
-        </RowComponent>
+   
         <RowComponent>
           <div className="col-lg-6">
             <div className="card shadow mb-3">

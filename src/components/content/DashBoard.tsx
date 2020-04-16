@@ -4,11 +4,11 @@ import RowComponent from "./RowComponent";
 import { store } from "../../store/ConfigStore";
 import { AppState } from "../../store/Store";
 import { ThunkDispatch } from "redux-thunk";
-import ProjectThunkAction  from "../../actions/ExpensesThunkActions";
 import { connect } from "react-redux";
-import { RhoneAction } from "../../actions/AppAction";
+import { AppAction } from "../../actions/AppAction";
 import {TimeInMilliseconds} from "../../types/Common";
 import { Expense } from "../../types/Expense";
+import ExpensesThunkActions from "../../actions/ExpensesThunkActions";
 
 
 
@@ -44,9 +44,9 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
   }
 
   componentDidMount() {
-    if (store.getState().projectState.projects.length === 0) {
-      this.scheduleNextPollingInterval(0);
-    }
+  //  if (store.getState().projectState.projects.length === 0) {
+  //    this.scheduleNextPollingInterval(0);
+  //  }
   }
 
   componentDidUpdate(prev: Props) {
@@ -158,10 +158,10 @@ const mapStateToProps = (state: AppState) => {
 };
 
 const mapDispatchToProps = (
-  dispatch: ThunkDispatch<AppState, void, RhoneAction>
+  dispatch: ThunkDispatch<AppState, void, AppAction>
 ) => ({
   getExpenses: () => {
-    dispatch(ProjectThunkAction.fetchProjectsData());
+    dispatch(ExpensesThunkActions.fetchExpensesData());
   }
 });
 
