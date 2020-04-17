@@ -1,7 +1,5 @@
 import React from "react";
 import Table from 'react-bootstrap/Table'
-import RowComponent from "./RowComponent";
-import { store } from "../../store/ConfigStore";
 import { AppState } from "../../store/Store";
 import { ThunkDispatch } from "redux-thunk";
 import { connect } from "react-redux";
@@ -9,6 +7,8 @@ import { AppAction } from "../../actions/AppAction";
 import {TimeInMilliseconds} from "../../types/Common";
 import { Expense } from "../../types/Expense";
 import ExpensesThunkActions from "../../actions/ExpensesThunkActions";
+import { store } from "../../store/ConfigStore";
+import { Jumbotron, Container, Row } from "react-bootstrap";
 
 
 
@@ -44,9 +44,9 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
   }
 
   componentDidMount() {
-  //  if (store.getState().projectState.projects.length === 0) {
-  //    this.scheduleNextPollingInterval(0);
-  //  }
+    if (store.getState().expensesState.expenses.length === 0) {
+      this.scheduleNextPollingInterval(0);
+    }
   }
 
   componentDidUpdate(prev: Props) {
@@ -135,16 +135,18 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
   render() {
     return (
       <div id="main list">
-        <RowComponent></RowComponent>
-        <RowComponent>
+        <Row>
+      
           {this.props.expenses.length > 0 ? (
             this.renderExpensesTable()
           ) : (
-            <div className="col-xl-3 col-md-6 mb-4">
-              No expenses is available at the moment.
-            </div>
+          
+              <p>
+               There is no expenses found
+              </p>
+           
           )}
-        </RowComponent>
+        </Row>
       </div>
     );
   } //end of render

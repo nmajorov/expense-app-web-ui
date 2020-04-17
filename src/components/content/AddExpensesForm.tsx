@@ -1,12 +1,7 @@
 import React, { FormEvent } from "react";
-import RowComponent from "./RowComponent";
-import Alert from "react-bootstrap/Alert";
-import { trackPromise } from "react-promise-tracker";
-import axios from "axios";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Row } from "react-bootstrap";
 
-import {backEndUrl} from "../../utils";
 
 interface FormProps extends RouteComponentProps {
 
@@ -65,7 +60,7 @@ class AddExpensesForm extends React.Component<FormProps, FormState> {
     return (
       <div id="addForm">
    
-        <RowComponent>
+        <Row>
           <div className="col-lg-6">
             <div className="card shadow mb-3">
               <div className="card-header py-3">
@@ -114,7 +109,7 @@ class AddExpensesForm extends React.Component<FormProps, FormState> {
               </div>
             </div>
           </div>
-        </RowComponent>
+        </Row>
       </div>
     );
   }

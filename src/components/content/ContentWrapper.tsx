@@ -16,6 +16,7 @@ export default class ContentWrapper extends React.Component {
                 <div id="content">
                     {this.props.children}
                 </div>
+                
                 <Footer />
             </div>
         )

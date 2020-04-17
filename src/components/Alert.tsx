@@ -84,6 +84,6 @@ const mapDispatchToProps = (
 
 const decorator = connect(mapStateToProps, mapDispatchToProps);
 
-const RhoneAlert = decorator(AlertContainer);
+const GlobalAlert = decorator(AlertContainer);
 
-export default RhoneAlert;
+export default GlobalAlert;
