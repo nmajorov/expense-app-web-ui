@@ -1,22 +1,20 @@
 import React, { FormEvent } from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import { Form, Button, Row } from "react-bootstrap";
-
+import { Form, Button, Row, FormGroup } from "react-bootstrap";
+import { Expense } from "../../types/Expense";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 interface FormProps extends RouteComponentProps {
 
 }
 
 type FormState = {
-  errorInput?: string;
-  repo: string;
-  ref: string;
-  errorType?: string;
+  expense: Expense
+  isAmountValid:boolean
 };
 
 
-//some info or error messages
-const messages: any[] = [];
 
 
 
@@ -26,31 +24,74 @@ const messages: any[] = [];
 class AddExpensesForm extends React.Component<FormProps, FormState> {
   constructor(props: FormProps) {
     super(props);
-    this.state = { repo: "" ,ref: "master"};
-    this.handleRepoChange = this.handleRepoChange.bind(this);
-    this.handleBranchChange = this.handleBranchChange.bind(this);
+    this.state = { expense: { amount: BigInt(0), createdAT: "", description:"",tstamp:""},
+      isAmountValid:true};
+    this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
+    this.handleDateChange = this.handleDateChange.bind(this);
+    this.handleAmountChange = this.handleAmountChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  private handleRepoChange = event => {
-    while (messages.length > 0) {
-      messages.pop();
-    }
-    this.setState({
-      repo: event.target.value
-    });
+  private handleDescriptionChange = event =>{
+    let previousState = this.state;
+    let expense = previousState.expense;
+    expense.description = event.target.value;
+
+    this.setState(
+      previousState
+    );
   };
 
-  private handleBranchChange = event => {
-    while (messages.length > 0) {
-      messages.pop();
-    }
-    this.setState({
-      ref: event.target.value
-    });
+  private handleAmountChange = event => {
+    let previousState = this.state;
+    
+    console.log("set new amount value:" + event.target.value)
+    try{
+      previousState.expense.amount = BigInt(event.target.value);
+      
+    
+      if (previousState.expense.amount <= BigInt(0)){
+        previousState = ({
+          expense: previousState.expense,
+          isAmountValid: false
+        })
+       }else{
+        previousState = ({
+          expense: previousState.expense,
+          isAmountValid: true
+        })
+       }
+
+      }catch{
+        console.log("can't convert to Bigint")
+      /**
+       * throwing exception if amount is not correct
+       */
+      previousState = ({
+        expense: previousState.expense,
+        isAmountValid: false
+      })
+     }
+
+    
+
+     this.setState({
+      expense: previousState.expense,
+      isAmountValid: previousState.isAmountValid
+    })
+
+    
+   
   };
 
+  private handleDateChange(date:string) {
+    console.log("new-date: " + date)
+    let previousState = this.state;
+   
 
+    previousState.expense.createdAT = date
+    this.setState(previousState);
+  };
 
   private handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -65,7 +106,7 @@ class AddExpensesForm extends React.Component<FormProps, FormState> {
             <div className="card shadow mb-3">
               <div className="card-header py-3">
                 <h6 className="m-0 font-weight-bold text-primary">
-                  Add Project
+                  Add Expense
                 </h6>
               </div>
               <div className="card-body">
@@ -73,14 +114,15 @@ class AddExpensesForm extends React.Component<FormProps, FormState> {
                 <div className="col-sm-10">
                   <Form.Group>
                  
+                  <Form.Label>Description</Form.Label>
                     <Form.Control
                       className="form-control form-control-user"
                       contentEditable
-                      id="add-repo"
-                      defaultValue={this.state.repo}
-                      onChange={this.handleRepoChange}
-                      placeholder="git:// url..."
-                      aria-label="GitURL"
+                      id="Description"
+                      defaultValue={this.state.expense.description}
+                      onChange={this.handleDescriptionChange}
+                      placeholder="description"
+                      aria-label="Description"
                     />
                    
                    
@@ -88,22 +130,36 @@ class AddExpensesForm extends React.Component<FormProps, FormState> {
                      </div>
                      <Form.Group>
                     <div className="col-sm-3">
+                    <Form.Label>Amount</Form.Label>
                     <Form.Control
                       className="form-control"
                       contentEditable
-                      id="branch"
-                      onChange={this.handleBranchChange}
-                      defaultValue={this.state.ref}
-                      placeholder="brach"
-                      aria-label="branch"
+                      id="amount"
+                      onChange={this.handleAmountChange}
+                      defaultValue={String.apply(this.state.expense.amount)}
+                      placeholder="0.0"
+                      aria-label="amount"
+                      isValid={this.state.isAmountValid}
+                      isInvalid={!this.state.isAmountValid}
                     />
+                   </div>
+                    </Form.Group>
+
+                    <div className="col-sm-6">
+                    <Form.Label>Date of Expenses</Form.Label>
+                    <Form.Group controlId="expensesDate">
+                    
+                      <DatePicker selected={this.state.expense.createdAT} id="example-datepicker" dateFormat="yyyy/MM/dd" 
+                      
+                      onChange={this.handleDateChange}/> 
+                    </Form.Group>
                     </div>
                     
-                  </Form.Group>
-                  <Form.Group>
-                  <div className="col-sm-3">
-                  <Button type="submit">Submit</Button>
-                  </div>
+                    
+                    <Form.Group>
+                      <div className="col-sm-3">
+                      <Button type="submit">Submit</Button>
+                      </div>
                   </Form.Group>
                 </Form>
               </div>

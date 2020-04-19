@@ -118,7 +118,6 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
                 <td>{pr.id}</td>
                 <td>{pr.description}</td>
                 <td>{pr.amount}</td>
-                <td>{pr.amount}</td>
                 <td>{pr.createdAT}</td>
                 <td>{pr.tstamp}</td>
               </tr>
