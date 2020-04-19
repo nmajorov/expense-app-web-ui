@@ -5,6 +5,8 @@ import { Expense } from "../../types/Expense";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+import {convertStrToAmount} from "../../utils"
+
 interface FormProps extends RouteComponentProps {
 
 }
@@ -16,15 +18,13 @@ type FormState = {
 
 
 
-
-
 /**
  * main content wrapper
  */
 class AddExpensesForm extends React.Component<FormProps, FormState> {
   constructor(props: FormProps) {
     super(props);
-    this.state = { expense: { amount: BigInt(0), createdAT: "", description:"",tstamp:""},
+    this.state = { expense: { amount: 0.0, createdAT: "", description:"",tstamp:""},
       isAmountValid:true};
     this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
@@ -47,40 +47,29 @@ class AddExpensesForm extends React.Component<FormProps, FormState> {
     
     console.log("set new amount value:" + event.target.value)
     try{
-      previousState.expense.amount = BigInt(event.target.value);
-      
+          let amount =  convertStrToAmount(event.target.value);
+
+          previousState.expense.amount = amount
+
+        this.setState({
+          expense:  previousState.expense ,
+          isAmountValid: true
+        })
+
     
-      if (previousState.expense.amount <= BigInt(0)){
-        previousState = ({
+      }catch{
+        
+        /**
+         * throwing exception if amount is not correct
+         */
+        this.setState( ({
           expense: previousState.expense,
           isAmountValid: false
         })
-       }else{
-        previousState = ({
-          expense: previousState.expense,
-          isAmountValid: true
-        })
-       }
+        )
 
-      }catch{
-        console.log("can't convert to Bigint")
-      /**
-       * throwing exception if amount is not correct
-       */
-      previousState = ({
-        expense: previousState.expense,
-        isAmountValid: false
-      })
+     
      }
-
-    
-
-     this.setState({
-      expense: previousState.expense,
-      isAmountValid: previousState.isAmountValid
-    })
-
-    
    
   };
 
