@@ -16,8 +16,7 @@ import ModalHeader from "react-bootstrap/ModalHeader";
 import ModalFooter from "react-bootstrap/ModalFooter";
 import ModalBody from "react-bootstrap/ModalBody";
 import Modal from "react-bootstrap/Modal";
-import { bindActionCreators } from 'redux';
-import { ExpensesActions } from "../../actions/ExpensesAction";
+
 
 const trashIcon = <FontAwesomeIcon icon={faTrashAlt} />;
 const editIcon = <FontAwesomeIcon icon={faEdit}/>;
