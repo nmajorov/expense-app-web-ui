@@ -237,13 +237,12 @@ const mapDispatchToProps = (
     dispatch(ExpensesThunkActions.fetchExpensesData());
   },
   deleteExpense: (id:BigInt) => {
-    //console.log("dispatch deleteExpense with id: "+ id)
     dispatch(ExpensesThunkActions.deleteExpense(id))
     dispatch(ExpensesThunkActions.fetchExpensesData());
   },
 
   hideOrShowDeleteModal: (id:BigInt) =>{ 
-    console.log("dispatch hideOrShowDeleteModal with id: "+ id)
+   // console.log("dispatch hideOrShowDeleteModal with id: "+ id)
     
     dispatch(ExpensesThunkActions.showDeleteDialog(id));
   }

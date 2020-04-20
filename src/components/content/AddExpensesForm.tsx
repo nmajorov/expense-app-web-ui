@@ -24,7 +24,7 @@ type FormState = {
 class AddExpensesForm extends React.Component<FormProps, FormState> {
   constructor(props: FormProps) {
     super(props);
-    this.state = { expense: { id: BigInt.apply(0),amount: 0.0, createdAT: "", description:"",tstamp:""},
+    this.state = { expense: { id: BigInt(0),amount: 0.0, createdAT: "", description:"",tstamp:""},
       isAmountValid:true};
     this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
