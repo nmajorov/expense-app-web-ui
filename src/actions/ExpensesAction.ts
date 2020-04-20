@@ -5,7 +5,9 @@ import { Expense } from '../types/Expense';
 
 export const ExpensesActions = {
     fetchActionSuccess: createAction(C.FETCH_EXPENSES)<Array<Expense>>(),
-    fetchError: createAction(C.ADD_ERROR)<any>()
+    fetchError: createAction(C.ADD_ERROR)<any>(),
+    deleteActionSuccess: createAction(C.REMOVE_EXPENSE)<any>(),
+    showDeleteDialog: createAction(C.SHOW_DELETE_DIALOG)<BigInt>()
 }
 
 export type ExpensesAction = ActionType<typeof ExpensesActions>;

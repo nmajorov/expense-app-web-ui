@@ -70,7 +70,7 @@ export const fetchExpenses = () => {
 
 
 export const deleteExpense = (ID:string) => {
-  //return newRequest<Array<any>>(HTTP_VERBS.POST,url + "/project/delete",{},{id:projectID})
+  return newRequest<Array<any>>(HTTP_VERBS.DELETE,url + "/services/app/expenses/" + ID ,{},{})
 }
 
 

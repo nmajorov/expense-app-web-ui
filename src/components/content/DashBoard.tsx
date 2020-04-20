@@ -8,14 +8,26 @@ import {TimeInMilliseconds} from "../../types/Common";
 import { Expense } from "../../types/Expense";
 import ExpensesThunkActions from "../../actions/ExpensesThunkActions";
 import { store } from "../../store/ConfigStore";
-import { Jumbotron, Container, Row } from "react-bootstrap";
+import { Button, Row } from "react-bootstrap";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'  
+import { faTrashAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
+import ModalTitle from "react-bootstrap/ModalTitle";
+import ModalHeader from "react-bootstrap/ModalHeader";
+import ModalFooter from "react-bootstrap/ModalFooter";
+import ModalBody from "react-bootstrap/ModalBody";
+import Modal from "react-bootstrap/Modal";
+import { bindActionCreators } from 'redux';
+import { ExpensesActions } from "../../actions/ExpensesAction";
 
-
+const trashIcon = <FontAwesomeIcon icon={faTrashAlt} />;
+const editIcon = <FontAwesomeIcon icon={faEdit}/>;
 
 type ProjectsStates = {};
 
 interface OwnProps {
   expenses: Array<Expense>;
+  showModal: boolean;
+  selectedExpenseID: BigInt;
 }
 
 interface StateProps {
@@ -24,9 +36,10 @@ interface StateProps {
 
 interface DispatchProps {
   getExpenses: () => any;
+  deleteExpense: (id:BigInt) => any;
   pollInterval: TimeInMilliseconds;
   setLastRefreshAt: (lastRefreshAt: TimeInMilliseconds) => void;
-  
+  hideOrShowDeleteModal:(id?:BigInt) => any;
 }
 
 type Props = StateProps & OwnProps & DispatchProps;
@@ -91,9 +104,61 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
     }
   }
 
+  /**
+   * trigger load of expenses from backend
+   */
   private loadExpensesFromBackend = () => {
     this.props.getExpenses();
     this.scheduleNextPollingIntervalFromProps();
+  };
+
+  private closeDeleteModalWindow = () => {
+    console.log("closeDeleteModalWindow called");
+    this.props.hideOrShowDeleteModal();
+  };
+
+  private openDeleteModalWindow = (id) => {
+    console.log("openDeleteModalWindow called " + this.props.showModal);
+    if (store.getState().expensesState.showModal === false) {
+      this.props.hideOrShowDeleteModal(id);
+    }
+  };
+
+  private renderDeleteDialog() {
+    return (
+      <Modal
+        id="versionPopUp"
+        show={this.props.showModal}
+        onHide={this.closeDeleteModalWindow}
+      >
+        <ModalHeader closeButton>
+          <ModalTitle>Delete Expense {this.props.selectedExpenseID}</ModalTitle>
+        </ModalHeader>
+
+        <ModalBody>Are you sure ?</ModalBody>
+
+        <ModalFooter>
+          <Button variant="secondary" onClick={this.closeDeleteModalWindow}>
+            Close
+          </Button>
+          <Button
+            variant="danger"
+            onClick={() => this.deleteExpense(this.props.selectedExpenseID)}
+          >
+            Delete
+          </Button>
+        </ModalFooter>
+      </Modal>
+    );
+  }
+
+  /**
+   * trigger delete of expense by id
+   *
+   */
+  private deleteExpense = (id) => {
+    this.closeDeleteModalWindow();
+    this.props.deleteExpense(id);
   };
 
   /**
@@ -109,17 +174,28 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
             <th>Amount</th>
             <th>Created</th>
             <th>Last Modified</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {this.props.expenses.map((pr) => {
             return (
-              <tr>
+              <tr key={pr.id.toString()}>
                 <td>{pr.id}</td>
                 <td>{pr.description}</td>
                 <td>{pr.amount}</td>
                 <td>{pr.createdAT}</td>
                 <td>{pr.tstamp}</td>
+                <td>
+                  <Button>{editIcon}</Button>{" "}
+                  <Button
+                    onClick={() => this.openDeleteModalWindow(pr.id)}
+                    variant="danger"
+                  >
+                    {trashIcon}
+                  </Button>
+                  {this.renderDeleteDialog()}
+                </td>
               </tr>
             );
           })}
@@ -135,15 +211,10 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
     return (
       <div id="main list">
         <Row>
-      
           {this.props.expenses.length > 0 ? (
             this.renderExpensesTable()
           ) : (
-          
-              <p>
-               There is no expenses found
-              </p>
-           
+            <p>There is no expenses found</p>
           )}
         </Row>
       </div>
@@ -154,7 +225,9 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
 const mapStateToProps = (state: AppState) => {
   return {
     expenses: state.expensesState.expenses,
-    pollInterval: state.expensesState.pollInterval
+    pollInterval: state.expensesState.pollInterval,
+    showModal: state.expensesState.showModal,
+    selectedExpenseID: state.expensesState.selectedID
   };
 };
 
@@ -163,8 +236,19 @@ const mapDispatchToProps = (
 ) => ({
   getExpenses: () => {
     dispatch(ExpensesThunkActions.fetchExpensesData());
+  },
+  deleteExpense: (id:BigInt) => {
+    //console.log("dispatch deleteExpense with id: "+ id)
+    dispatch(ExpensesThunkActions.deleteExpense(id))
+    dispatch(ExpensesThunkActions.fetchExpensesData());
+  },
+
+  hideOrShowDeleteModal: (id:BigInt) =>{ 
+    console.log("dispatch hideOrShowDeleteModal with id: "+ id)
+    
+    dispatch(ExpensesThunkActions.showDeleteDialog(id));
   }
-});
+  });
 
 
 

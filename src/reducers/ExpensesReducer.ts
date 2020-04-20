@@ -9,7 +9,9 @@ import { MILLISECONDS } from "../types/Common";
 
 export const EXPENSES_INITIAL_STATE: ExpensesState = {
     expenses:[],
-    pollInterval: 0
+    pollInterval: 0,
+    showModal:false,
+    selectedID : BigInt(0) 
 }
 
 
@@ -24,6 +26,21 @@ const expensesReducer = (state: ExpensesState = EXPENSES_INITIAL_STATE,
       newState.pollInterval = 5 * MILLISECONDS;
       break;
     
+    case getType(ExpensesActions.deleteActionSuccess):
+    break;
+    
+    case getType(ExpensesActions.showDeleteDialog):
+      console.log("showDeleteDialog  called" );
+      newState.selectedID = action.payload as BigInt;
+      if( newState.showModal){
+        newState.showModal = false;
+      }else{
+        newState.showModal = true;
+      }
+     
+      console.log("new state showModal now: " + newState.showModal )
+    break;
+
     case getType(ExpensesActions.fetchError):
       newState.expenses = []
       newState.pollInterval = 15 * MILLISECONDS;

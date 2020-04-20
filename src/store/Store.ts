@@ -16,6 +16,8 @@ export interface AlertsState{
 export interface ExpensesState {
     expenses: Array<Expense>;
     pollInterval: TimeInMilliseconds;
+    showModal: boolean;
+    selectedID: BigInt;
 }
 
 

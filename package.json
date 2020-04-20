@@ -24,7 +24,6 @@
     "bootstrap": "^4.3.1",
     "react": "^16.10.2",
     "react-bootstrap": "1.0.0",
-    "react-bootstrap-dialog": "^0.13.0",
     "react-datepicker": "^2.14.1",
     "react-dom": "^16.10.2",
     "react-fontawesome": "^1.6.1",
