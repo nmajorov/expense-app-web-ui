@@ -3,10 +3,10 @@
  * represent Expense types in backend
  */
 export type Expense = {
-    id: BigInt;
+    id: Number;
     description: string;
     createdAT: string;
     amount: Number;
-    tstamp: string; //($date)
+    tstamp?: string; //(last modified date)
 
 }

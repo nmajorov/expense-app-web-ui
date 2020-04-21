@@ -58,7 +58,7 @@ const ExpensesThunkActions = {
   /**
    * delete expenses
    */
-  deleteExpense: (id: BigInt) => {
+  deleteExpense: (id: number) => {
     return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
       return API.deleteExpense(id.toString()).then(
         response => {
@@ -81,13 +81,41 @@ const ExpensesThunkActions = {
       )
     }
   },
-  showDeleteDialog: (id: BigInt) => {
+  showDeleteDialog: (id: number) => {
     return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
       return (
         dispatch(ExpensesActions.showDeleteDialog(id))
       )
     }
+  },
+
+
+  addNewExpense:(newExpense: Expense) => {
+  return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
+    return API.addNewExpense(newExpense).then(
+      response => {
+        dispatch(ExpensesActions.addNewExpenseSuccess([]))
+      },
+      error => {
+
+        let emsg = 'Cannot add the expenses: ' + error.toString();
+
+
+        dispatch(ExpensesActions.fetchError(emsg))
+        let alertMessage: AlertMessage = {
+          content: emsg,
+          show_notification: true,
+          type: MessageType.ERROR
+        }
+        dispatch(AlertActions.addMessage(alertMessage))
+
+      }
+    )
   }
+
+
+}
+  
 }
 
 export default ExpensesThunkActions;

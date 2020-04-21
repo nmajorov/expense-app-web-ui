@@ -5,7 +5,7 @@ import { HTTP_VERBS } from '../types/Common';
 import {backEndUrl as url} from "../utils/backendUrl";
 import { Expense } from '../types/Expense';
 
-export const ANONYMOUS_USER = 'anonymous';
+//export const ANONYMOUS_USER = 'anonymous';
 
 export interface Response<T> {
   data: T;
@@ -76,10 +76,20 @@ export const deleteExpense = (ID:string) => {
 
 
 /**
+ * add new expense to the system  
+ *  * @param expenseID an expense by id
+ */
+export const addNewExpense= (expense:Expense) =>{
+  return newRequest<Expense>(HTTP_VERBS.POST,url+ "/services/app/expenses",{},expense)
+}
+
+
+/**
  * fetch an expense by id
  * @param expenseID an expense by id
  */
 export const fetchExpense= (expenseID) =>{
   return newRequest<Expense>(HTTP_VERBS.GET,url+ "/services/app/expenses/"  +expenseID,{},{})
 }
+
 

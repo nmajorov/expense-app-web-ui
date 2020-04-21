@@ -11,8 +11,9 @@ export const EXPENSES_INITIAL_STATE: ExpensesState = {
     expenses:[],
     pollInterval: 0,
     showModal:false,
-    selectedID : BigInt(0) 
+    selectedID : 0 
 }
+
 
 
 const expensesReducer = (state: ExpensesState = EXPENSES_INITIAL_STATE, 
@@ -31,7 +32,7 @@ const expensesReducer = (state: ExpensesState = EXPENSES_INITIAL_STATE,
     
     case getType(ExpensesActions.showDeleteDialog):
       //console.log("showDeleteDialog  called" );
-      newState.selectedID = action.payload as BigInt;
+      newState.selectedID = action.payload as Number;
       if( newState.showModal){
         newState.showModal = false;
       }else{

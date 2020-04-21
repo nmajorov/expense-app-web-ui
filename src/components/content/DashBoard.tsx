@@ -26,7 +26,7 @@ type ProjectsStates = {};
 interface OwnProps {
   expenses: Array<Expense>;
   showModal: boolean;
-  selectedExpenseID: BigInt;
+  selectedExpenseID: number;
 }
 
 interface StateProps {
@@ -35,10 +35,10 @@ interface StateProps {
 
 interface DispatchProps {
   getExpenses: () => any;
-  deleteExpense: (id:BigInt) => any;
+  deleteExpense: (id:number) => any;
   pollInterval: TimeInMilliseconds;
   setLastRefreshAt: (lastRefreshAt: TimeInMilliseconds) => void;
-  hideOrShowDeleteModal:(id?:BigInt) => any;
+  hideOrShowDeleteModal:(id?:number) => any;
 }
 
 type Props = StateProps & OwnProps & DispatchProps;
@@ -236,12 +236,12 @@ const mapDispatchToProps = (
   getExpenses: () => {
     dispatch(ExpensesThunkActions.fetchExpensesData());
   },
-  deleteExpense: (id:BigInt) => {
+  deleteExpense: (id:number) => {
     dispatch(ExpensesThunkActions.deleteExpense(id))
     dispatch(ExpensesThunkActions.fetchExpensesData());
   },
 
-  hideOrShowDeleteModal: (id:BigInt) =>{ 
+  hideOrShowDeleteModal: (id:number) =>{ 
    // console.log("dispatch hideOrShowDeleteModal with id: "+ id)
     
     dispatch(ExpensesThunkActions.showDeleteDialog(id));

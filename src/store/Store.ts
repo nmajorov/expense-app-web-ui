@@ -17,11 +17,17 @@ export interface ExpensesState {
     expenses: Array<Expense>;
     pollInterval: TimeInMilliseconds;
     showModal: boolean;
-    selectedID: BigInt;
+    selectedID: Number;
+}
+
+
+export interface AddExpenseState {
+    newExpense: Expense;
 }
 
 
 export interface AppState {
     expensesState: ExpensesState;
     alertState: AlertsState;
+    addExpenseState: AddExpenseState;
 }
