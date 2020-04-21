@@ -12,11 +12,9 @@ import { AppAction } from "../../actions/AppAction";
 import ExpensesThunkActions from "../../actions/ExpensesThunkActions";
 
 
-interface FormProps extends RouteComponentProps {
 
-}
 
-interface DispatchProps {
+interface DispatchProps extends RouteComponentProps  {
   saveExpense:(expense:Expense) => any;
 }
 
@@ -32,7 +30,7 @@ type FormState = {
 
 };
 
-type Props = DispatchProps & FormProps
+type Props = DispatchProps 
 
 
 /**
