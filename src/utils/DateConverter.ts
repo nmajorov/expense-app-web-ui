@@ -24,12 +24,12 @@ export const formatDate = (input: string):string => {
 }
 
 
-export const formateDateStr = (input:string) : string  =>{
-    if (input === "" || input === undefined){
-        return "";
+export const formateDateStr = (input:string) : Date  =>{
+    if (!input){
+        return new Date()
     }
     let sd = input.split("-");
-    let result=  formatRFC7231(new Date(Number(sd[0]),Number(sd[1]), Number(sd[2]),0,0,0))
-    console.log("result: " + result);
+    let result= new Date(Number(sd[0]),Number(sd[1]), Number(sd[2]),0,0,0)
+
     return result;
 }

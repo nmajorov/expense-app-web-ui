@@ -144,6 +144,10 @@ class ExpensesForm extends React.Component<Props, FormState> {
 
 
   render() {
+
+    console.log("render started " +this.props.currentInputExpense.createdAT);
+    
+
     return (
 
     
@@ -199,8 +203,8 @@ class ExpensesForm extends React.Component<Props, FormState> {
                     <Form.Label>Date of Expenses</Form.Label>
                     <Form.Group controlId="expensesDate">
                       
-                        <DatePicker selected={this.state.isoDateInput} id="example-datepicker" 
-                        dateFormat="yyyy/MM/dd"
+                        <DatePicker selected={formateDateStr(this.props.currentInputExpense.createdAT)} id="example-datepicker" 
+                        dateFormat="yyyy-MM-dd"
                         className={ this.state.isDateValid ? "form-control is-valid":"form-control is-invalid"}
                         onChange={this.handleDateChange}/>
                       
