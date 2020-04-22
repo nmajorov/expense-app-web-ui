@@ -25,3 +25,9 @@ export const convertStrToAmount = (input: string):Number => {
 
     return amount
 }
+
+export const convertAmountToStr = (input: Number):string => {
+        let result = String(input);
+    console.log("convertAmountToStr "+ result)
+    return result.valueOf();
+}

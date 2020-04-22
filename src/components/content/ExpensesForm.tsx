@@ -5,7 +5,7 @@ import { Expense } from "../../types/Expense";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { connect } from "react-redux";
-import {convertStrToAmount,formatDate} from "../../utils"
+import {convertStrToAmount,convertAmountToStr,formatDate,formateDateStr} from "../../utils"
 import { AppState } from "../../store/Store";
 import { ThunkDispatch } from "redux-thunk";
 import { AppAction } from "../../actions/AppAction";
@@ -15,7 +15,13 @@ import ExpensesThunkActions from "../../actions/ExpensesThunkActions";
 
 
 interface DispatchProps extends RouteComponentProps  {
-  saveExpense:(expense:Expense) => any;
+  
+    /** selected id of expenses to edit from route */
+    editExpenseId: string;
+    //expense loaded from backend
+    currentInputExpense:Expense;
+    loadExpense:(id:string) => any;
+    saveExpense:(expense:Expense) => any;
 }
 
 
@@ -23,7 +29,7 @@ type FormState = {
   isDescriptionValid:boolean;
   isAmountValid:boolean;
   isDateValid: boolean;
-  currentInputExpense:Expense;
+ // currentInputExpense:Expense;
   
   // iso date for temporary save the datepicker component
   isoDateInput:string; 
@@ -36,16 +42,11 @@ type Props = DispatchProps
 /**
  * main content wrapper
  */
-class AddExpensesForm extends React.Component<Props, FormState> {
+class ExpensesForm extends React.Component<Props, FormState> {
   constructor(props: Props) {
     super(props);
     this.state={
-      currentInputExpense:{
-        id:0,
-        description:"",
-        createdAT:"",
-        amount:0.0
-      },
+      
       isoDateInput:"",
       isAmountValid:false,
       isDescriptionValid:false,
@@ -58,20 +59,20 @@ class AddExpensesForm extends React.Component<Props, FormState> {
   }
 
   private handleDescriptionChange = event =>{
-    let expense = this.state.currentInputExpense;
+    let expense = this.props.currentInputExpense;
      expense.description = event.target.value;
     
     if (expense.description.length>3){
       this.setState(
         {
-          currentInputExpense: expense,
+         // currentInputExpense: expense,
           isDescriptionValid:true
         }
       );
     }else{
       this.setState(
         {
-          currentInputExpense: expense,
+         // currentInputExpense: expense,
           isDescriptionValid:false
         }
       );
@@ -86,12 +87,12 @@ class AddExpensesForm extends React.Component<Props, FormState> {
     try{
           let amount =  convertStrToAmount(event.target.value);
 
-        previousState.currentInputExpense.amount = amount
+        //previousState.currentInputExpense.amount = amount
 
         this.setState({
-          currentInputExpense:  previousState.currentInputExpense ,
-          isAmountValid: true
-        })
+            isAmountValid: true
+          }
+        )
 
     
       }catch{
@@ -99,10 +100,9 @@ class AddExpensesForm extends React.Component<Props, FormState> {
         /**
          * throwing exception if amount is not correct
          */
-        this.setState( ({
-          currentInputExpense:  previousState.currentInputExpense ,
+        this.setState( {
           isAmountValid: false
-        })
+        }
         )
 
      
@@ -114,7 +114,7 @@ class AddExpensesForm extends React.Component<Props, FormState> {
     console.log("new-date: " + date)
     let previousState = this.state;
    
-    previousState.currentInputExpense.createdAT = formatDate(date)
+    // previousState.currentInputExpense.createdAT = formatDate(date)
     this.setState(
         {isoDateInput:date, isDateValid:true}
       );
@@ -122,13 +122,26 @@ class AddExpensesForm extends React.Component<Props, FormState> {
 
   private handleSubmit(event: FormEvent) {
     event.preventDefault(); 
-    console.log("handleSubmit: " + JSON.stringify(this.state.currentInputExpense));
+   // console.log("handleSubmit: " + JSON.stringify(this.state.currentInputExpense));
     if (this.state.isAmountValid && this.state.isDescriptionValid 
       && this.state.isDateValid){
-      this.props.saveExpense(this.state.currentInputExpense);
-      this.props.history.push("/");
+      //this.props.saveExpense(this.state.currentInputExpense);
+      //this.props.history.push("/");
     }
   }
+
+
+  componentDidMount(){
+    console.log("componentDidMount started")
+    let id = this.props.editExpenseId;
+    if (id){
+      //load expense from backend
+      this.props.loadExpense(id);
+    }
+
+  }
+
+
 
   render() {
     return (
@@ -141,7 +154,7 @@ class AddExpensesForm extends React.Component<Props, FormState> {
             <div className="card shadow mb-3">
               <div className="card-header py-3">
                 <h6 className="m-0 font-weight-bold text-primary">
-                  Add Expense
+                  { this.props.editExpenseId ? "Edit": "Add"}  Expense
                 </h6>
               </div>
               <div className="card-body">
@@ -154,7 +167,7 @@ class AddExpensesForm extends React.Component<Props, FormState> {
                       className="form-control form-control-user"
                       contentEditable
                       id="Description"
-                      defaultValue={this.state.currentInputExpense.description}
+                      defaultValue={this.props.currentInputExpense.description}
                       onChange={this.handleDescriptionChange}
                       isValid={this.state.isDescriptionValid}
                       isInvalid={!this.state.isDescriptionValid}
@@ -173,7 +186,7 @@ class AddExpensesForm extends React.Component<Props, FormState> {
                       contentEditable
                       id="amount"
                       onChange={this.handleAmountChange}
-                      defaultValue={String.apply(this.state.currentInputExpense.amount)}
+                      value={convertAmountToStr(this.props.currentInputExpense.amount)}
                       placeholder="0.0"
                       aria-label="amount"
                       isValid={this.state.isAmountValid}
@@ -213,12 +226,13 @@ class AddExpensesForm extends React.Component<Props, FormState> {
 
 const mapStateToProps = (state: AppState) => {
   
-  console.log("state.addExpenseState.newExpense: " + JSON.stringify(state.addExpenseState.newExpense));
-
+  
   return {
-    expense: state.addExpenseState.newExpense
+    currentInputExpense: state.addEditExpenseState.newExpense
   };
 };
+
+
 const mapDispatchToProps = (
   dispatch: ThunkDispatch<AppState, void, AppAction>
 ) => ({
@@ -226,11 +240,12 @@ const mapDispatchToProps = (
     console.log("saveExpense: " + JSON.stringify(expense));
 
     dispatch(ExpensesThunkActions.addNewExpense(expense));
+  },
+  loadExpense: (id:string) =>{
+    dispatch(ExpensesThunkActions.fetchOneExpense(id));
   }
 })
 
 const decorator = connect(mapStateToProps, mapDispatchToProps);
 
-const AddExpensesFormContainer = decorator(AddExpensesForm);
-
-export default withRouter(AddExpensesFormContainer);
+export default decorator(ExpensesForm);

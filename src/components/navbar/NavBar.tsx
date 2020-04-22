@@ -28,7 +28,7 @@ class NavigationBarContainer extends React.Component<Props, State> {
         <Navbar.Brand href="/">Home</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Nav className="mr-auto">
-          <Nav.Link href="/add-expenses">Add Expenses</Nav.Link>
+          <Nav.Link href="/add">Add Expenses</Nav.Link>
         </Nav>
         <Nav>
           <NavItem>

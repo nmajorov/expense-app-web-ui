@@ -114,6 +114,32 @@ const ExpensesThunkActions = {
   }
 
 
+},
+
+fetchOneExpense:(id: string) => {
+  return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
+    return API.fetchExpense(id).then(
+      response => {
+        dispatch(ExpensesActions.fetchOneExpenseActionSuccess(response.data))
+      },
+      error => {
+
+        let emsg = 'Cannot load expenses from backend: ' + error;
+
+
+        dispatch(ExpensesActions.fetchError(emsg))
+        let alertMessage: AlertMessage = {
+          content: emsg,
+          show_notification: true,
+          type: MessageType.ERROR
+        }
+        dispatch(AlertActions.addMessage(alertMessage))
+
+      }
+    )
+  }
+
+
 }
   
 }

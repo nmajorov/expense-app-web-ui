@@ -16,14 +16,14 @@ import ModalHeader from "react-bootstrap/ModalHeader";
 import ModalFooter from "react-bootstrap/ModalFooter";
 import ModalBody from "react-bootstrap/ModalBody";
 import Modal from "react-bootstrap/Modal";
-
-
+import {RouteComponentProps} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 const trashIcon = <FontAwesomeIcon icon={faTrashAlt} />;
 const editIcon = <FontAwesomeIcon icon={faEdit}/>;
 
 type ProjectsStates = {};
 
-interface OwnProps {
+interface OwnProps extends  RouteComponentProps {
   expenses: Array<Expense>;
   showModal: boolean;
   selectedExpenseID: number;
@@ -122,6 +122,13 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
       this.props.hideOrShowDeleteModal(id);
     }
   };
+  
+
+  private callEdit = (id) => {
+    console.log("call Edit " + id);
+    this.props.history.push(`/edit/${id}`)
+  };
+
 
   private renderDeleteDialog() {
     return (
@@ -174,30 +181,39 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
             <th>Created</th>
             <th>Last Modified</th>
             <th>Actions</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          {this.props.expenses.map((pr) => {
-            return (
-              <tr key={pr.id.toString()}>
-                <td>{pr.id}</td>
-                <td>{pr.description}</td>
-                <td>{pr.amount}</td>
-                <td>{pr.createdAT}</td>
-                <td>{pr.tstamp}</td>
-                <td>
-                  <Button>{editIcon}</Button>{" "}
-                  <Button
-                    onClick={() => this.openDeleteModalWindow(pr.id)}
-                    variant="danger"
-                  >
-                    {trashIcon}
-                  </Button>
-                  {this.renderDeleteDialog()}
-                </td>
-              </tr>
-            );
-          })}
+      
+          {this.props.expenses.map((pr) => 
+              {
+                  return (
+                    
+                    <tr key={pr.id.toString()}>
+                      <td>{pr.id}</td>
+                      <td>{pr.description}</td>
+                      <td>{pr.amount}</td>
+                      <td>{pr.createdAT}</td>
+                      <td>{pr.tstamp}</td>
+                      <td>
+                      <Button onClick={() => this.callEdit(pr.id)}>{editIcon}</Button>
+                      </td>
+                    <td>
+                        <Button
+                          onClick={() => this.openDeleteModalWindow(pr.id)}
+                          variant="danger"
+                        >
+                          {trashIcon}
+                        </Button>
+                        {this.renderDeleteDialog()}
+                      </td>
+                      </tr>
+                  );
+              } 
+            )
+          }
+          
         </tbody>
       </Table>
     );
@@ -252,6 +268,6 @@ const mapDispatchToProps = (
 
 const decorator = connect(mapStateToProps, mapDispatchToProps);
 
-const DashBoard = decorator(DashBoardContainer);
+const DashBoard = withRouter(decorator(DashBoardContainer));
 
 export default DashBoard;

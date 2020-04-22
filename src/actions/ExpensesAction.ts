@@ -5,6 +5,7 @@ import { Expense } from '../types/Expense';
 
 export const ExpensesActions = {
     fetchActionSuccess: createAction(C.FETCH_EXPENSES)<Array<Expense>>(),
+    fetchOneExpenseActionSuccess: createAction(C.FETCH_ONE_EXPENSE)<Expense>(),
     fetchError: createAction(C.ADD_ERROR)<any>(),
     deleteActionSuccess: createAction(C.REMOVE_EXPENSE)<any>(),
     showDeleteDialog: createAction(C.SHOW_DELETE_DIALOG)<Number>(),

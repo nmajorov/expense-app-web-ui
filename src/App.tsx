@@ -3,41 +3,42 @@ import React from "react";
 import DashBoard from "./components/content/DashBoard";
 import NavigationBarContainer from "./components/navbar/NavBar";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import AddExpensesForm from "./components/content/AddExpensesForm";
+import  ExpensesForm from "./components/content/ExpensesForm";
 import { Container,Row,Col } from "react-bootstrap";
 import Footer from "./components/footer";
 
+
 const App: React.FC = () => {
   return (
-   <>
-    <NavigationBarContainer />
+    <>
+      <NavigationBarContainer />
       <main role="main">
-      <Container className="p-3">
-      
-        <Row>
-          <Col>
-          
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Router>
-            <Switch>
-              <Route path="/add-expenses">
-                <AddExpensesForm />
-              </Route>
-              <Route path="/">
-                <DashBoard />
-              </Route>
-            </Switch>
-          </Router>
-          </Col>
- 
-        </Row>
-     
-      </Container>
+        <Container className="p-3">
+          <Row>
+            <Col></Col>
+          </Row>
+          <Row>
+            <Col>
+              <Router>
+                <Switch>
+                  <Route exact path="/">
+                    <DashBoard />
+                  </Route>
+                  <Route path="/add">
+                    <ExpensesForm />
+                  </Route>
+                  <Route path="/edit/:id" render={(props) =>{
+                    return(<ExpensesForm  editExpenseId = {props.match.params.id}/>)
+                    }} />
+                 </Switch>
+              </Router>
+            </Col>
+          </Row>
+          <Footer />
+        </Container>
       </main>
-      <Footer/>
+     
+     
     </>
   );
 };

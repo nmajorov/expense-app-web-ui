@@ -1,4 +1,4 @@
-import { convertStrToAmount } from "./index";
+import { convertStrToAmount , convertAmountToStr} from "./index";
 
 
 test("convert valid amount", () => {
@@ -36,5 +36,15 @@ test("test too long amount", () => {
     expect(() => {
         convertStrToAmount(amount);
       }).toThrow(new Error("ToLong"))
+    
+})
+
+
+test("test string to amount", () => {
+    let amount = Number(18.23);
+    console.log("amount: " + amount.toString())
+    
+    expect(convertAmountToStr(amount)
+            ).toEqual("18.23")
     
 })

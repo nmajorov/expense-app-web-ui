@@ -16,9 +16,7 @@ export interface Response<T> {
 
 const newRequest = <P>(method: HTTP_VERBS, url: string, queryParams: any, data: any) =>{
 
-
-  console.log("method: " + method);
-  return axios.request<P>({
+ return axios.request<P>({
     method: method,
     url: url,
     data: data,
@@ -65,12 +63,12 @@ export const getErrorMsg = (msg: string, error: AxiosError) => {
  * fetch all available expenses  
  */
 export const fetchExpenses = () => {
-  return newRequest<Array<Expense>>(HTTP_VERBS.GET,url + "/services/app/expenses",{},{})
+  return newRequest<Array<Expense>>(HTTP_VERBS.GET,url,{},{})
 }
 
 
 export const deleteExpense = (ID:string) => {
-  return newRequest<Array<any>>(HTTP_VERBS.DELETE,url + "/services/app/expenses/" + ID ,{},{})
+  return newRequest<Array<any>>(HTTP_VERBS.DELETE,url + "/" + ID ,{},{})
 }
 
 
@@ -80,7 +78,7 @@ export const deleteExpense = (ID:string) => {
  *  * @param expenseID an expense by id
  */
 export const addNewExpense= (expense:Expense) =>{
-  return newRequest<Expense>(HTTP_VERBS.POST,url+ "/services/app/expenses",{},expense)
+  return newRequest<Expense>(HTTP_VERBS.POST,url,{},expense)
 }
 
 
@@ -89,7 +87,7 @@ export const addNewExpense= (expense:Expense) =>{
  * @param expenseID an expense by id
  */
 export const fetchExpense= (expenseID) =>{
-  return newRequest<Expense>(HTTP_VERBS.GET,url+ "/services/app/expenses/"  +expenseID,{},{})
+  return newRequest<Expense>(HTTP_VERBS.GET,url+ "/"  +expenseID,{},{})
 }
 
 

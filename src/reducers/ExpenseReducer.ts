@@ -46,6 +46,7 @@ const expensesReducer = (state: ExpensesState = EXPENSES_INITIAL_STATE,
       newState.pollInterval = 15 * MILLISECONDS;
       break;
 
+    
     default:
       break;
 

@@ -21,7 +21,7 @@ export interface ExpensesState {
 }
 
 
-export interface AddExpenseState {
+export interface AddEditExpenseState {
     newExpense: Expense;
 }
 
@@ -29,5 +29,5 @@ export interface AddExpenseState {
 export interface AppState {
     expensesState: ExpensesState;
     alertState: AlertsState;
-    addExpenseState: AddExpenseState;
+    addEditExpenseState: AddEditExpenseState;
 }

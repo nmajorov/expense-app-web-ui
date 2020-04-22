@@ -1,6 +1,6 @@
 // TODO look in this library  
 //https://github.com/date-fns
-
+import { formatRFC7231 } from 'date-fns'
 /**
  * return date in short format like 2020-04-20
  * 
@@ -23,3 +23,13 @@ export const formatDate = (input: string):string => {
 
 }
 
+
+export const formateDateStr = (input:string) : string  =>{
+    if (input === "" || input === undefined){
+        return "";
+    }
+    let sd = input.split("-");
+    let result=  formatRFC7231(new Date(Number(sd[0]),Number(sd[1]), Number(sd[2]),0,0,0))
+    console.log("result: " + result);
+    return result;
+}

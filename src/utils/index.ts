@@ -1,9 +1,10 @@
 import {calcDuration} from "./TimeUtils";
 
 import {backEndUrl} from "./backendUrl";
-import {convertStrToAmount} from "./AmountConverter";
-import {formatDate} from "./DateConverter"; 
+import {convertStrToAmount,convertAmountToStr} from "./AmountConverter";
+import {formatDate,formateDateStr} from "./DateConverter"; 
 import constants from './constants';
 export{
-    calcDuration,backEndUrl,constants,convertStrToAmount,formatDate
+    calcDuration,backEndUrl,constants,convertStrToAmount,
+    convertAmountToStr,formatDate,formateDateStr
 }

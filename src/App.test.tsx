@@ -5,7 +5,7 @@ import configureStore from 'redux-mock-store'
 import { Provider } from 'react-redux';
 import { AppState } from "./store/Store";
 import { ALERT_MESSAGE_INITIAL_STATE } from './reducers/AlertMessagesReducer';
-import { ADD_EXPENSE_FORM_INITIAL_STATE } from './reducers/AddExpenseReducer';
+import { EXPENSE_FORM_INITIAL_STATE } from './reducers/AddEditExpenseReducer';
 import thunk from 'redux-thunk';
 import { EXPENSES_INITIAL_STATE } from './reducers/ExpenseReducer';
 
@@ -14,7 +14,7 @@ const mockStore = configureStore(middlewares)
 const initialStore: AppState = {
   alertState: ALERT_MESSAGE_INITIAL_STATE,
   expensesState: EXPENSES_INITIAL_STATE,
-  addExpenseState:ADD_EXPENSE_FORM_INITIAL_STATE
+  addEditExpenseState:EXPENSE_FORM_INITIAL_STATE
   
   
 }
