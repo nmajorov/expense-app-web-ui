@@ -29,7 +29,7 @@ export const formateDateStr = (input:string) : Date  =>{
         return new Date()
     }
     let sd = input.split("-");
-    let result= new Date(Number(sd[0]),Number(sd[1]), Number(sd[2]),0,0,0)
+    let result= new Date(Number(sd[0]),Number(sd[1]) - 1 , Number(sd[2]),0,0,0)
 
     return result;
 }
