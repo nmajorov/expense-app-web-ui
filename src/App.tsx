@@ -3,7 +3,7 @@ import React from "react";
 import DashBoard from "./components/content/DashBoard";
 import NavigationBarContainer from "./components/navbar/NavBar";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import  ExpensesForm from "./components/content/ExpensesForm";
+import  {ExpensesForm} from "./components/content/ExpensesForm";
 import { Container,Row,Col } from "react-bootstrap";
 import Footer from "./components/footer";
 
@@ -25,11 +25,9 @@ const App: React.FC = () => {
                     <DashBoard />
                   </Route>
                   <Route path="/add">
-                    <ExpensesForm />
+                    <ExpensesForm key="addForm" />
                   </Route>
-                  <Route path="/edit/:id" render={(props) =>{
-                    return(<ExpensesForm  editExpenseId = {props.match.params.id}/>)
-                    }} />
+                   <Route path="/edit/:id" component={ExpensesForm}/>
                  </Switch>
               </Router>
             </Col>

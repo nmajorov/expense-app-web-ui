@@ -11,13 +11,14 @@ import { ThunkDispatch } from "redux-thunk";
 import { AppAction } from "../../actions/AppAction";
 import ExpensesThunkActions from "../../actions/ExpensesThunkActions";
 
+type OwnProps = RouteComponentProps<{ id: string}>;
 
+interface AppOwnProps {
+  editExpenseId?: string
+};
 
-
-interface DispatchProps extends RouteComponentProps  {
+interface DispatchProps  {
   
-    /** selected id of expenses to edit from route */
-    editExpenseId: string;
     //expense loaded from backend
     currentInputExpense: Expense;
     loadExpense:(id:string) => any;
@@ -36,13 +37,13 @@ type FormState = {
   changedAmount: string;
 };
 
-type Props = DispatchProps 
+type Props =  DispatchProps & OwnProps & AppOwnProps;
 
 
 /**
  * main content wrapper
  */
-class ExpensesForm extends React.Component<Props, FormState> {
+class ExpensesFormContainer extends React.Component<Props, FormState> {
   constructor(props: Props) {
     super(props);
     this.state={
@@ -79,6 +80,10 @@ class ExpensesForm extends React.Component<Props, FormState> {
    
   };
 
+
+  /***
+   * handle amount changes on the field
+   */
   private handleAmountChange = event => {
     
     console.log("set new amount value:" + event.target.value)
@@ -142,7 +147,7 @@ class ExpensesForm extends React.Component<Props, FormState> {
         this.props.saveExpense(this.props.currentInputExpense);
       }
       //
-      //this.props.history.push("/");
+      this.props.history.push("/");
     }
   }
 
@@ -154,10 +159,12 @@ class ExpensesForm extends React.Component<Props, FormState> {
       //edit expense
       //load expense from backend
       this.props.loadExpense(id);
+     
       this.setState({
-        changedAmount: convertAmountToStr(this.props.currentInputExpense.amount),
         isDescriptionValid: true,
+        isAmountValid: true
       })
+
     } else {
       //handle add expense
       this.setState({
@@ -180,7 +187,7 @@ class ExpensesForm extends React.Component<Props, FormState> {
 
   render() {
 
-    //console.log("render started " +this.props.currentInputExpense.createdAT);
+    console.log("render started " + this.state.changedAmount);
     
 
     return (
@@ -225,7 +232,11 @@ class ExpensesForm extends React.Component<Props, FormState> {
                       contentEditable
                       id="amount"
                       onChange={this.handleAmountChange}
-                      value={this.state.changedAmount}
+                      value={  this.props.editExpenseId ? 
+                         convertAmountToStr(this.props.currentInputExpense.amount): 
+                         this.state.changedAmount
+                        }
+
                       placeholder="0.0"
                       aria-label="amount"
                       isValid={this.state.isAmountValid}
@@ -263,10 +274,11 @@ class ExpensesForm extends React.Component<Props, FormState> {
 }
 
 
-const mapStateToProps = (state: AppState) => {
+const mapStateToProps = (state: AppState,ownProps:Props ) => {
   
   console.log("state: " + JSON.stringify(state.addEditExpenseState.newExpense));
   return {
+    editExpenseId: ownProps.match.params.id,
     currentInputExpense: state.addEditExpenseState.newExpense
   };
 };
@@ -279,12 +291,17 @@ const mapDispatchToProps = (
     console.log("saveExpense: " + JSON.stringify(expense));
 
     dispatch(ExpensesThunkActions.addNewExpense(expense));
+
+    
   },
   loadExpense: (id:string) =>{
     dispatch(ExpensesThunkActions.fetchOneExpense(id));
+    
   }
 })
 
-const decorator = connect(mapStateToProps, mapDispatchToProps);
+const ExpensesForm = withRouter(
+  connect<Props>(mapStateToProps, mapDispatchToProps)(ExpensesFormContainer)
+);
 
-export default decorator(ExpensesForm);
+export {ExpensesForm};
