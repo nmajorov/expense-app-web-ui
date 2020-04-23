@@ -82,11 +82,13 @@ class ExpensesForm extends React.Component<Props, FormState> {
   private handleAmountChange = event => {
     
     console.log("set new amount value:" + event.target.value)
+    
     try{
         let amount = convertStrToAmount(event.target.value);
-
+      //  console.log("amount value:" + amount)
         this.setState({
-            isAmountValid: true
+            isAmountValid: true,
+            changedAmount: "" + amount
           }
         )
 
@@ -94,13 +96,16 @@ class ExpensesForm extends React.Component<Props, FormState> {
 
 
       }catch{
-        
+        console.log("error new amount value:" + event.target.value)
+    
         /**
          * throwing exception if amount is not correct
          */
-        this.setState( {
-          isAmountValid: false
-        }
+          this.setState( {
+           isAmountValid: false,
+           //keep previous value  
+           changedAmount: event.target.value
+          }
         )
 
      
@@ -220,7 +225,7 @@ class ExpensesForm extends React.Component<Props, FormState> {
                       contentEditable
                       id="amount"
                       onChange={this.handleAmountChange}
-                      value={convertAmountToStr(this.props.currentInputExpense.amount)}
+                      value={this.state.changedAmount}
                       placeholder="0.0"
                       aria-label="amount"
                       isValid={this.state.isAmountValid}

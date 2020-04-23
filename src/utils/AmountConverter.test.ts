@@ -2,7 +2,7 @@ import { convertStrToAmount , convertAmountToStr} from "./index";
 
 
 test("convert valid amount", () => {
-    let amounts: Array<string> = ["10.12", "103", "1.0"];
+    let amounts: Array<string> = ["10.12", "103", "1.01"];
 
     amounts.forEach(element => {
         console.log("test amount: " + element)
@@ -39,6 +39,14 @@ test("test too long amount", () => {
     
 })
 
+test("test one zero  after point amount", () => {
+    let amount = "18.0"
+    
+    expect(() => {
+        convertStrToAmount(amount);
+      }).toThrow(new Error("Not complete"))
+    
+})
 
 test("test string to amount", () => {
     let amount = Number(18.23);
@@ -46,5 +54,13 @@ test("test string to amount", () => {
     
     expect(convertAmountToStr(amount)
             ).toEqual("18.23")
+    
+})
+test("test wrong point string to amount", () => {
+    let amount = "18."
+    
+    expect(() => {
+        convertStrToAmount(amount);
+      }).toThrow(new Error("NaN"))
     
 })

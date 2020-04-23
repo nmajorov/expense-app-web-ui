@@ -7,7 +7,19 @@
 export const convertStrToAmount = (input: string):Number => {
 
 
+    if (input.includes(".")){
 
+        if ((input.split(".")[1]) === ""){
+            throw new Error("NaN")
+            
+        }
+            
+        if ((input.split(".")[1]) === "0"){
+            throw new Error("Not complete")
+        } 
+        
+    }
+    
 
     let amount = Number(input)
     if (isNaN(amount)) {
