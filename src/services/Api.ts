@@ -90,4 +90,14 @@ export const fetchExpense= (expenseID) =>{
   return newRequest<Expense>(HTTP_VERBS.GET,url+ "/"  +expenseID,{},{})
 }
 
+/**
+ * add new expense to the system  
+ *  * @param expenseID an expense by id
+ */
+export const updateExpense= (expense:Expense) =>{
+  return newRequest<Expense>(HTTP_VERBS.PUT,url,{},expense)
+}
+
+
+
 

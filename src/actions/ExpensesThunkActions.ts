@@ -140,6 +140,31 @@ fetchOneExpense:(id: string) => {
   }
 
 
+},
+
+updateExpense:(expense: Expense) => {
+  return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
+    return API.updateExpense(expense).then(
+      response => {
+        dispatch(ExpensesActions.addNewExpenseSuccess([]))
+      },
+      error => {
+
+        let emsg = 'Cannot add the expenses: ' + error.toString();
+
+
+        dispatch(ExpensesActions.fetchError(emsg))
+        let alertMessage: AlertMessage = {
+          content: emsg,
+          show_notification: true,
+          type: MessageType.ERROR
+        }
+        dispatch(AlertActions.addMessage(alertMessage))
+
+      }
+    )
+  }
+
 }
   
 }

@@ -23,6 +23,7 @@ interface DispatchProps  {
     currentInputExpense: Expense;
     loadExpense:(id:string) => any;
     saveExpense:(expense:Expense) => any;
+    updateExpense:(expense:Expense)=>any;
 }
 
 
@@ -140,6 +141,7 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
 
       if (this.props.editExpenseId){
         //send to update
+       this.props.updateExpense(this.props.currentInputExpense);
       }else{
         // some clean up for timestamp
         this.props.currentInputExpense.tstamp = undefined;
@@ -153,7 +155,7 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
 
 
   componentDidMount() {
-    console.log("componentDidMount started")
+ //   console.log("componentDidMount started")
     let id = this.props.editExpenseId;
     if (id) {
       //edit expense
@@ -287,17 +289,17 @@ const mapStateToProps = (state: AppState,ownProps:Props ) => {
 const mapDispatchToProps = (
   dispatch: ThunkDispatch<AppState, void, AppAction>
 ) => ({
-  saveExpense: (expense:Expense) => {
-    console.log("saveExpense: " + JSON.stringify(expense));
-
-    dispatch(ExpensesThunkActions.addNewExpense(expense));
-
-    
+  saveExpense: (expense: Expense) => {
+     dispatch(ExpensesThunkActions.addNewExpense(expense));
   },
-  loadExpense: (id:string) =>{
+  loadExpense: (id: string) => {
     dispatch(ExpensesThunkActions.fetchOneExpense(id));
-    
+
+  },
+  updateExpense: (expense: Expense) => {
+    dispatch(ExpensesThunkActions.updateExpense(expense));
   }
+
 })
 
 const ExpensesForm = withRouter(

@@ -56,9 +56,9 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
   }
 
   componentDidMount() {
-    if (store.getState().expensesState.expenses.length === 0) {
+    //if (store.getState().expensesState.expenses.length === 0) {
       this.scheduleNextPollingInterval(0);
-    }
+    //}
   }
 
   componentDidUpdate(prev: Props) {
