@@ -2,7 +2,7 @@
  * test date converter
  */
 
-import {formatDate,formateDateStr} from './DateConverter'
+import {formatDateStr, formateStrToDate} from './DateConverter'
 
 
 test("test the date converter", () => {
@@ -10,7 +10,7 @@ test("test the date converter", () => {
 
   
    console.log("test date: " + testDate)
-       expect(formatDate(testDate)).toEqual("2020-04-19")
+       expect(formatDateStr(testDate)).toEqual("2020-04-20")
   
 })
 
@@ -21,10 +21,13 @@ test("test before 22  time", () => {
 
   
    console.log("test date: " + testDate)
-       expect(formatDate(testDate)).toEqual("2021-10-09")
+       expect(formatDateStr(testDate)).toEqual("2021-10-09")
   
 })
 
 test("convert string to iso date",()=>{
-    expect(formateDateStr("2020-04-21")).toEqual("Wed, 20 May 2020 22:00:00 GMT")
+    //The getMonth() method returns the month in the specified date according
+    // to local time, as a zero-based value
+    // (where zero indicates the first month of the year).
+    expect(formateStrToDate("2020-05-21").toUTCString()).toEqual(new Date(2020,(5-1),21).toUTCString())
 })

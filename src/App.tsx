@@ -25,9 +25,9 @@ const App: React.FC = () => {
                     <DashBoard />
                   </Route>
                   <Route path="/add">
-                    <ExpensesForm key="addForm" />
+                    <ExpensesForm />
                   </Route>
-                   <Route path="/edit/:id" component={ExpensesForm}/>
+                   <Route path="/edit/:id"  component={ExpensesForm}/>
                  </Switch>
               </Router>
             </Col>

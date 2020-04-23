@@ -5,11 +5,13 @@ import { Expense } from "../../types/Expense";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { connect } from "react-redux";
-import {convertStrToAmount,convertAmountToStr,formatDate,formateDateStr} from "../../utils"
+import {convertStrToAmount,convertAmountToStr,
+  formatDateStr,formateStrToDate} from "../../utils"
 import { AppState } from "../../store/Store";
 import { ThunkDispatch } from "redux-thunk";
 import { AppAction } from "../../actions/AppAction";
 import ExpensesThunkActions from "../../actions/ExpensesThunkActions";
+
 
 type OwnProps = RouteComponentProps<{ id: string}>;
 
@@ -112,17 +114,18 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
            //keep previous value  
            changedAmount: event.target.value
           }
+          
         )
 
-     
+     this.props.currentInputExpense.amount = event.target.value;
      }
    
   };
 
   private handleDateChange(date:string) {
-    console.log("new-date: " + date)
+   // console.log("new-date: " + date)
     
-    let changedDate= formatDate(date)
+    let changedDate= formatDateStr(date)
  
 
     this.props.currentInputExpense.createdAT = changedDate;
@@ -155,7 +158,7 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
 
 
   componentDidMount() {
- //   console.log("componentDidMount started")
+    console.log("componentDidMount started")
     let id = this.props.editExpenseId;
     if (id) {
       //edit expense
@@ -163,6 +166,7 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
       this.props.loadExpense(id);
      
       this.setState({
+        //amount loaded from database is correct
         isDescriptionValid: true,
         isAmountValid: true
       })
@@ -179,7 +183,7 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
           return date.toString()
         }());
 
-        this.props.currentInputExpense.createdAT = formatDate(newDateStr);
+        this.props.currentInputExpense.createdAT = formatDateStr(newDateStr);
       }
 
     }
@@ -251,7 +255,7 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
                     <Form.Label>Date of Expenses</Form.Label>
                     <Form.Group controlId="expensesDate">
                       
-                        <DatePicker selected={formateDateStr(this.props.currentInputExpense.createdAT)} id="example-datepicker" 
+                        <DatePicker selected={formateStrToDate(this.props.currentInputExpense.createdAT)} id="example-datepicker" 
                         dateFormat="yyyy-MM-dd"
                         className={ this.state.isDateValid ? "form-control is-valid":"form-control is-invalid"}
                         onChange={this.handleDateChange}/>
@@ -278,10 +282,10 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
 
 const mapStateToProps = (state: AppState,ownProps:Props ) => {
   
-  console.log("state: " + JSON.stringify(state.addEditExpenseState.newExpense));
+  console.log("state: " + JSON.stringify(state.expensesState.newExpense));
   return {
     editExpenseId: ownProps.match.params.id,
-    currentInputExpense: state.addEditExpenseState.newExpense
+    currentInputExpense: state.expensesState.newExpense
   };
 };
 
@@ -291,13 +295,15 @@ const mapDispatchToProps = (
 ) => ({
   saveExpense: (expense: Expense) => {
      dispatch(ExpensesThunkActions.addNewExpense(expense));
+     dispatch(ExpensesThunkActions.fetchExpensesData());
   },
   loadExpense: (id: string) => {
     dispatch(ExpensesThunkActions.fetchOneExpense(id));
-
+   
   },
   updateExpense: (expense: Expense) => {
     dispatch(ExpensesThunkActions.updateExpense(expense));
+    
   }
 
 })

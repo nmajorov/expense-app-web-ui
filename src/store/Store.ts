@@ -18,16 +18,15 @@ export interface ExpensesState {
     pollInterval: TimeInMilliseconds;
     showModal: boolean;
     selectedID: Number;
-}
-
-
-export interface AddEditExpenseState {
     newExpense: Expense;
 }
+
+
+
 
 
 export interface AppState {
     expensesState: ExpensesState;
     alertState: AlertsState;
-    addEditExpenseState: AddEditExpenseState;
+  
 }

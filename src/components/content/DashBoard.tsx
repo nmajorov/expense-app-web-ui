@@ -56,13 +56,16 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
   }
 
   componentDidMount() {
-    //if (store.getState().expensesState.expenses.length === 0) {
+    if (store.getState().expensesState.expenses.length === 0) {
       this.scheduleNextPollingInterval(0);
-    //}
+    }
   }
 
+  
+
   componentDidUpdate(prev: Props) {
-    // schedule an immediate graph fetch if needed
+   // console.log("upate daschboard prev.pollInterval: " + prev.pollInterval)
+    // schedule an immediate  fetch if needed
     const curr = this.props;
     if (prev.pollInterval !== curr.pollInterval) {
       this.scheduleNextPollingIntervalFromProps();
@@ -95,7 +98,6 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
   }
 
   private scheduleNextPollingIntervalFromProps() {
-    console.log("this.props.pollInterval " + this.props.pollInterval);
     if (this.props.pollInterval > 0) {
       this.scheduleNextPollingInterval(this.props.pollInterval);
     } else {
@@ -112,12 +114,12 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
   };
 
   private closeDeleteModalWindow = () => {
-    console.log("closeDeleteModalWindow called");
+    //console.log("closeDeleteModalWindow called");
     this.props.hideOrShowDeleteModal();
   };
 
   private openDeleteModalWindow = (id) => {
-    console.log("openDeleteModalWindow called " + this.props.showModal);
+    //console.log("openDeleteModalWindow called " + this.props.showModal);
     if (store.getState().expensesState.showModal === false) {
       this.props.hideOrShowDeleteModal(id);
     }
@@ -125,7 +127,7 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
   
 
   private callEdit = (id) => {
-    console.log("call Edit " + id);
+    //console.log("call Edit " + id);
     this.props.history.push(`/edit/${id}`)
   };
 
