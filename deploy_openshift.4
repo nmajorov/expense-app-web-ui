@@ -1,4 +1,6 @@
 #!/bin/sh
+
+# use default service name for the fuse backend
 BACKEND_URL="http://camel-rest-sql:8080/services/app/expenses"
 BUILD_DID=build
 
@@ -9,17 +11,20 @@ then
 fi
 
 echo "backEndUrl=$BACKEND_URL"
-# set backend url with redirect
-#sed -ri  "s|=(.*)|= \"$BACKEND_URL\";|g" src/utils/backendUrl.ts
 
-sed -ri  "s|proxy_pass.*|proxy_pass $BACKEND_URL;|g" ./nginx-default-cfg/default.conf
+# set backend url with redirects
+
+# set react url just to api - nginx will handle the rest
+sed -ri  "s|=(.*)|= \"/api\";|g" src/utils/backendUrl.ts
+
+# set nginx proxy pass url 
+sed -ri  "s|proxy_pass.*|proxy_pass $BACKEND_URL;|g" ./nginx.conf
 
 echo "build for prod"   
 yarn build
 
 #copy web server config
-cp -r nginx-cfg/ ./build
-
+cp -r ./nginx.conf   ./build
 cd build
 
 oc new-build --image-stream=nginx  --binary=true --name=gui
