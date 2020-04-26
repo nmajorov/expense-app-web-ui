@@ -24,7 +24,7 @@ const App: React.FC = () => {
                   <Route exact path="/">
                     <DashBoard />
                   </Route>
-                  <Route path="/add">
+                  <Route  exact path="/add">
                     <ExpensesForm />
                   </Route>
                    <Route path="/edit/:id"  component={ExpensesForm}/>

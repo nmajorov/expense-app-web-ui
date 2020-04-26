@@ -1,0 +1,29 @@
+#!/bin/sh
+BACKEND_URL="http://camel-rest-sql:8080/services/app/expenses"
+BUILD_DID=build
+
+if [ -d "$BUILD_DIR" ]
+then
+    echo "delete existing prod build"
+    rm -r build
+fi
+
+echo "backEndUrl=$BACKEND_URL"
+# set backend url with redirect
+#sed -ri  "s|=(.*)|= \"$BACKEND_URL\";|g" src/utils/backendUrl.ts
+
+sed -ri  "s|proxy_pass.*|proxy_pass $BACKEND_URL;|g" ./nginx-default-cfg/default.conf
+
+echo "build for prod"   
+yarn build
+
+#copy web server config
+cp -r nginx-cfg/ ./build
+
+cd build
+
+oc new-build --image-stream=nginx  --binary=true --name=gui
+oc start-build gui --from-dir=. --follow
+oc new-app gui
+oc expose svc gui
+
