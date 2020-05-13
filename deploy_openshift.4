@@ -26,9 +26,9 @@ yarn build
 #copy web server config
 cp -r ./nginx.conf   ./build
 cd build
-
-oc new-build --image-stream=nginx  --binary=true --name=gui
-oc start-build gui --from-dir=. --follow
-oc new-app gui
-oc expose svc gui
+oc new-app nodejs-gui
+oc new-build --image-stream=nginx  --binary=true --name=nodejs-gui
+oc start-build nodejs-gui --from-dir=. --follow
+oc new-app nodejs-gui
+oc expose svc nodejs-gui
 
