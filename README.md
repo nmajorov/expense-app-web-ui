@@ -1,4 +1,7 @@
-# REDUX
+# Example React Web 
+
+It is a simple  Expenses webapp written in React and Typescript.
+It used for middleware  demo for OpenShift4
 
 https://medium.com/knerd/typescript-tips-series-proper-typing-of-react-redux-connected-components-eda058b6727d
 
