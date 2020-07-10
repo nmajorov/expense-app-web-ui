@@ -1,0 +1,28 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: build-expenses-web-ui
+spec:
+  resources:
+    - name: expenses-web-ui-git
+      type: git
+    - name: ui-image
+      type: image
+
+  tasks:
+    - name: build-ui
+      taskRef:
+        name: s2i-nodejs
+        kind: ClusterTask
+      params:
+          - name: VERSION
+            value: "10"
+          - name: TLSVERIFY
+            value: "false"
+      resources:
+        inputs:
+          - name: source
+            resource: expenses-web-ui-git
+        outputs:
+        - name: image
+          resource: ui-image
