@@ -123,7 +123,7 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
   };
 
   private handleDateChange(date:string) {
-   // console.log("new-date: " + date)
+    console.log("new-date: " + date)
     
     let changedDate= formatDateStr(date)
  
