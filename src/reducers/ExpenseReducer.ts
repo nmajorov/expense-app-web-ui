@@ -52,7 +52,6 @@ const expensesReducer = (state: ExpensesState = EXPENSES_INITIAL_STATE,
      * used by add and edit expense
      */
     case getType(ExpensesActions.addNewExpenseSuccess):
-      newState.pollInterval = 0;
       break;
 
     case getType(ExpensesActions.fetchOneExpenseActionSuccess):
