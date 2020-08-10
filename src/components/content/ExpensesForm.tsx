@@ -231,7 +231,7 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
                      </Form.Group>
                      </div>
                      <Form.Group>
-                    <div className="col-sm-3">
+                    <div className="col-sm-5">
                     <Form.Label>Amount</Form.Label>
                     <Form.Control
                       className="form-control"
@@ -303,7 +303,7 @@ const mapDispatchToProps = (
   },
   updateExpense: (expense: Expense) => {
     dispatch(ExpensesThunkActions.updateExpense(expense));
-    
+    dispatch(ExpensesThunkActions.fetchExpensesData());
   }
 
 })

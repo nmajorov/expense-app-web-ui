@@ -43,9 +43,6 @@ export const formatDateISOStr = (input: string):string => {
 
  
 
-
-
-  // Mon Aug 10 2020 18:19:36 GMT+0200 (Mitteleuropäische Sommerzeit)
    let tmpArrayDate =  input.split('-');
    console.log("tmpArrayDate: " + tmpArrayDate)
    //let nd = new Date(input);

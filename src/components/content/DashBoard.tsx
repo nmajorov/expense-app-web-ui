@@ -169,6 +169,20 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
     this.props.deleteExpense(id);
   };
 
+  private calculateTotalAmount (){
+ 
+    let amountArray=  this.props.expenses.map((pr) => {
+       return pr.amount;
+    });
+
+    let numOr0 = n => isNaN(n) ? 0 : n
+
+
+    return (amountArray.reduce(function(acc, val) { return  (numOr0(acc) + numOr0(val)) }, 0)).toFixed(2);
+
+  }
+
+
   /**
    * render table with expenses
    */
@@ -215,7 +229,9 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
               } 
             )
           }
-          
+        <tr><td><b></b></td> <td></td> <td></td> <td></td><td></td><td></td><td></td></tr>          
+        
+        <tr><td><b>Total:</b></td> <td></td> <td><b>{ this.calculateTotalAmount()} </b></td> <td></td><td></td><td></td><td></td></tr>          
         </tbody>
       </Table>
     );
