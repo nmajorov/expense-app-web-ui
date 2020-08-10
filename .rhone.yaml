@@ -1,0 +1,12 @@
+---
+apiVersion: build.rhone.io/v1
+contributors:
+- email: nikolaj@majorov.biz
+  name: Nikolaj Majorov
+interpreter-version: node:lts
+language: node_js
+name: expences-ui
+version: 0.1.0
+scripts:
+  - preBuild: "yarn add create-react-app"
+
