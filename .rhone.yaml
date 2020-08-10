@@ -3,7 +3,7 @@ apiVersion: build.rhone.io/v1
 contributors:
 - email: nikolaj@majorov.biz
   name: Nikolaj Majorov
-interpreter-version: node:lts
+interpreter-version: lts
 language: node_js
 name: expences-ui
 version: 0.1.0
