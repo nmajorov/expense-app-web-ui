@@ -22,18 +22,18 @@ all: help
 .PHONY: run
 run: ##  run gui in dev mode
 	@echo "run	app"
-	$(shell yarn start)
+	yarn start
 
 
 .PHONY: test
 test: ##	run tests
 		@echo "run tests"
-		$(shell yarn test)
+		yarn test
 
 .PHONY: build
 build: ##  build everything
 		@echo "run js build"
-		$(shell yarn build)
+		yarn build
 
 .PHONY: build-container
 build-container: ## build with container
