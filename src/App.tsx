@@ -15,7 +15,7 @@ const App: React.FC = () => {
       <main role="main">
         <Container className="p-3">
           <Row>
-            <Col></Col>
+            <Col/>
           </Row>
           <Row>
             <Col>
