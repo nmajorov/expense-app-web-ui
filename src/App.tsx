@@ -6,8 +6,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import  {ExpensesForm} from "./components/content/ExpensesForm";
 import { Container,Row,Col } from "react-bootstrap";
 import Footer from "./components/footer";
-import keycloak from "./keycloak";
-import { KeycloakProvider } from '@react-keycloak/web'
+
 import LoginPage from "./components/Login";
 
 
@@ -15,16 +14,14 @@ const App: React.FC = () => {
 
   return (
     <>
+      <Container  fluid="md">
+
       <NavigationBarContainer />
       <main role="main">
-        <Container className="p-3">
-          <Row>
-            <Col/>
-          </Row>
+     
           <Row>
             <Col>
-              <KeycloakProvider
-                  keycloak={keycloak}>
+              
               <Router>
                 <Switch>
                   <Route exact path="/">
@@ -37,13 +34,15 @@ const App: React.FC = () => {
                    <Route path="/edit/:id"  component={ExpensesForm}/>
                  </Switch>
               </Router>
-              </KeycloakProvider>
+             
             </Col>
           </Row>
-          <Footer />
-        </Container>
+      
       </main>
-     
+   
+      <Footer />
+      
+      </Container>
      
     </>
   );

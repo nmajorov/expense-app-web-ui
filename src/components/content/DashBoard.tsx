@@ -8,7 +8,7 @@ import {TimeInMilliseconds} from "../../types/Common";
 import { Expense } from "../../types/Expense";
 import ExpensesThunkActions from "../../actions/ExpensesThunkActions";
 import { store } from "../../store/ConfigStore";
-import { Button, Row } from "react-bootstrap";
+import { Button, Row, Jumbotron, Container } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'  
 import { faTrashAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
 import ModalTitle from "react-bootstrap/ModalTitle";
@@ -18,6 +18,10 @@ import ModalBody from "react-bootstrap/ModalBody";
 import Modal from "react-bootstrap/Modal";
 import {RouteComponentProps} from "react-router-dom";
 import { withRouter } from "react-router-dom";
+
+import {keycloak} from "../../keycloak";
+
+
 const trashIcon = <FontAwesomeIcon icon={faTrashAlt} />;
 const editIcon = <FontAwesomeIcon icon={faEdit}/>;
 
@@ -27,6 +31,7 @@ interface OwnProps extends  RouteComponentProps {
   expenses: Array<Expense>;
   showModal: boolean;
   selectedExpenseID: number;
+  isAuthenticated?:boolean;
 }
 
 interface StateProps {
@@ -52,7 +57,9 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      isAuthenticated : keycloak.authenticated
+    };
   }
 
   componentDidMount() {
@@ -132,6 +139,8 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
   };
 
 
+
+
   private renderDeleteDialog() {
     return (
       <Modal
@@ -145,7 +154,7 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
 
         <ModalBody>Are you sure ?</ModalBody>
 
-        <ModalFooter>
+          <ModalFooter>
           <Button variant="secondary" onClick={this.closeDeleteModalWindow}>
             Close
           </Button>
@@ -182,6 +191,16 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
 
   }
 
+
+  private renderExpenses() {
+    return (this.props.expenses.length > 0 ? (
+      this.renderExpensesTable()
+    ) : (
+        <p>There is no expenses found</p>
+      )
+    )
+
+  }
 
   /**
    * render table with expenses
@@ -242,15 +261,23 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
    */
   render() {
     return (
-      <div id="main list">
-        <Row>
-          {this.props.expenses.length > 0 ? (
-            this.renderExpensesTable()
+      
+      
+          this.props.isAuthenticated ? (
+            this.renderExpenses()
           ) : (
-            <p>There is no expenses found</p>
-          )}
-        </Row>
-      </div>
+            <Jumbotron>
+            <Container>
+              <h3>Better travel and expense management.</h3>
+              <h3>On OpenShift 4!</h3>
+              <p>
+                This is an example of application running on OpenShift.
+              </p>
+            </Container>
+          </Jumbotron>
+            )
+      
+     
     );
   } //end of render
 }
