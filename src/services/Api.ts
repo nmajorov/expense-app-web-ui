@@ -75,7 +75,7 @@ export const deleteExpense = (ID:string) => {
 
 /**
  * add new expense to the system  
- *  * @param expenseID an expense by id
+ *  * @param expense an expense by id
  */
 export const addNewExpense= (expense:Expense) =>{
   return newRequest<Expense>(HTTP_VERBS.POST,url,{},expense)
@@ -92,7 +92,7 @@ export const fetchExpense= (expenseID) =>{
 
 /**
  * add new expense to the system  
- *  * @param expenseID an expense by id
+ *  * @param expense an expense by id
  */
 export const updateExpense= (expense:Expense) =>{
   return newRequest<Expense>(HTTP_VERBS.PUT,url,{},expense)
