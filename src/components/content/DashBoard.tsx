@@ -8,7 +8,7 @@ import {TimeInMilliseconds} from "../../types/Common";
 import { Expense } from "../../types/Expense";
 import ExpensesThunkActions from "../../actions/ExpensesThunkActions";
 import { store } from "../../store/ConfigStore";
-import { Button, Row, Jumbotron, Container } from "react-bootstrap";
+import { Button,  Jumbotron, Container } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'  
 import { faTrashAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
 import ModalTitle from "react-bootstrap/ModalTitle";
@@ -63,8 +63,13 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
   }
 
   componentDidMount() {
-    if (store.getState().expensesState.expenses.length === 0) {
-      this.scheduleNextPollingInterval(0);
+    if (store.getState().ssoState.sso.keycloak.authenticated){
+      //run only if authenticated !!
+      if (store.getState().expensesState.expenses.length === 0) {
+        this.scheduleNextPollingInterval(0);
+      }
+    }else{
+      console.log("user is not authenticated")
     }
   }
 

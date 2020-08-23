@@ -7,5 +7,6 @@ export  const keycloak =  Keycloak({
     url: process.env.REACT_APP_KEYCLOAK_URL?.toString(),
     clientId: (process.env.REACT_APP_KEYCLOAK_CLIENT_ID) ? process.env.REACT_APP_KEYCLOAK_CLIENT_ID.toString(): "",
 })
-keycloak.init({});
+
+
 export default keycloak;

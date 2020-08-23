@@ -7,11 +7,13 @@ import thunk from 'redux-thunk';
 import { ALERT_MESSAGE_INITIAL_STATE } from "../reducers/AlertMessagesReducer";
 
 import { EXPENSES_INITIAL_STATE } from "../reducers/ExpenseReducer";
+import { SSO_INITIAL_STATE } from "../reducers/SSOReducer";
 
 
 const initialStore: AppState = {
   alertState: ALERT_MESSAGE_INITIAL_STATE,
   expensesState: EXPENSES_INITIAL_STATE,
+  ssoState: SSO_INITIAL_STATE
  }
 
 

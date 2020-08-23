@@ -3,18 +3,27 @@ import Navbar from "react-bootstrap/Navbar";
 
 import { NavItem, Nav,Button,Form} from "react-bootstrap";
 import GlobalAlert from "../Alert";
-
-import {keycloak} from "../../keycloak";
-
+import { connect } from "react-redux";
+import { AppState } from "../../store/Store";
+import { ThunkDispatch } from "redux-thunk";
+import { AppAction } from "../../actions/AppAction";
+import { SSO } from "../../types/SSO";
+import { SSOActions } from "../../actions/SSOAction";
+import SSOThunkActions from "../../actions/SSOThunkActions";
 
 interface State {}
 
 interface OwnProps {
   
-  isAuthenticated?:boolean;
+  sso:SSO;
 }
 
-interface DispatchProps {}
+interface DispatchProps {
+
+  loginSSO:() => any;
+  checkLoginDetails:() =>any;
+  initKeycloak:() => any;
+}
 
 type Props = OwnProps & DispatchProps;
 
@@ -23,20 +32,29 @@ type Props = OwnProps & DispatchProps;
  * left side navigation
  */
 class NavigationBarContainer extends React.Component<Props, State> {
-  constructor(prop: Props) {
-    super(prop);
-    this.state = {
-      isAuthenticated : keycloak.authenticated
-    };
+  constructor(props:Props) {
+    super(props);
+    this.state = {};
   }
 
 
+  componentDidMount() {
+    if (this.props.sso.isInitialized){
+      this.props.checkLoginDetails()
+    }else{
+      console.info("run keycloak initialization")
+      this.props.initKeycloak()
+    }
+    
+  }
+
+
+  /**
+   * handle login
+   */
   private login = () => {
-      keycloak.login()
-      this.props.isAuthenticated = keycloak.authenticated;
-      this.setState({
-        isAuthenticated : keycloak.authenticated
-      });
+    //redirect to the keycloak
+    this.props.sso.keycloak.login();
   }
 
   render() {
@@ -46,14 +64,14 @@ class NavigationBarContainer extends React.Component<Props, State> {
         <Navbar.Toggle />
        
         <Nav>
-       {console.info("isAuthenticated: " + this.props.isAuthenticated)}
-
-        {this.props.isAuthenticated  ? (
-           <Nav.Link href="/add">Add Expenses</Nav.Link>
-         
-        ) : (
-          <></>
-        )}
+     
+            { this.props.sso.keycloak.authenticated  ? (
+              <Nav.Link href="/add">Add Expenses</Nav.Link>
+            
+            ) : (
+              <></>
+            )
+        }
          
         </Nav>
         <Nav  className="justify-content-center">
@@ -63,9 +81,12 @@ class NavigationBarContainer extends React.Component<Props, State> {
         </Nav>
         <Navbar.Collapse className="justify-content-end">
         <Form inline>
+          {this.props.sso.keycloak.authenticated  ? ( <></>):(
                    <Button variant="primary" onClick={this.login}>
                     Login
                   </Button>
+                  )
+          }
           </Form>
         </Navbar.Collapse>
       </Navbar>
@@ -73,4 +94,36 @@ class NavigationBarContainer extends React.Component<Props, State> {
   }
 }
 
-export default NavigationBarContainer;
+
+const mapStateToProps = (state: AppState,ownProps:Props ) => {
+  
+  
+  return {
+      sso: state.ssoState.sso
+  };
+};
+
+
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<AppState, void, AppAction>
+) => ({
+  
+
+   checkLoginDetails: () =>{
+        console.info("check login Details  called");
+         
+        },
+    
+    initKeycloak: () =>{
+        dispatch(SSOThunkActions.initKeycloak());
+    }
+    
+})
+
+
+const decorator = connect(mapStateToProps, mapDispatchToProps);
+
+const Navigation = decorator(NavigationBarContainer);
+
+
+export default Navigation;
