@@ -12,7 +12,10 @@ import { AlertActions } from "./AlertAction";
 const SSOThunkActions = {
   initKeycloak: () => {
     return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
-      return keycloak.init({}).then(
+      return keycloak.init({
+         // redirectUri: (process.env.REACT_APP_KEYCLOAK_REDIRECT_URL) ?  process.env.REACT_APP_KEYCLOAK_REDIRECT_URL : window.location.origin + '/callback'
+
+      }).then(
         success => {
 
           dispatch(

@@ -8,7 +8,6 @@ import { AppState } from "../../store/Store";
 import { ThunkDispatch } from "redux-thunk";
 import { AppAction } from "../../actions/AppAction";
 import { SSO } from "../../types/SSO";
-import { SSOActions } from "../../actions/SSOAction";
 import SSOThunkActions from "../../actions/SSOThunkActions";
 
 interface State {}
