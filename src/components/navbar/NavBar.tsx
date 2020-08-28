@@ -37,15 +37,7 @@ class NavigationBarContainer extends React.Component<Props, State> {
   }
 
 
-  componentDidMount() {
-    if (this.props.sso.isInitialized){
-      this.props.checkLoginDetails()
-    }else{
-      console.info("run keycloak initialization")
-      this.props.initKeycloak()
-    }
-    
-  }
+ 
 
 
   /**
@@ -122,7 +114,7 @@ const mapDispatchToProps = (
 
 const decorator = connect(mapStateToProps, mapDispatchToProps);
 
-const Navigation = decorator(NavigationBarContainer);
+const NavigationBar = decorator(NavigationBarContainer);
 
 
-export default Navigation;
+export default NavigationBar;

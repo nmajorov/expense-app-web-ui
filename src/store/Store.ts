@@ -3,7 +3,7 @@ import { Expense } from "../types/Expense";
 import { TimeInMilliseconds } from "../types/Common";
 import { AlertMessage } from "../types/AlertTypes";
 import { SSO } from "../types/SSO";
-
+import { RouterState } from 'connected-react-router'
 /**
  * state of  warning or info messages
  */
@@ -32,5 +32,6 @@ export interface AppState {
     expensesState: ExpensesState;
     alertState: AlertsState;
     ssoState: SSOState;
-  
+    routerState: RouterState;
 }
+

@@ -6,12 +6,14 @@ import ssoReducer from './SSOReducer';
 import expensesReducer from "./ExpenseReducer";
 import { AppAction } from '../actions/AppAction';
 import {AppState} from '../store/Store';
+import { connectRouter } from 'connected-react-router'
+import { History } from 'history'
 
-
-const rootReducer = combineReducers<AppState,AppAction>({
+const rootReducer = (history: History) =>  combineReducers({
         alertState: alertMessageReducer,
         expensesState: expensesReducer,
-        ssoState: ssoReducer
+        ssoState: ssoReducer,
+        router: connectRouter(history)
 
 
 })

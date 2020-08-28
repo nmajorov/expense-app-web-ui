@@ -31,7 +31,7 @@ const SSOThunkActions = {
 
         error => {
 
-          let message = 'Error at SSO init: ' + error.toString();
+          let message = 'Error at SSO initialization';
 
 
           dispatch(ExpensesActions.fetchError(message))
