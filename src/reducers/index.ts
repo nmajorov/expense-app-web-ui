@@ -8,10 +8,12 @@ import { AppAction } from '../actions/AppAction';
 import {AppState} from '../store/Store';
 
 
-export default combineReducers<AppState,AppAction>({
+const rootReducer = combineReducers<AppState,AppAction>({
         alertState: alertMessageReducer,
         expensesState: expensesReducer,
         ssoState: ssoReducer
 
 
 })
+
+export default rootReducer

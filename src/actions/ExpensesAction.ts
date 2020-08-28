@@ -1,15 +1,15 @@
-import { ActionType, createAction } from 'typesafe-actions';
-import {constants as C} from "../utils"
+import { ActionType, createAction,createCustomAction } from 'typesafe-actions';
+import {ActionKeys as C} from "../utils"
 import { Expense } from '../types/Expense';
 
 
 export const ExpensesActions = {
     fetchActionSuccess: createAction(C.FETCH_EXPENSES)<Array<Expense>>(),
     fetchOneExpenseActionSuccess: createAction(C.FETCH_ONE_EXPENSE)<Expense>(),
-    fetchError: createAction(C.ADD_ERROR)<any>(),
-    deleteActionSuccess: createAction(C.REMOVE_EXPENSE)<any>(),
+    fetchError: createAction(C.ADD_ERROR)<String>(),
+    deleteActionSuccess: createCustomAction(C.REMOVE_EXPENSE),
     showDeleteDialog: createAction(C.SHOW_DELETE_DIALOG)<Number>(),
-    addNewExpenseSuccess: createAction(C.ADD_EXPENSE)<any>()
+    addNewExpenseSuccess: createCustomAction(C.ADD_EXPENSE)
 }
 
 export type ExpensesAction = ActionType<typeof ExpensesActions>;

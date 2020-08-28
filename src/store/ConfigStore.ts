@@ -8,6 +8,12 @@ import { ALERT_MESSAGE_INITIAL_STATE } from "../reducers/AlertMessagesReducer";
 
 import { EXPENSES_INITIAL_STATE } from "../reducers/ExpenseReducer";
 import { SSO_INITIAL_STATE } from "../reducers/SSOReducer";
+import { persistStore, persistReducer } from 'redux-persist';
+
+
+// defaults to localStorage for web and AsyncStorage for react-native
+import storage from 'redux-persist/lib/storage';
+
 
 
 const initialStore: AppState = {
@@ -24,6 +30,21 @@ const composeEnhancers =
   (process.env.NODE_ENV === 'development' && window && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
   
 
+
+const webRoot = (window as any).WEB_ROOT ? (window as any).WEB_ROOT : undefined;
+const persistKey = 'expence-' + (webRoot && webRoot !== '/' ? webRoot.substring(1) : 'root');
+
+
+
+const persistConfig = {
+  key: persistKey,
+  storage: storage
+};
+
+
+
+
+
 const configureStore = (initialState: AppState) => {
   // configure middlewares
   const middlewares = [thunk];
@@ -31,10 +52,13 @@ const configureStore = (initialState: AppState) => {
 
   const enhancer = composeEnhancers(applyMiddleware(...middlewares));
   // persist reducers
-  //const persistentReducer = persistReducer(persistConfig, rootReducer);
+  const persistentReducer = persistReducer(persistConfig, rootReducer);
 
-  return createStore(rootReducer, initialState, enhancer);
+  return createStore(persistentReducer, initialState, enhancer);
 };
 
 
+// pass an optional param to rehydrate state on app start
 export const store = configureStore(initialStore);
+export const persistor = persistStore(store);
+

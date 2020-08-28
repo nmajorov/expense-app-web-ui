@@ -1,4 +1,4 @@
-import {constants as C} from "../utils";
+import {ActionKeys as C} from "../utils";
 import { ActionType, createAction } from 'typesafe-actions';
 import { SSO } from "../types/SSO";
 

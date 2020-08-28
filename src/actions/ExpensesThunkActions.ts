@@ -30,7 +30,7 @@ const ExpensesThunkActions = {
 
           });
           dispatch(ExpensesActions.fetchActionSuccess(data))
-          dispatch(AlertActions.remoteMessage(""))
+          dispatch(AlertActions.removeMessage())
         },
         error => {
 
@@ -62,7 +62,7 @@ const ExpensesThunkActions = {
     return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
       return API.deleteExpense(id.toString()).then(
         response => {
-          dispatch(ExpensesActions.deleteActionSuccess([]))
+          dispatch(ExpensesActions.deleteActionSuccess())
         },
         error => {
 
@@ -81,7 +81,7 @@ const ExpensesThunkActions = {
       )
     }
   },
-  showDeleteDialog: (id: number) => {
+    showDeleteDialog: (id: number) => {
     return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
       return (
         dispatch(ExpensesActions.showDeleteDialog(id))
@@ -94,7 +94,7 @@ const ExpensesThunkActions = {
   return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
     return API.addNewExpense(newExpense).then(
       response => {
-        dispatch(ExpensesActions.addNewExpenseSuccess([]))
+        dispatch(ExpensesActions.addNewExpenseSuccess())
       },
       error => {
 
@@ -146,7 +146,7 @@ updateExpense:(expense: Expense) => {
   return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
     return API.updateExpense(expense).then(
       response => {
-        dispatch(ExpensesActions.addNewExpenseSuccess([]))
+        dispatch(ExpensesActions.addNewExpenseSuccess())
       },
       error => {
 
