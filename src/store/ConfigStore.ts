@@ -1,13 +1,13 @@
 
 import { createBrowserHistory } from 'history';
-import { AppState } from "./Store";
+//import { AppState } from "./Store";
 import { createStore, compose, applyMiddleware } from 'redux';
 import createRootReducer from '../reducers';
 import thunk from 'redux-thunk';
-import { ALERT_MESSAGE_INITIAL_STATE } from "../reducers/AlertMessagesReducer";
+//import { ALERT_MESSAGE_INITIAL_STATE } from "../reducers/AlertMessagesReducer";
 import { routerMiddleware } from 'connected-react-router'
-import { EXPENSES_INITIAL_STATE } from "../reducers/ExpenseReducer";
-import { SSO_INITIAL_STATE } from "../reducers/SSOReducer";
+//import { EXPENSES_INITIAL_STATE } from "../reducers/ExpenseReducer";
+//import { SSO_INITIAL_STATE } from "../reducers/SSOReducer";
 import { persistStore, persistReducer } from 'redux-persist';
 
 
@@ -44,9 +44,9 @@ const composeEnhancers =
 
 
 const persistConfig = {
-  key: "nm-expences-root",
-  storage: storage //, 
-  //whitelist:['ssoState']
+  key: "primary",
+  storage: storage , 
+  whitelist:['ssoState','router']
 };
 
 

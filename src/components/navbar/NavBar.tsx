@@ -8,9 +8,12 @@ import { AppState } from "../../store/Store";
 import { ThunkDispatch } from "redux-thunk";
 import { AppAction } from "../../actions/AppAction";
 import { SSO } from "../../types/SSO";
-import SSOThunkActions from "../../actions/SSOThunkActions";
+import { Link } from 'react-router-dom'
 
-interface State {}
+import {keycloak} from "../../keycloak";
+
+interface State {
+}
 
 interface OwnProps {
   
@@ -45,24 +48,26 @@ class NavigationBarContainer extends React.Component<Props, State> {
    */
   private login = () => {
     //redirect to the keycloak
-    this.props.sso.keycloak.login();
+    keycloak.init({})
+    keycloak.login()
   }
 
   render() {
     return (
       <Navbar bg="light">
-        <Navbar.Brand href="/">Home</Navbar.Brand>
+        <Nav.Link as={Link}  to="/" >Home</Nav.Link>
+      
         <Navbar.Toggle />
        
         <Nav>
      
-            { this.props.sso.keycloak.authenticated  ? (
-              <Nav.Link href="/add">Add Expenses</Nav.Link>
-            
-            ) : (
+          {this.props.sso.authenticated ? (
+            <Nav.Link as={Link} to="/add">Add Expenses</Nav.Link>
+
+          ) : (
               <></>
             )
-        }
+          }
          
         </Nav>
         <Nav  className="justify-content-center">
@@ -72,7 +77,7 @@ class NavigationBarContainer extends React.Component<Props, State> {
         </Nav>
         <Navbar.Collapse className="justify-content-end">
         <Form inline>
-          {this.props.sso.keycloak.authenticated  ? ( <></>):(
+          {this.props.sso.authenticated  ? ( <></>):(
                    <Button variant="primary" onClick={this.login}>
                     Login
                   </Button>
@@ -105,9 +110,7 @@ const mapDispatchToProps = (
          
         },
     
-    initKeycloak: () =>{
-        dispatch(SSOThunkActions.initKeycloak());
-    }
+  
     
 })
 

@@ -1,8 +1,6 @@
 import React from "react";
 
-// import { store } from "../store/ConfigStore";
-import { AlertMessage, MessageType } from "../types/AlertTypes"
-import { Alert } from "react-bootstrap";
+
 
 import { connect } from "react-redux";
 import { AppState } from "../store/Store";
@@ -11,7 +9,6 @@ import { AppAction } from "../actions/AppAction";
 import { SSO } from "../types/SSO";
 import SSOThunkActions from "../actions/SSOThunkActions";
 import { store } from "../store/ConfigStore";
-interface State { }
 
 
 
@@ -25,26 +22,31 @@ interface DispatchProps {
     loginSSO: () => any;
     checkLoginDetails: () => any;
     initKeycloak: () => any;
+    loadProfile :() => any;
 }
 type Props = OwnProps & DispatchProps;
 
 
-class SSOContainer extends React.PureComponent<Props, State> {
+class SSOContainer extends React.PureComponent<Props, {}> {
     constructor(props: Props) {
         super(props);
         this.state = {};
     }
 
     componentDidMount() {
-        console.log("componentDidMount redux state: " 
-            + JSON.stringify(store.getState().ssoState.sso.isInitialized));
-
+        console.log("componentWillMount redux state: "
+            + JSON.stringify(store.getState().ssoState.sso));
         if (this.props.sso.isInitialized) {
-            this.props.checkLoginDetails()
+            if (this.props.sso.authenticated) {
+                this.props.checkLoginDetails()
+            } else {
+                this.props.loadProfile()
+            }
+
         } else {
             this.props.initKeycloak()
-        }
 
+        }
     }
 
     render() {
@@ -73,15 +75,20 @@ const mapDispatchToProps = (
     dispatch: ThunkDispatch<AppState, void, AppAction>
 ) => ({
 
-
+    loadProfile:() => {
+        dispatch(SSOThunkActions.loadUserProfile());
+    },
     checkLoginDetails: () => {
         console.info("check login Details  called");
-
+       
     },
 
     initKeycloak: () => {
         console.info("run keycloak initialization")
         dispatch(SSOThunkActions.initKeycloak());
+
+       
+     
     }
 
 })

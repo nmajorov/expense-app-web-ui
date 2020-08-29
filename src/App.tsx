@@ -2,7 +2,7 @@ import React from "react";
 //import "./App.css";
 import DashBoard from "./components/content/DashBoard";
 import Navigation from "./components/navbar/NavBar";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import { ExpensesForm } from "./components/content/ExpensesForm";
 import { Container, Row, Col } from "react-bootstrap";
 import Footer from "./components/footer";
@@ -24,27 +24,27 @@ const App: React.FC = () => {
 
   return (
     <Provider store={store}>
-      <PersistGate loading={<InitializingScreen />} persistor={persistor}>
+      <PersistGate loading={<InitializingScreen />} persistor ={persistor}>
 
       <ConnectedRouter history={history}>
 
       
-      <Switch>
-        <SSOComponent>
+        <SSOComponent> </SSOComponent>
           <Container fluid="md">
             <Navigation />
             <main role="main">
 
               <Row>
                 <Col>
-                 
-                      <Route exact path="/" component={DashBoard} />
                   
-                      <Route exact path="/add" component={ExpensesForm}>
-                        
-                      </Route>
-                      <Route path="/edit/:id" component={ExpensesForm} />
-                   
+                      
+                    <Switch>            
+                        <Route exact path="/" component={DashBoard} />
+                  
+                        <Route  path="/add" component={ExpensesForm} />
+
+                       <Route path="/edit/:id" component={ExpensesForm} />
+                      </Switch>         
                  
 
                 </Col>
@@ -55,8 +55,8 @@ const App: React.FC = () => {
             <Footer />
 
           </Container>
-          </SSOComponent>
-          </Switch>
+         
+          
         </ConnectedRouter>
       </PersistGate>
 

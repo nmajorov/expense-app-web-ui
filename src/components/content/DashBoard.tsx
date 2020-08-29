@@ -20,6 +20,7 @@ import {RouteComponentProps} from "react-router-dom";
 import { withRouter } from "react-router-dom";
 
 import {keycloak} from "../../keycloak";
+import { SSO } from "../../types/SSO";
 
 
 const trashIcon = <FontAwesomeIcon icon={faTrashAlt} />;
@@ -35,7 +36,7 @@ interface OwnProps extends  RouteComponentProps {
 }
 
 interface StateProps {
-
+  sso: SSO
 }
 
 interface DispatchProps {
@@ -63,7 +64,7 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
   }
 
   componentDidMount() {
-    if (store.getState().ssoState.sso.keycloak.authenticated){
+    if (store.getState().ssoState.sso.authenticated){
       //run only if authenticated !!
       if (store.getState().expensesState.expenses.length === 0) {
         this.scheduleNextPollingInterval(0);
@@ -76,11 +77,16 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
   
 
   componentDidUpdate(prev: Props) {
-   // console.log("upate daschboard prev.pollInterval: " + prev.pollInterval)
+    // console.log("upate daschboard prev.pollInterval: " + prev.pollInterval)
     // schedule an immediate  fetch if needed
-    const curr = this.props;
-    if (prev.pollInterval !== curr.pollInterval) {
-      this.scheduleNextPollingIntervalFromProps();
+    if (store.getState().ssoState.sso.authenticated) {
+
+      const curr = this.props;
+      if (prev.pollInterval !== curr.pollInterval) {
+        this.scheduleNextPollingIntervalFromProps();
+      }
+    } else {
+      console.log("user is not authenticated")
     }
   }
 
@@ -293,7 +299,8 @@ const mapStateToProps = (state: AppState) => {
     pollInterval: state.expensesState.pollInterval,
     showModal: state.expensesState.showModal,
     selectedExpenseID: state.expensesState.selectedID
-  };
+   
+    };
 };
 
 const mapDispatchToProps = (

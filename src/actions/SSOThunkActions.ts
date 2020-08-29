@@ -10,19 +10,23 @@ import { AlertMessage, MessageType } from "../types/AlertTypes";
 import { AlertActions } from "./AlertAction";
 
 const SSOThunkActions = {
+
+
+
   initKeycloak: () => {
     return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
-      return keycloak.init({
-         // redirectUri: (process.env.REACT_APP_KEYCLOAK_REDIRECT_URL) ?  process.env.REACT_APP_KEYCLOAK_REDIRECT_URL : window.location.origin + '/callback'
+      return keycloak.init({ onLoad: 'check-sso', checkLoginIframeInterval: 1 
+        // redirectUri: (process.env.REACT_APP_KEYCLOAK_REDIRECT_URL) ?  process.env.REACT_APP_KEYCLOAK_REDIRECT_URL : window.location.origin + '/callback'
 
       }).then(
-        success => {
 
+        success => {
           dispatch(
             SSOActions.ssoInitializedSuccess(
               {
-                keycloak: keycloak,
-                isInitialized: true
+                authenticated: keycloak.authenticated ? true : false,
+                isInitialized: true,
+                userProfile:{email:"unknown",username: "unknown"}
               }
             )
 
@@ -30,7 +34,6 @@ const SSOThunkActions = {
         },
 
         error => {
-
           let message = 'Error at SSO initialization';
 
 
@@ -44,12 +47,62 @@ const SSOThunkActions = {
 
         }
 
+
       )
+    }
+  },
+
+  loadUserProfile: () => {
 
 
+    return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
+      return keycloak.init({
+        onLoad: 'check-sso', checkLoginIframeInterval: 1
+        
+      }).then(
+        ok => (
 
+
+          keycloak.loadUserProfile().then(
+            ok => {
+              console.log("load profile was ok");
+              if (keycloak.profile) {
+                dispatch(
+                  SSOActions.userProfileLoadSuccess(
+                    {
+                      authenticated: keycloak.authenticated ? true : false,
+                      isInitialized: true,
+                      userProfile: {
+                        email: keycloak.profile.email ? keycloak.profile.email : "unknown",
+                        username: keycloak.profile.username ? keycloak.profile.username : "unknown"
+                      }
+                    }
+                  )
+
+                )
+              }
+
+            },
+            err => {
+              let message = 'Error at loading profile';
+
+
+              dispatch(ExpensesActions.fetchError(message))
+              let alertMessage: AlertMessage = {
+                content: message,
+                show_notification: true,
+                type: MessageType.ERROR
+              }
+              dispatch(AlertActions.addMessage(alertMessage))
+
+            }
+          )
+
+        )
+      )
     }
   }
+  
 }
 
 export default SSOThunkActions;

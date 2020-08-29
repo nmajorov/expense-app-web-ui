@@ -10,5 +10,7 @@ export  const keycloak =  Keycloak({
 
 })
 
+//keycloak.init({});
+
 
 export default keycloak;
