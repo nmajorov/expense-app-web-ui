@@ -61,11 +61,11 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
   }
 
   private readonly handleDescriptionChange = event =>{
-     let description = event.target.value as String;
-    
+     let description = event.target.value as string;
+      this.props.currentInputExpense.description =   description;
     if (description.length>3){
-       this.props.currentInputExpense.description =   event.target.value;
-      this.setState(
+
+       this.setState(
         {
           isDescriptionValid:true
         }
@@ -161,6 +161,7 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
       this.props.loadExpense(id);
      
       this.setState({
+
         //amount loaded from database is correct
         isDescriptionValid: true,
         isAmountValid: true
@@ -187,7 +188,6 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
 
 
   render() {
-
     return (
 
     
@@ -208,10 +208,10 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
                  
                     <Form.Label>Description</Form.Label>
                     <Form.Control
-                      className="form-control form-control-user"
+                      className="form-control"
                       contentEditable
                       id="Description"
-                      defaultValue={ this.props.editExpenseId ?  this.props.currentInputExpense.description:""}
+                      value={this.props.currentInputExpense.description}
                       onChange={this.handleDescriptionChange}
                       isValid={this.state.isDescriptionValid}
                       isInvalid={!this.state.isDescriptionValid}
@@ -290,6 +290,7 @@ const mapDispatchToProps = (
      dispatch(ExpensesThunkActions.fetchExpensesData());
   },
   loadExpense: (id: string) => {
+      console.info("load expense with id: " + id)
     dispatch(ExpensesThunkActions.fetchOneExpense(id));
    
   },

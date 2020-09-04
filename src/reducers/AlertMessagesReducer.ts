@@ -4,6 +4,7 @@ import { AlertMessage, MessageType } from "../types/AlertTypes";
 import { getType } from 'typesafe-actions';
 import { AppAction } from "../actions/AppAction";
 
+
 export const ALERT_MESSAGE_INITIAL_STATE: AlertsState = {
 
   alertMessage:{

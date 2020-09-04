@@ -76,7 +76,9 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
     }
   }
 
-  
+  componentWillUnmount() {
+    this.removePollingIntervalTimer();
+  }
 
   componentDidUpdate(prev: Props) {
     // console.log("update dashboard prev.pollInterval: " + prev.pollInterval)
