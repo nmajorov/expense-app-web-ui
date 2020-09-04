@@ -25,7 +25,7 @@ const expensesReducer = (state: ExpensesState = EXPENSES_INITIAL_STATE,
   switch (action.type) {
     case getType(ExpensesActions.fetchActionSuccess):
       newState.expenses = action.payload as Array<Expense>;
-      newState.pollInterval = 3 * MILLISECONDS;
+      newState.pollInterval = 5 * MILLISECONDS;
       break;
 
     case getType(ExpensesActions.deleteActionSuccess):

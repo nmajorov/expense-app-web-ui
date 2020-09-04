@@ -70,7 +70,7 @@ const SSOThunkActions = {
                 dispatch(
                   SSOActions.userProfileLoadSuccess(
                     {
-                      authenticated: keycloak.authenticated ? true : false,
+                      authenticated: !!keycloak.authenticated,
                       isInitialized: true,
                       userProfile: {
                         email: keycloak.profile.email ? keycloak.profile.email : "unknown",

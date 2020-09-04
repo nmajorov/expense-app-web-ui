@@ -29,7 +29,7 @@ const App: React.FC = () => {
       <ConnectedRouter history={history}>
 
       
-        <SSOComponent> </SSOComponent>
+        <SSOComponent/>
           <Container fluid="md">
             <Navigation />
             <main role="main">

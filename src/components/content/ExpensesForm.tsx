@@ -1,15 +1,14 @@
-import React, { FormEvent } from "react";
-import { withRouter, RouteComponentProps } from "react-router-dom";
-import { Form, Button, Row } from "react-bootstrap";
-import { Expense } from "../../types/Expense";
+import React, {FormEvent} from "react";
+import {RouteComponentProps, withRouter} from "react-router-dom";
+import {Button, Form, Row} from "react-bootstrap";
+import {Expense} from "../../types/Expense";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { connect } from "react-redux";
-import {convertStrToAmount,convertAmountToStr,
-  formatDateStr,formateStrToDate} from "../../utils"
-import { AppState } from "../../store/Store";
-import { ThunkDispatch } from "redux-thunk";
-import { AppAction } from "../../actions/AppAction";
+import {connect} from "react-redux";
+import {convertAmountToStr, convertStrToAmount, formatDateStr, formateStrToDate} from "../../utils"
+import {AppState} from "../../store/Store";
+import {ThunkDispatch} from "redux-thunk";
+import {AppAction} from "../../actions/AppAction";
 import ExpensesThunkActions from "../../actions/ExpensesThunkActions";
 
 
@@ -17,7 +16,7 @@ type OwnProps = RouteComponentProps<{ id: string}>;
 
 interface AppOwnProps {
   editExpenseId?: string
-};
+}
 
 interface DispatchProps  {
   
@@ -61,14 +60,13 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  private handleDescriptionChange = event =>{
+  private readonly handleDescriptionChange = event =>{
      let description = event.target.value as String;
     
     if (description.length>3){
        this.props.currentInputExpense.description =   event.target.value;
       this.setState(
         {
-        
           isDescriptionValid:true
         }
       );
@@ -87,7 +85,7 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
   /***
    * handle amount changes on the field
    */
-  private handleAmountChange = event => {
+  private readonly handleAmountChange = event => {
     
     console.log("set new amount value:" + event.target.value)
     
@@ -124,11 +122,8 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
 
   private handleDateChange(date:string) {
     console.log("new-date: " + date)
-    
-    let changedDate= formatDateStr(date)
- 
 
-    this.props.currentInputExpense.createdAT = changedDate;
+  this.props.currentInputExpense.createdAT = formatDateStr(date);
     this.setState(
       {isDateValid:true}
     );
@@ -193,9 +188,6 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
 
   render() {
 
-    console.log("render started " + this.state.changedAmount);
-    
-
     return (
 
     
@@ -219,7 +211,7 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
                       className="form-control form-control-user"
                       contentEditable
                       id="Description"
-                      defaultValue={this.props.currentInputExpense.description}
+                      defaultValue={ this.props.editExpenseId ?  this.props.currentInputExpense.description:""}
                       onChange={this.handleDescriptionChange}
                       isValid={this.state.isDescriptionValid}
                       isInvalid={!this.state.isDescriptionValid}

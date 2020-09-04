@@ -19,8 +19,8 @@ import Modal from "react-bootstrap/Modal";
 import {RouteComponentProps} from "react-router-dom";
 import { withRouter } from "react-router-dom";
 
-import {keycloak} from "../../keycloak";
 import { SSO } from "../../types/SSO";
+import SSOThunkActions from "../../actions/SSOThunkActions";
 
 
 const trashIcon = <FontAwesomeIcon icon={faTrashAlt} />;
@@ -45,6 +45,7 @@ interface DispatchProps {
   pollInterval: TimeInMilliseconds;
   setLastRefreshAt: (lastRefreshAt: TimeInMilliseconds) => void;
   hideOrShowDeleteModal:(id?:number) => any;
+  checkSSO: () => any;
 }
 
 type Props = StateProps & OwnProps & DispatchProps;
@@ -59,12 +60,13 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
   constructor(props) {
     super(props);
     this.state = {
-      isAuthenticated : keycloak.authenticated
+
     };
   }
 
   componentDidMount() {
-    if (store.getState().ssoState.sso.authenticated){
+    console.log("dashboard did mount called")
+    if (this.props.sso.authenticated){
       //run only if authenticated !!
       if (store.getState().expensesState.expenses.length === 0) {
         this.scheduleNextPollingInterval(0);
@@ -77,16 +79,13 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
   
 
   componentDidUpdate(prev: Props) {
-    // console.log("upate daschboard prev.pollInterval: " + prev.pollInterval)
+    // console.log("update dashboard prev.pollInterval: " + prev.pollInterval)
     // schedule an immediate  fetch if needed
-    if (store.getState().ssoState.sso.authenticated) {
-
-      const curr = this.props;
+    if (this.props.sso.authenticated) {
+       const curr = this.props;
       if (prev.pollInterval !== curr.pollInterval) {
         this.scheduleNextPollingIntervalFromProps();
       }
-    } else {
-      console.log("user is not authenticated")
     }
   }
 
@@ -138,7 +137,7 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
 
   private openDeleteModalWindow = (id) => {
     //console.log("openDeleteModalWindow called " + this.props.showModal);
-    if (store.getState().expensesState.showModal === false) {
+    if (!store.getState().expensesState.showModal) {
       this.props.hideOrShowDeleteModal(id);
     }
   };
@@ -204,6 +203,7 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
 
 
   private renderExpenses() {
+    this.loadExpensesFromBackend();
     return (this.props.expenses.length > 0 ? (
       this.renderExpensesTable()
     ) : (
@@ -259,9 +259,24 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
               } 
             )
           }
-        <tr><td><b></b></td> <td></td> <td></td> <td></td><td></td><td></td><td></td></tr>          
-        
-        <tr><td><b>Total:</b></td> <td></td> <td><b>{ this.calculateTotalAmount()} </b></td> <td></td><td></td><td></td><td></td></tr>          
+          <tr>
+            <td>&#8203;</td>
+            <td>&#8203;</td>
+            <td>&#8203;</td>
+            <td>&#8203;</td>
+            <td>&#8203;</td>
+            <td>&#8203;</td>
+            <td>&#8203;</td>
+          </tr>
+          <tr>
+            <td><b>Total:</b></td>
+            <td>&#8203;</td>
+            <td><b>{ this.calculateTotalAmount()} </b></td>
+            <td>&#8203;</td>
+            <td>&#8203;</td>
+            <td>&#8203;</td>
+            <td>&#8203;</td>
+          </tr>
         </tbody>
       </Table>
     );
@@ -274,7 +289,7 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
     return (
       
       
-          this.props.isAuthenticated ? (
+          this.props.sso.authenticated ? (
             this.renderExpenses()
           ) : (
             <Jumbotron>
@@ -298,8 +313,8 @@ const mapStateToProps = (state: AppState) => {
     expenses: state.expensesState.expenses,
     pollInterval: state.expensesState.pollInterval,
     showModal: state.expensesState.showModal,
-    selectedExpenseID: state.expensesState.selectedID
-   
+    selectedExpenseID: state.expensesState.selectedID,
+    sso: state.ssoState.sso
     };
 };
 
@@ -315,9 +330,11 @@ const mapDispatchToProps = (
   },
 
   hideOrShowDeleteModal: (id:number) =>{ 
-   // console.log("dispatch hideOrShowDeleteModal with id: "+ id)
-    
     dispatch(ExpensesThunkActions.showDeleteDialog(id));
+  },
+
+  checkSSO: () =>{
+    dispatch(SSOThunkActions.initKeycloak()) ;
   }
   });
 
