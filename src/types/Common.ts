@@ -20,7 +20,7 @@ export const HTTP_CODES = {
     GATEWAY_TIMEOUT: 504
 };
 
-
+// 1000 ms = 1 second.
 export const MILLISECONDS = 1000;
 
 

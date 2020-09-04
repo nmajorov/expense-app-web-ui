@@ -60,26 +60,28 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  private readonly handleDescriptionChange = event =>{
-     let description = event.target.value as string;
-      this.props.currentInputExpense.description =   description;
-    if (description.length>3){
+    /**
+     * change description of item
+     * @param event change text field event
+     */
+    private readonly handleDescriptionChange = event =>{
+        let description = event.target.value as string;
+        this.props.currentInputExpense.description =   description;
+        if (description.length>3){
+            this.setState(
+                {
+                    isDescriptionValid:true
+                }
+            );
+        }else{
+            this.setState(
+                {
 
-       this.setState(
-        {
-          isDescriptionValid:true
+                    isDescriptionValid:false
+                }
+            );
         }
-      );
-    }else{
-      this.setState(
-        {
-       
-          isDescriptionValid:false
-        }
-      );
-    }
-   
-  };
+    };
 
 
   /***
@@ -286,8 +288,9 @@ const mapDispatchToProps = (
   dispatch: ThunkDispatch<AppState, void, AppAction>
 ) => ({
   saveExpense: (expense: Expense) => {
-     dispatch(ExpensesThunkActions.addNewExpense(expense));
-     dispatch(ExpensesThunkActions.fetchExpensesData());
+      dispatch(ExpensesThunkActions.fetchExpensesData());
+      dispatch(ExpensesThunkActions.addNewExpense(expense));
+
   },
   loadExpense: (id: string) => {
       console.info("load expense with id: " + id)
@@ -295,8 +298,8 @@ const mapDispatchToProps = (
    
   },
   updateExpense: (expense: Expense) => {
-    dispatch(ExpensesThunkActions.updateExpense(expense));
-    dispatch(ExpensesThunkActions.fetchExpensesData());
+      dispatch(ExpensesThunkActions.fetchExpensesData());
+      dispatch(ExpensesThunkActions.updateExpense(expense));
   }
 
 })

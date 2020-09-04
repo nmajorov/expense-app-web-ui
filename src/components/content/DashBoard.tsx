@@ -85,8 +85,13 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
     // schedule an immediate  fetch if needed
     if (this.props.sso.authenticated) {
        const curr = this.props;
+       console.log("curr.pollInterval: " + curr.pollInterval + "  prevPoolInt: " + prev.pollInterval )
       if (prev.pollInterval !== curr.pollInterval) {
         this.scheduleNextPollingIntervalFromProps();
+      }else{
+        if (this.pollTimeoutRef === undefined)
+         this.loadExpensesFromBackend();
+         this.scheduleNextPollingIntervalFromProps();
       }
     }
   }
@@ -117,6 +122,7 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
   }
 
   private scheduleNextPollingIntervalFromProps() {
+    console.log("scheduleNextPollingIntervalFromProps: " + this.props.pollInterval)
     if (this.props.pollInterval > 0) {
       this.scheduleNextPollingInterval(this.props.pollInterval);
     } else {
@@ -128,8 +134,8 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
    * trigger load of expenses from backend
    */
   private loadExpensesFromBackend = () => {
+    console.log("loadExpensesFromBackend " + Date().toLocaleString())
     this.props.getExpenses();
-    this.scheduleNextPollingIntervalFromProps();
   };
 
   private closeDeleteModalWindow = () => {
@@ -205,7 +211,7 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
 
 
   private renderExpenses() {
-    this.loadExpensesFromBackend();
+  //  this.loadExpensesFromBackend();
     return (this.props.expenses.length > 0 ? (
       this.renderExpensesTable()
     ) : (
