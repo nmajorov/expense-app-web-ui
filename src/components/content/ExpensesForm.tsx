@@ -170,19 +170,20 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
       })
 
     } else {
+        this.props.currentInputExpense.description="";
       //handle add expense
       this.setState({
         isDescriptionValid: false,
       })
 
-      if (!this.props.currentInputExpense.createdAT) {
+
         let newDateStr = (function (): string {
           let date = new Date();
           return date.toString()
         }());
 
         this.props.currentInputExpense.createdAT = formatDateStr(newDateStr);
-      }
+
 
     }
   }
