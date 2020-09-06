@@ -22,30 +22,12 @@ spec:
       inputs:
         - name: source
           resource: expenses-web-ui-git
-  - name: build-ui
-    taskRef:
-      name: s2i-nodejs
-      kind: ClusterTask
-    runAfter:
-      - test
-    params:
-        - name: VERSION
-          value: "10"
-        - name: TLSVERIFY
-          value: "false"
-    resources:
-      inputs:
-        - name: source
-          resource: expenses-web-ui-git
-      outputs:
-      - name: image
-        resource: ui-image
 
-  - name: deploy-nodejs-app
+  - name: build-and-deploy
     taskRef:
       name: deploy-nodejs-app
     runAfter:
-      - build-ui
+      - test
     resources:
       inputs:
         - name: source
