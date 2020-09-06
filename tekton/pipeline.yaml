@@ -10,19 +10,44 @@ spec:
       type: image
 
   tasks:
-    - name: build-ui
-      taskRef:
-        name: s2i-nodejs
-        kind: ClusterTask
-      params:
-          - name: VERSION
-            value: "10"
-          - name: TLSVERIFY
-            value: "false"
-      resources:
-        inputs:
-          - name: source
-            resource: expenses-web-ui-git
-        outputs:
-        - name: image
-          resource: ui-image
+  - name: test
+    taskRef:
+      name: test-nodejs-app
+    params:
+      - name: VERSION
+        value: "10"
+      - name: TLSVERIFY
+        value: "false"
+    resources:
+      inputs:
+        - name: source
+          resource: expenses-web-ui-git
+  - name: build-ui
+    taskRef:
+      name: s2i-nodejs
+      kind: ClusterTask
+    runAfter:
+      - test
+    params:
+        - name: VERSION
+          value: "10"
+        - name: TLSVERIFY
+          value: "false"
+    resources:
+      inputs:
+        - name: source
+          resource: expenses-web-ui-git
+      outputs:
+      - name: image
+        resource: ui-image
+
+  - name: deploy-nodejs-app
+    taskRef:
+      name: deploy-nodejs-app
+    runAfter:
+      - build-ui
+    resources:
+      inputs:
+        - name: source
+          resource: expenses-web-ui-git
+

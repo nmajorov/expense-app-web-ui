@@ -1,0 +1,66 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: deploy-nodejs-app
+spec:
+  inputs:
+    resources:
+      - name: source
+        type: git
+
+  steps:
+    - name: test-app
+      image: 'registry.access.redhat.com/rhscl/nodejs-$(inputs.params.VERSION)-rhel7'
+      workingDir: /workspace/source
+      command: ["/bin/bash", "-c"]
+      volumeMounts:
+        #- name: varlibcontainers
+        #  mountPath: /var/lib/containers
+        - name: gen-source
+          mountPath: /gen-source
+      args:
+        - |-
+          echo "install yarn"
+          npm install -g yarn
+          yarn install
+
+          # use default service name for the fuse backend
+          BACKEND_URL="http://nfuse:8080/services/app/expenses"
+
+          echo "backEndUrl=$BACKEND_URL"
+
+          # set backend url with redirects
+
+          # set react url just to api - nginx will handle the rest
+          sed -ri  "s|=(.*)|= \"/api\";|g" src/utils/backendUrl.ts
+
+          # set nginx proxy pass url
+          sed -ri  "s|proxy_pass.*|proxy_pass $BACKEND_URL;|g" ./nginx.conf
+
+          echo "build for prod"
+          yarn build
+
+          #copy web server config
+          cp -r ./nginx.conf   ./build
+
+
+
+      - name: deploy-app
+        image: quay.io/openshift/origin-cli:latest
+        workingDir: /workspace/source
+        command: ["/bin/bash", "-c"]
+        volumeMounts:
+          - name: gen-source
+            mountPath: /gen-source
+        args:
+          - |-
+            oc new-app nodejs-gui
+            oc new-build --image-stream=nginx  --binary=true --name=nodejs-gui
+            oc start-build nodejs-gui --from-dir=. --follow
+            oc new-app nodejs-gui
+            oc expose svc nodejs-gui
+       # securityContext:
+       #   privileged: true
+  volumes:
+    - name: gen-source
+      emptyDir: {}

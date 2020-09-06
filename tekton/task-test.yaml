@@ -1,0 +1,53 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: test-nodejs-app
+spec:
+  inputs:
+    resources:
+      - name: source
+        type: git
+    params:
+      - name: VERSION
+        description: The version of the nodejs
+        default: '8'
+        type: string
+      - name: PATH_CONTEXT
+        description: The location of the path to run  from.
+        default: .
+        type: string
+      - name: TLSVERIFY
+        description: Verify the TLS on the registry endpoint (for push/pull to a non-TLS registry)
+        default: "true"
+        type: string
+
+
+  steps:
+      - name: test-app
+        image: 'registry.access.redhat.com/rhscl/nodejs-$(inputs.params.VERSION)-rhel7'
+        workingDir: /workspace/source
+        command: ["/bin/bash", "-c"]
+        volumeMounts:
+          #- name: varlibcontainers
+          #  mountPath: /var/lib/containers
+          - name: gen-source
+            mountPath: /gen-source
+        args:
+          - |-
+            echo "test project"
+            # pwd && ls
+            echo "install yarn first"
+            npm install -g yarn
+            yarn --version
+            echo "install dependencies"
+            yarn install
+            echo "run tests"
+            yarn test
+
+       # securityContext:
+       #   privileged: true
+  volumes:
+    - name: varlibcontainers
+      emptyDir: {}
+    - name: gen-source
+      emptyDir: {}
