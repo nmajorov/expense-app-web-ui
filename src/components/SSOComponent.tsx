@@ -33,21 +33,24 @@ class SSOContainer extends React.PureComponent<Props, {}> {
         this.state = {};
     }
 
-
+     private checkUserProfile(){
+         if (this.props.sso.isInitialized) {
+             if (this.props.sso.authenticated) {
+                 if (this.props.sso.userProfile.username === "unknown"){
+                     this.props.loadProfile()
+                 }
+             }
+         } else {
+             this.props.initKeycloak()
+         }
+     }
+    componentDidUpdate(prev: Props) {
+        this.checkUserProfile();
+    }
     componentDidMount() {
         console.log("componentWillMount redux state: "
             + JSON.stringify(store.getState().ssoState.sso));
-        if (this.props.sso.isInitialized) {
-            if (this.props.sso.authenticated && this.props.sso.userProfile.username !== "unknown") {
-                this.props.checkLoginDetails()
-            } else {
-                this.props.loadProfile()
-            }
-
-        } else {
-            this.props.initKeycloak()
-
-        }
+        this.checkUserProfile()
     }
 
     render() {
@@ -65,7 +68,7 @@ class SSOContainer extends React.PureComponent<Props, {}> {
 
 const mapStateToProps = (state: AppState, ownProps: Props) => {
 
-    //  console.log("mapStateToProps called sso state: " +  JSON.stringify(state.ssoState));
+     console.log("mapStateToProps called sso state: " +  JSON.stringify(state.ssoState));
     return {
         sso: state.ssoState.sso
     };
@@ -80,7 +83,8 @@ const mapDispatchToProps = (
         dispatch(SSOThunkActions.loadUserProfile());
     },
     checkLoginDetails: () => {
-        console.info("check login Details  called");
+        //TODO implement
+        console.info("check login Details  called ");
        
     },
 

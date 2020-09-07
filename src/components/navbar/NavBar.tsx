@@ -77,7 +77,13 @@ class NavigationBarContainer extends React.Component<Props, State> {
         </Nav>
         <Navbar.Collapse className="justify-content-end">
         <Form inline>
-          {this.props.sso.authenticated  ? ( <></>):(
+          {this.props.sso.authenticated  ? (
+
+                  <Navbar.Text>
+                      Signed in as: <a href="#login" onClick={this.login} >{this.props.sso.userProfile.username}</a>
+                  </Navbar.Text>
+
+          ):(
                    <Button variant="primary" onClick={this.login}>
                     Login
                   </Button>

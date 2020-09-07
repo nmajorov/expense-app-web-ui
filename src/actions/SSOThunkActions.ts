@@ -56,16 +56,9 @@ const SSOThunkActions = {
 
 
     return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
-      return keycloak.init({
-        onLoad: 'check-sso', checkLoginIframeInterval: 1
-        
-      }).then(
-        ok => (
-
-
-          keycloak.loadUserProfile().then(
+      return keycloak.loadUserProfile().then(
             ok => {
-              console.log("load profile was ok");
+              console.log("load profile was ok" + JSON.stringify(keycloak.profile));
               if (keycloak.profile) {
                 dispatch(
                   SSOActions.userProfileLoadSuccess(
@@ -98,8 +91,6 @@ const SSOThunkActions = {
             }
           )
 
-        )
-      )
     }
   }
   
