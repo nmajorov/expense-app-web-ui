@@ -26,6 +26,9 @@ spec:
   - name: build-and-deploy
     taskRef:
       name: deploy-nodejs-app
+    params:
+      - name: VERSION
+        value: "10"
     runAfter:
       - test
     resources:
