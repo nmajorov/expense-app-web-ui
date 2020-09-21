@@ -25,11 +25,11 @@ const expensesReducer = (state: ExpensesState = EXPENSES_INITIAL_STATE,
   switch (action.type) {
     case getType(ExpensesActions.fetchActionSuccess):
       newState.expenses = action.payload as Array<Expense>;
-      newState.pollInterval = 1 * MILLISECONDS;
+      newState.pollInterval = 5 * MILLISECONDS;
       break;
 
     case getType(ExpensesActions.deleteActionSuccess):
-      
+      newState.pollInterval = 0
       break;
 
     case getType(ExpensesActions.showDeleteDialog):
@@ -50,6 +50,7 @@ const expensesReducer = (state: ExpensesState = EXPENSES_INITIAL_STATE,
     case getType(ExpensesActions.addNewExpenseSuccess):
       newState.expenses = []
       newState.newExpense = { id: 0, amount: 0.0, createdAT: "", tstamp: "", description: "" }
+      newState.pollInterval = 0
       break;
 
     case getType(ExpensesActions.fetchOneExpenseActionSuccess):

@@ -68,9 +68,9 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
     console.log("dashboard did mount called")
     if (this.props.sso.authenticated){
       //run only if authenticated !!
-      if (store.getState().expensesState.expenses.length === 0) {
+     // if (store.getState().expensesState.expenses.length === 0) {
         this.scheduleNextPollingInterval(0);
-      }
+     // }
     }else{
       console.log("user is not authenticated")
     }
@@ -81,28 +81,28 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
   }
 
   componentDidUpdate(prev: Props) {
-    // console.log("update dashboard prev.pollInterval: " + prev.pollInterval)
+    console.log("update dashboard prev.pollInterval: " + prev.pollInterval)
     // schedule an immediate  fetch if needed
     if (this.props.sso.authenticated) {
        const curr = this.props;
        console.log("curr.pollInterval: " + curr.pollInterval + "  prevPoolInt: " + prev.pollInterval )
       if (prev.pollInterval !== curr.pollInterval) {
-        this.scheduleNextPollingIntervalFromProps();
+        this.scheduleNextPollingInterval(curr.pollInterval);
+        
       }else{
-        if (this.pollTimeoutRef === undefined)
-         this.loadExpensesFromBackend();
-         this.scheduleNextPollingIntervalFromProps();
+          this.scheduleNextPollingIntervalFromProps();
       }
     }
   }
 
   private scheduleNextPollingInterval(pollInterval: number) {
     // Remove any pending timeout to avoid having multiple requests at once
-    this.removePollingIntervalTimer();
+   
 
     if (pollInterval === 0 || pollInterval === undefined) {
       this.loadExpensesFromBackend();
     } else {
+      this.removePollingIntervalTimer();
       // We are using setTimeout instead of setInterval because we have more control over it
       // e.g. If a request takes much time, the next interval will fire up anyway and is
       // possible that it will take much time as well. Instead wait for it to timeout/error to
@@ -116,6 +116,7 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
 
   private removePollingIntervalTimer() {
     if (this.pollTimeoutRef) {
+      ///console.log("clear previous timeout:" + this.pollTimeoutRef)
       clearTimeout(this.pollTimeoutRef);
       this.pollTimeoutRef = undefined;
     }
@@ -123,11 +124,7 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
 
   private scheduleNextPollingIntervalFromProps() {
     console.log("scheduleNextPollingIntervalFromProps: " + this.props.pollInterval)
-    if (this.props.pollInterval > 0) {
-      this.scheduleNextPollingInterval(this.props.pollInterval);
-    } else {
-      this.removePollingIntervalTimer();
-    }
+    this.scheduleNextPollingInterval(this.props.pollInterval)
   }
 
   /**
