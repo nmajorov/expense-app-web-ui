@@ -27,8 +27,18 @@ yarn build
 cp -r ./nginx.conf   ./build
 
 cd build
-oc new-app nodejs-gui
-oc new-build --image-stream=nginx  --binary=true --name=nodejs-gui
-oc start-build nodejs-gui --from-dir=. --follow
-oc new-app nodejs-gui
-oc expose svc nodejs-gui
+
+oc get deployment.apps/nodejs-gui
+if [[ $? -ne 0 ]]
+    then
+	#oc new-app -i $(inputs.params.APP_NAME) -n $(inputs.params.DEPLOY_PROJECT)
+	      oc new-app nodejs-gui
+        oc new-build --image-stream=nginx  --binary=true --name=nodejs-gui 
+        oc expose svc nodejs-gui
+   
+    else
+        echo "Application already exists."
+	      oc start-build nodejs-gui --from-dir=. --follow
+fi
+
+

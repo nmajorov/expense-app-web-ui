@@ -1,2 +1,2 @@
-export  const backEndUrl = "http://localhost:8080/services/app/expenses";
+export  const backEndUrl = "/api";
 

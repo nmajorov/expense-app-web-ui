@@ -52,18 +52,20 @@ spec:
           mountPath: /gen-source
       args:
         - |-
-          echo "delete if  deployment exist"
-          oc delete  deployment.app/nodejs-gui
-          oc delete  service nodejs-gui
           cd build
-          echo "start deployment from directory"
-          pwd
-          oc new-app nodejs-gui
-          oc new-build --image-stream=nginx  --binary=true --name=nodejs-gui
-          oc start-build nodejs-gui --from-dir=. --follow
-          oc expose svc nodejs-gui
-     # securityContext:
-     #   privileged: true
+          oc get deployment.apps/nodejs-gui
+          if [[ $? -ne 0 ]]
+             then
+                #TODO: add params in task
+                oc new-app nodejs-gui
+                oc new-build --image-stream=nginx  --binary=true --name=nodejs-gui
+                oc start-build nodejs-gui --from-dir=. --follow
+                oc expose svc nodejs-gui
+             else
+                echo "Application already exists. trigger new s2i nginx build"
+                oc start-build nodejs-gui --from-dir=. --follow
+          fi
+
   volumes:
     - name: gen-source
       emptyDir: {}
