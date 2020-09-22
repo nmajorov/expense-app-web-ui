@@ -3,7 +3,7 @@ import { AppState } from "../store/Store";
 import { connect } from "react-redux";
 // import { store } from "../store/ConfigStore";
 import {AlertMessage,MessageType} from "../types/AlertTypes"
-import { Alert, Col, Container, Row, Spinner } from "react-bootstrap";
+import { Alert, Spinner } from "react-bootstrap";
 import { ThunkDispatch } from "redux-thunk";
 import { AppAction } from "../actions/AppAction";
 import { AlertActions } from "../actions/AlertAction";
