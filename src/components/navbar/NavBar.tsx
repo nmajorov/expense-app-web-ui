@@ -2,7 +2,6 @@ import React from "react";
 import Navbar from "react-bootstrap/Navbar";
 
 import { NavItem, Nav,Button,Form} from "react-bootstrap";
-import GlobalAlert from "../Alert";
 import { connect } from "react-redux";
 import { AppState } from "../../store/Store";
 import { ThunkDispatch } from "redux-thunk";
@@ -70,11 +69,11 @@ class NavigationBarContainer extends React.Component<Props, State> {
           }
          
         </Nav>
-        <Nav  className="justify-content-center">
+        <Navbar.Collapse  className="justify-content-center">
           <NavItem>
-            <GlobalAlert />
+           
           </NavItem>
-        </Nav>
+        </Navbar.Collapse>
         <Navbar.Collapse className="justify-content-end">
         <Form inline>
           {this.props.sso.authenticated  ? (

@@ -13,6 +13,7 @@ import { PersistGate } from 'redux-persist/lib/integration/react';
 import InitializingScreen from "./InitializingScreen";
 import SSOComponent from "./components/SSOComponent";
 import { ConnectedRouter } from 'connected-react-router'
+import GlobalAlert from "./components/Alert";
 
 
 
@@ -31,6 +32,7 @@ const App: React.FC = () => {
       
         <SSOComponent/>
           <Container fluid="md">
+           <GlobalAlert />
             <Navigation />
             <main role="main">
 

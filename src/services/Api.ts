@@ -5,13 +5,6 @@ import { HTTP_VERBS } from '../types/Common';
 import {backEndUrl as url} from "../utils/backendUrl";
 import { Expense } from '../types/Expense';
 
-//export const ANONYMOUS_USER = 'anonymous';
-
-export interface Response<T> {
-  data: T;
-}
-
-
 
 
 const newRequest = <P>(method: HTTP_VERBS, url: string, queryParams: any, data: any) =>{
@@ -26,36 +19,7 @@ const newRequest = <P>(method: HTTP_VERBS, url: string, queryParams: any, data: 
 
 }
 
-/** 
-export const getAppHealth = (
-  namespace: string,
-  app: string,
-  durationSec: number,
-  hasSidecar: boolean
-): Promise<AppHealth> => {
-  const params = durationSec ? { rateInterval: String(durationSec) + 's' } : {};
-  return newRequest(HTTP_VERBS.GET, urls.appHealth(namespace, app), params, {}).then(response =>
-    AppHealth.fromJson(response.data, { rateInterval: durationSec, hasSidecar: hasSidecar })
-  );
-};
 
-
-
-export const getErrorMsg = (msg: string, error: AxiosError) => {
-  let errorMessage = msg;
-  if (error && error.response) {
-    if (error.response.data && error.response.data.error) {
-      errorMessage = `${msg}, Error: [ ${error.response.data.error} ]`;
-    } else if (error.response.statusText) {
-      errorMessage = `${msg}, Error: [ ${error.response.statusText} ]`;
-      if (error.response.status === 401) {
-        errorMessage += ' Has your session expired? Try logging in again.';
-      }
-    }
-  }
-  return errorMessage;
-};
-**/
 
 
 

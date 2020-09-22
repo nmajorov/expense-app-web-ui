@@ -21,6 +21,8 @@ import { withRouter } from "react-router-dom";
 
 import { SSO } from "../../types/SSO";
 import SSOThunkActions from "../../actions/SSOThunkActions";
+import { AlertMessage, MessageType } from "../../types/AlertTypes";
+import { AlertActions } from "../../actions/AlertAction";
 
 
 const trashIcon = <FontAwesomeIcon icon={faTrashAlt} />;
@@ -41,6 +43,10 @@ interface StateProps {
 
 interface DispatchProps {
   getExpenses: () => any;
+  showLoading:() => any;
+  stopShowLoading:()=>any;
+  startLoading:() => any;
+  isLoading:boolean;
   deleteExpense: (id:number) => any;
   pollInterval: TimeInMilliseconds;
   setLastRefreshAt: (lastRefreshAt: TimeInMilliseconds) => void;
@@ -68,9 +74,8 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
     console.log("dashboard did mount called")
     if (this.props.sso.authenticated){
       //run only if authenticated !!
-     // if (store.getState().expensesState.expenses.length === 0) {
         this.scheduleNextPollingInterval(0);
-     // }
+     
     }else{
       console.log("user is not authenticated")
     }
@@ -81,27 +86,28 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
   }
 
   componentDidUpdate(prev: Props) {
-    console.log("update dashboard prev.pollInterval: " + prev.pollInterval)
+    console.log("update dashboard loading in progress: "+  this.props.isLoading )
+   
     // schedule an immediate  fetch if needed
     if (this.props.sso.authenticated) {
+     
+
        const curr = this.props;
        console.log("curr.pollInterval: " + curr.pollInterval + "  prevPoolInt: " + prev.pollInterval )
-      if (prev.pollInterval !== curr.pollInterval) {
-        this.scheduleNextPollingInterval(curr.pollInterval);
-        
-      }else{
-          this.scheduleNextPollingIntervalFromProps();
-      }
+     
+      this.scheduleNextPollingInterval(curr.pollInterval);
+     
     }
   }
 
   private scheduleNextPollingInterval(pollInterval: number) {
-    // Remove any pending timeout to avoid having multiple requests at once
-   
-
+  
     if (pollInterval === 0 || pollInterval === undefined) {
       this.loadExpensesFromBackend();
     } else {
+
+    
+      // Remove any pending timeout to avoid having multiple requests at once
       this.removePollingIntervalTimer();
       // We are using setTimeout instead of setInterval because we have more control over it
       // e.g. If a request takes much time, the next interval will fire up anyway and is
@@ -122,17 +128,14 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
     }
   }
 
-  private scheduleNextPollingIntervalFromProps() {
-    console.log("scheduleNextPollingIntervalFromProps: " + this.props.pollInterval)
-    this.scheduleNextPollingInterval(this.props.pollInterval)
-  }
-
   /**
    * trigger load of expenses from backend
    */
   private loadExpensesFromBackend = () => {
-    console.log("loadExpensesFromBackend " + Date().toLocaleString())
+      
+    this.props.startLoading();
     this.props.getExpenses();
+  
   };
 
   private closeDeleteModalWindow = () => {
@@ -208,7 +211,7 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
 
 
   private renderExpenses() {
-  //  this.loadExpensesFromBackend();
+  
     return (this.props.expenses.length > 0 ? (
       this.renderExpensesTable()
     ) : (
@@ -223,6 +226,7 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
    */
   private renderExpensesTable() {
     return (
+      <>
       <Table striped bordered hover size="sm">
         <thead>
           <tr>
@@ -284,6 +288,7 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
           </tr>
         </tbody>
       </Table>
+      </>
     );
   }
 
@@ -314,18 +319,33 @@ class DashBoardContainer extends React.Component<Props, ProjectsStates> {
 }
 
 const mapStateToProps = (state: AppState) => {
+  console.log("state.expensesState.isLoading: "+ state.expensesState.isLoading)
   return {
+
     expenses: state.expensesState.expenses,
     pollInterval: state.expensesState.pollInterval,
     showModal: state.expensesState.showModal,
     selectedExpenseID: state.expensesState.selectedID,
-    sso: state.ssoState.sso
+    sso: state.ssoState.sso,
+    isLoading: state.expensesState.isLoading
     };
 };
 
 const mapDispatchToProps = (
   dispatch: ThunkDispatch<AppState, void, AppAction>
 ) => ({
+  
+  startLoading: () =>{
+    let loadMessage: AlertMessage = {
+      content: "loading data ",
+      show_notification: true,
+      type: MessageType.INFO
+    }
+  
+    dispatch(AlertActions.addMessage(loadMessage))
+    dispatch(ExpensesThunkActions.startFetching())
+  },
+ 
   getExpenses: () => {
     dispatch(ExpensesThunkActions.fetchExpensesData());
   },

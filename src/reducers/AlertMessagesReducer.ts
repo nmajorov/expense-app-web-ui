@@ -26,7 +26,6 @@ const alertMessageReducer = (state: AlertsState = ALERT_MESSAGE_INITIAL_STATE, a
     
     case getType(AlertActions.addMessage):
       newState.alertMessage = action.payload as AlertMessage; 
-      newState.alertMessage.show_notification = true;
       break;
     
     case getType(AlertActions.removeMessage):

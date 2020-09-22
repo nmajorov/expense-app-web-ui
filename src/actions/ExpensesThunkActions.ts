@@ -8,12 +8,25 @@ import { AlertActions } from "./AlertAction";
 import { AlertMessage, MessageType } from "../types/AlertTypes";
 
 const ExpensesThunkActions = {
+ 
+  startFetching:() => {
+    return(dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
+
+
+      return dispatch(ExpensesActions.isFetching(true))
+    }
+  },
+ 
   fetchExpensesData: (
 
   ) => {
+    
     return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
-      return API.fetchExpenses().then(
+      
+    
+      return  API.fetchExpenses().then(
         response => {
+       
           const objArray = response.data;
           const data: Array<Expense> = [];
           objArray.forEach(element => {
@@ -29,14 +42,17 @@ const ExpensesThunkActions = {
             )
 
           });
+         
           dispatch(ExpensesActions.fetchActionSuccess(data))
-          dispatch(AlertActions.removeMessage())
+          dispatch(ExpensesActions.isFetching(false));
+         
         },
         error => {
 
           let emsg: string;
           if (error.response && error.response.data && error.response.data.error) {
             emsg = 'Cannot load the expenses: ' + error.response.data.error;
+            ;
           } else {
             emsg = 'Cannot load the expenses: ' + error.toString();
           }
@@ -47,11 +63,17 @@ const ExpensesThunkActions = {
             show_notification: true,
             type: MessageType.ERROR
           }
+          //remove if any
+          dispatch(ExpensesActions.isFetching(false));
           dispatch(AlertActions.addMessage(alertMessage))
 
 
         }
+
+        
       )
+      
+
     }
   },
 
@@ -75,6 +97,7 @@ const ExpensesThunkActions = {
             show_notification: true,
             type: MessageType.ERROR
           }
+      
           dispatch(AlertActions.addMessage(alertMessage))
 
         }
@@ -134,7 +157,6 @@ fetchOneExpense:(id: string) => {
           type: MessageType.ERROR
         }
         dispatch(AlertActions.addMessage(alertMessage))
-
       }
     )
   }
