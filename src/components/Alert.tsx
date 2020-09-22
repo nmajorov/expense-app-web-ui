@@ -3,7 +3,7 @@ import { AppState } from "../store/Store";
 import { connect } from "react-redux";
 // import { store } from "../store/ConfigStore";
 import {AlertMessage,MessageType} from "../types/AlertTypes"
-import { Alert, Spinner } from "react-bootstrap";
+import { Alert, Col, Container, Row, Spinner } from "react-bootstrap";
 import { ThunkDispatch } from "redux-thunk";
 import { AppAction } from "../actions/AppAction";
 import { AlertActions } from "../actions/AlertAction";
@@ -117,7 +117,7 @@ class AlertContainer extends React.PureComponent<Props, State> {
 
         return( <Spinner
                as="span"
-               animation="border"
+               animation="grow"
                size="sm"
                role="status"
                aria-hidden="true"
@@ -138,11 +138,14 @@ class AlertContainer extends React.PureComponent<Props, State> {
       <>
             <Alert key="e" show={this.props.message.show_notification} variant={typeVariant(this.props.message.type)}
                onClose={() => this.props.closeAlert()} dismissible>
-                 <p>
+               
+                <p>
+                {this.props.message.content} {this.renderSpinner()} 
+                </p>
+               
+               
                    
-                   {this.props.message.content}
-                   {this.renderSpinner()}
-                   </p>
+                
             </Alert>
     </>
     
