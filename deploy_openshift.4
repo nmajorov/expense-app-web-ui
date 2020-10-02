@@ -15,7 +15,7 @@ echo "backEndUrl=$BACKEND_URL"
 # set backend url with redirects
 
 # set react url just to api - nginx will handle the rest
-sed -ri  "s|=(.*)|= \"/api\";|g" src/utils/backendUrl.ts
+#sed -ri  "s|=(.*)|= \"/api\";|g" src/utils/backendUrl.ts
 
 # set nginx proxy pass url
 sed -ri  "s|proxy_pass.*|proxy_pass $BACKEND_URL;|g" ./nginx.conf
@@ -25,9 +25,17 @@ yarn build
 
 #copy web server config
 cp -r ./nginx.conf   ./build
+
 cd build
-oc new-app nodejs-gui
-oc new-build --image-stream=nginx  --binary=true --name=nodejs-gui
-oc start-build nodejs-gui --from-dir=. --follow
-oc new-app nodejs-gui
-oc expose svc nodejs-gui
+echo "delete previous deployments if exist"
+oc delete  all --selector=app=nodejs-gui --ignore-not-found
+
+
+	#oc new-app -i $(inputs.params.APP_NAME) -n $(inputs.params.DEPLOY_PROJECT)
+	      oc new-app --name=nodejs-gui --image-stream=openshift/nginx:1.16 --binary=true
+        oc start-build nodejs-gui --from-dir .
+        oc expose svc nodejs-gui
+   
+
+
+

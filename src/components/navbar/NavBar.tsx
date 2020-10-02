@@ -1,14 +1,30 @@
 import React from "react";
 import Navbar from "react-bootstrap/Navbar";
 
-import { NavItem, Nav } from "react-bootstrap";
-import GlobalAlert from "../Alert";
+import { NavItem, Nav,Button,Form} from "react-bootstrap";
+import { connect } from "react-redux";
+import { AppState } from "../../store/Store";
+import { ThunkDispatch } from "redux-thunk";
+import { AppAction } from "../../actions/AppAction";
+import { SSO } from "../../types/SSO";
+import { Link } from 'react-router-dom'
 
-interface State {}
+import {keycloak} from "../../keycloak";
 
-interface OwnProps {}
+interface State {
+}
 
-interface DispatchProps {}
+interface OwnProps {
+  
+  sso:SSO;
+}
+
+interface DispatchProps {
+
+  loginSSO:() => any;
+  checkLoginDetails:() =>any;
+  initKeycloak:() => any;
+}
 
 type Props = OwnProps & DispatchProps;
 
@@ -17,30 +33,96 @@ type Props = OwnProps & DispatchProps;
  * left side navigation
  */
 class NavigationBarContainer extends React.Component<Props, State> {
-  constructor(prop: Props) {
-    super(prop);
+  constructor(props:Props) {
+    super(props);
     this.state = {};
+  }
+
+
+ 
+
+
+  /**
+   * handle login
+   */
+  private login = () => {
+    //redirect to the keycloak
+    keycloak.init({})
+    keycloak.login()
   }
 
   render() {
     return (
-      <Navbar className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-        <Navbar.Brand href="/">Home</Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Nav className="mr-auto">
-          <Nav.Link href="/add">Add Expenses</Nav.Link>
-        </Nav>
+      <Navbar bg="light">
+        <Nav.Link as={Link}  to="/" >Home</Nav.Link>
+      
+        <Navbar.Toggle />
+       
         <Nav>
+     
+          {this.props.sso.authenticated ? (
+            <Nav.Link as={Link} to="/add">Add Expenses</Nav.Link>
+
+          ) : (
+              <></>
+            )
+          }
+         
+        </Nav>
+        <Navbar.Collapse  className="justify-content-center">
           <NavItem>
-            <GlobalAlert />
+           
           </NavItem>
-        </Nav>
-        <Nav>
-          <Navbar.Text></Navbar.Text>
-        </Nav>
+        </Navbar.Collapse>
+        <Navbar.Collapse className="justify-content-end">
+        <Form inline>
+          {this.props.sso.authenticated  ? (
+
+                  <Navbar.Text>
+                      Signed in as: <a href="#login" onClick={this.login} >{this.props.sso.userProfile.username}</a>
+                  </Navbar.Text>
+
+          ):(
+                   <Button variant="primary" onClick={this.login}>
+                    Login
+                  </Button>
+                  )
+          }
+          </Form>
+        </Navbar.Collapse>
       </Navbar>
     );
   }
 }
 
-export default NavigationBarContainer;
+
+const mapStateToProps = (state: AppState,ownProps:Props ) => {
+  
+  
+  return {
+      sso: state.ssoState.sso
+  };
+};
+
+
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<AppState, void, AppAction>
+) => ({
+  
+
+   checkLoginDetails: () =>{
+        console.info("check login Details  called");
+         
+        },
+    
+  
+    
+})
+
+
+const decorator = connect(mapStateToProps, mapDispatchToProps);
+
+const NavigationBar = decorator(NavigationBarContainer);
+
+
+export default NavigationBar;

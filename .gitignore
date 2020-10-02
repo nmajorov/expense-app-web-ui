@@ -24,3 +24,6 @@ yarn-error.log*
 
 #remove idea files
 .idea
+# vim
+*.swp
+

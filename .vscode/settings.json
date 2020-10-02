@@ -3,6 +3,7 @@
     "editor.fontLigatures": true,
     "workbench.colorTheme": "Visual Studio Light",
     "cSpell.words": [
+        "keycloak",
         "middlewares"
     ],
     "workbench.iconTheme": "eq-material-theme-icons",

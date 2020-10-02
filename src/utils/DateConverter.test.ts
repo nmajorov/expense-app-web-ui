@@ -5,11 +5,11 @@
 import {formatDateStr, formateStrToDate} from './DateConverter'
 
 
-test("test the date converter", () => {
+test("test the date converter at 22", () => {
    let testDate: string = "2020-04-19T22:00:00.000Z";
 
   
-   console.log("test date: " + testDate)
+   console.log(" test the date converter at 22 test date: " + testDate)
        expect(formatDateStr(testDate)).toEqual("2020-04-20")
   
 })

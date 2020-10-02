@@ -1,0 +1,63 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: deploy-nodejs-app
+spec:
+  params:
+    - name: VERSION
+      description: The version of the nodejs
+      default: '10'
+      type: string
+  steps:
+    - name: yarn-build-app
+      image: 'registry.access.redhat.com/rhscl/nodejs-$(params.VERSION)-rhel7'
+      workingDir: /workspace/input-ui-source
+      command: ["/bin/bash", "-c"]
+
+      args:
+        - |-
+          echo "current git branch: $(git rev-parse --abbrev-ref HEAD)"
+          echo "install yarn"
+          npm install -g yarn
+          yarn install
+
+          # use default service name for the fuse backend
+          BACKEND_URL="http://nfuse:8080/services/app/expenses"
+          echo "backEndUrl=$BACKEND_URL"
+          # set backend url for redirects
+          # set nginx proxy pass url
+          sed -ri  "s|proxy_pass.*|proxy_pass $BACKEND_URL;|g" ./nginx.conf
+          echo "build for prod"
+          yarn install
+          yarn build
+          #copy web server config
+          cp -r ./nginx.conf   ./build
+
+
+    - name: deploy-app
+      image: quay.io/openshift/origin-cli:latest
+      workingDir: /workspace/input-ui-source
+      command: ["/bin/bash", "-c"]
+
+      args:
+        - |-
+
+          cd build
+          ls -lisa
+
+          oc get bc/nodejs-gui
+          if [[ $? -ne 0 ]]
+              then
+          	        oc new-app --name=nodejs-gui --image-stream=openshift/nginx:1.16 --binary=true
+                    oc start-build nodejs-gui --from-dir .
+                    oc expose svc nodejs-gui
+
+              else
+                  echo "Application already exists."
+          	      oc start-build nodejs-gui --from-dir=. --follow
+          fi
+
+
+  workspaces:
+   - name: input
+     mountPath: /workspace/input-ui-source

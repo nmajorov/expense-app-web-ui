@@ -8,12 +8,25 @@ import { AlertActions } from "./AlertAction";
 import { AlertMessage, MessageType } from "../types/AlertTypes";
 
 const ExpensesThunkActions = {
+ 
+  startFetching:() => {
+    return(dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
+
+
+      return dispatch(ExpensesActions.isFetching(true))
+    }
+  },
+ 
   fetchExpensesData: (
 
   ) => {
+    
     return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
-      return API.fetchExpenses().then(
+      
+    
+      return  API.fetchExpenses().then(
         response => {
+       
           const objArray = response.data;
           const data: Array<Expense> = [];
           objArray.forEach(element => {
@@ -29,14 +42,17 @@ const ExpensesThunkActions = {
             )
 
           });
+         
           dispatch(ExpensesActions.fetchActionSuccess(data))
-          dispatch(AlertActions.remoteMessage(""))
+          dispatch(ExpensesActions.isFetching(false));
+         
         },
         error => {
 
           let emsg: string;
           if (error.response && error.response.data && error.response.data.error) {
             emsg = 'Cannot load the expenses: ' + error.response.data.error;
+            ;
           } else {
             emsg = 'Cannot load the expenses: ' + error.toString();
           }
@@ -47,11 +63,17 @@ const ExpensesThunkActions = {
             show_notification: true,
             type: MessageType.ERROR
           }
+          //remove if any
+          dispatch(ExpensesActions.isFetching(false));
           dispatch(AlertActions.addMessage(alertMessage))
 
 
         }
+
+        
       )
+      
+
     }
   },
 
@@ -62,7 +84,7 @@ const ExpensesThunkActions = {
     return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
       return API.deleteExpense(id.toString()).then(
         response => {
-          dispatch(ExpensesActions.deleteActionSuccess([]))
+          dispatch(ExpensesActions.deleteActionSuccess())
         },
         error => {
 
@@ -75,13 +97,14 @@ const ExpensesThunkActions = {
             show_notification: true,
             type: MessageType.ERROR
           }
+      
           dispatch(AlertActions.addMessage(alertMessage))
 
         }
       )
     }
   },
-  showDeleteDialog: (id: number) => {
+    showDeleteDialog: (id: number) => {
     return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
       return (
         dispatch(ExpensesActions.showDeleteDialog(id))
@@ -94,7 +117,7 @@ const ExpensesThunkActions = {
   return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
     return API.addNewExpense(newExpense).then(
       response => {
-        dispatch(ExpensesActions.addNewExpenseSuccess([]))
+        dispatch(ExpensesActions.addNewExpenseSuccess())
       },
       error => {
 
@@ -134,7 +157,6 @@ fetchOneExpense:(id: string) => {
           type: MessageType.ERROR
         }
         dispatch(AlertActions.addMessage(alertMessage))
-
       }
     )
   }
@@ -146,7 +168,7 @@ updateExpense:(expense: Expense) => {
   return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
     return API.updateExpense(expense).then(
       response => {
-        dispatch(ExpensesActions.addNewExpenseSuccess([]))
+        dispatch(ExpensesActions.addNewExpenseSuccess())
       },
       error => {
 

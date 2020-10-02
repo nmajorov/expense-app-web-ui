@@ -1,15 +1,14 @@
-import React, { FormEvent } from "react";
-import { withRouter, RouteComponentProps } from "react-router-dom";
-import { Form, Button, Row } from "react-bootstrap";
-import { Expense } from "../../types/Expense";
+import React, {FormEvent} from "react";
+import {RouteComponentProps, withRouter} from "react-router-dom";
+import {Button, Form, Row} from "react-bootstrap";
+import {Expense} from "../../types/Expense";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { connect } from "react-redux";
-import {convertStrToAmount,convertAmountToStr,
-  formatDateStr,formateStrToDate} from "../../utils"
-import { AppState } from "../../store/Store";
-import { ThunkDispatch } from "redux-thunk";
-import { AppAction } from "../../actions/AppAction";
+import {connect} from "react-redux";
+import {convertAmountToStr, convertStrToAmount, formatDateStr, formateStrToDate} from "../../utils"
+import {AppState} from "../../store/Store";
+import {ThunkDispatch} from "redux-thunk";
+import {AppAction} from "../../actions/AppAction";
 import ExpensesThunkActions from "../../actions/ExpensesThunkActions";
 
 
@@ -17,7 +16,7 @@ type OwnProps = RouteComponentProps<{ id: string}>;
 
 interface AppOwnProps {
   editExpenseId?: string
-};
+}
 
 interface DispatchProps  {
   
@@ -61,33 +60,34 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  private handleDescriptionChange = event =>{
-     let description = event.target.value as String;
-    
-    if (description.length>3){
-       this.props.currentInputExpense.description =   event.target.value;
-      this.setState(
-        {
-        
-          isDescriptionValid:true
+    /**
+     * change description of item
+     * @param event change text field event
+     */
+    private readonly handleDescriptionChange = event =>{
+        let description = event.target.value as string;
+        this.props.currentInputExpense.description =   description;
+        if (description.length>3){
+            this.setState(
+                {
+                    isDescriptionValid:true
+                }
+            );
+        }else{
+            this.setState(
+                {
+
+                    isDescriptionValid:false
+                }
+            );
         }
-      );
-    }else{
-      this.setState(
-        {
-       
-          isDescriptionValid:false
-        }
-      );
-    }
-   
-  };
+    };
 
 
   /***
    * handle amount changes on the field
    */
-  private handleAmountChange = event => {
+  private readonly handleAmountChange = event => {
     
     console.log("set new amount value:" + event.target.value)
     
@@ -123,12 +123,9 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
   };
 
   private handleDateChange(date:string) {
-   // console.log("new-date: " + date)
-    
-    let changedDate= formatDateStr(date)
- 
+    console.log("new-date: " + date)
 
-    this.props.currentInputExpense.createdAT = changedDate;
+  this.props.currentInputExpense.createdAT = formatDateStr(date);
     this.setState(
       {isDateValid:true}
     );
@@ -166,25 +163,27 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
       this.props.loadExpense(id);
      
       this.setState({
+
         //amount loaded from database is correct
         isDescriptionValid: true,
         isAmountValid: true
       })
 
     } else {
+        this.props.currentInputExpense.description="";
       //handle add expense
       this.setState({
         isDescriptionValid: false,
       })
 
-      if (!this.props.currentInputExpense.createdAT) {
+
         let newDateStr = (function (): string {
           let date = new Date();
           return date.toString()
         }());
 
         this.props.currentInputExpense.createdAT = formatDateStr(newDateStr);
-      }
+
 
     }
   }
@@ -192,10 +191,6 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
 
 
   render() {
-
-    console.log("render started " + this.state.changedAmount);
-    
-
     return (
 
     
@@ -216,10 +211,10 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
                  
                     <Form.Label>Description</Form.Label>
                     <Form.Control
-                      className="form-control form-control-user"
+                      className="form-control"
                       contentEditable
                       id="Description"
-                      defaultValue={this.props.currentInputExpense.description}
+                      value={this.props.currentInputExpense.description}
                       onChange={this.handleDescriptionChange}
                       isValid={this.state.isDescriptionValid}
                       isInvalid={!this.state.isDescriptionValid}
@@ -231,7 +226,7 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
                      </Form.Group>
                      </div>
                      <Form.Group>
-                    <div className="col-sm-3">
+                    <div className="col-sm-5">
                     <Form.Label>Amount</Form.Label>
                     <Form.Control
                       className="form-control"
@@ -294,16 +289,18 @@ const mapDispatchToProps = (
   dispatch: ThunkDispatch<AppState, void, AppAction>
 ) => ({
   saveExpense: (expense: Expense) => {
-     dispatch(ExpensesThunkActions.addNewExpense(expense));
-     dispatch(ExpensesThunkActions.fetchExpensesData());
+      dispatch(ExpensesThunkActions.fetchExpensesData());
+      dispatch(ExpensesThunkActions.addNewExpense(expense));
+
   },
   loadExpense: (id: string) => {
+      console.info("load expense with id: " + id)
     dispatch(ExpensesThunkActions.fetchOneExpense(id));
    
   },
   updateExpense: (expense: Expense) => {
-    dispatch(ExpensesThunkActions.updateExpense(expense));
-    
+      dispatch(ExpensesThunkActions.fetchExpensesData());
+      dispatch(ExpensesThunkActions.updateExpense(expense));
   }
 
 })

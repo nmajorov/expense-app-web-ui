@@ -1,7 +1,9 @@
-import { constants as C } from "../utils";
 import { AlertsState } from "../store/Store";
-import { AppAction } from "../actions/AppAction";
+import { AlertActions } from "../actions/AlertAction";
 import { AlertMessage, MessageType } from "../types/AlertTypes";
+import { getType } from 'typesafe-actions';
+import { AppAction } from "../actions/AppAction";
+
 
 export const ALERT_MESSAGE_INITIAL_STATE: AlertsState = {
 
@@ -22,12 +24,11 @@ const alertMessageReducer = (state: AlertsState = ALERT_MESSAGE_INITIAL_STATE, a
 
   switch (action.type) {
     
-    case C.SHOW_ERROR:
+    case getType(AlertActions.addMessage):
       newState.alertMessage = action.payload as AlertMessage; 
-      newState.alertMessage.show_notification = true;
       break;
     
-    case C.CLEAR_ERROR:
+    case getType(AlertActions.removeMessage):
       newState.alertMessage = ALERT_MESSAGE_INITIAL_STATE.alertMessage;
       break;
 
