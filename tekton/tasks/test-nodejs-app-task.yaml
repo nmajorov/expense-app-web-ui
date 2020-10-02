@@ -5,7 +5,7 @@ metadata:
 spec:
   inputs:
     resources:
-      - name: expenses-web-ui-git
+      - name: input-ui-source
         type: git
     params:
       - name: VERSION
@@ -20,25 +20,21 @@ spec:
         description: Verify the TLS on the registry endpoint (for push/pull to a non-TLS registry)
         default: "true"
         type: string
-      - name: REVISION
-        description: branch / tag  to checkout from git
-        default: keycloak
+
 
 
   steps:
       - name: test-app
         image: 'registry.access.redhat.com/rhscl/nodejs-$(inputs.params.VERSION)-rhel7'
-        workingDir: /workspace/source
+        workingDir: /workspace/input-ui-source
         command: ["/bin/bash", "-c"]
-        volumeMounts:
-          #- name: varlibcontainers
-          #  mountPath: /var/lib/containers
-          - name: gen-source
-            mountPath: /gen-source
         args:
           - |-
             echo "test project"
-            # pwd && ls
+            pwd
+            ls
+            echo "current git branch: $(git rev-parse --abbrev-ref HEAD)"
+
             echo "install yarn first"
             npm install -g yarn
             yarn --version
@@ -46,11 +42,3 @@ spec:
             yarn install
             echo "run tests"
             yarn test
-
-       # securityContext:
-       #   privileged: true
-  volumes:
-    - name: varlibcontainers
-      emptyDir: {}
-    - name: gen-source
-      emptyDir: {}

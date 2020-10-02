@@ -7,3 +7,5 @@ spec:
   params:
     - name: url
       value: https://github.com/nmajorov/expenses-web-ui.git
+    - name: revision
+      value: master

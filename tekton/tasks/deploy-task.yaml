@@ -15,13 +15,9 @@ spec:
   steps:
     - name: yarn-build-app
       image: 'registry.access.redhat.com/rhscl/nodejs-$(inputs.params.VERSION)-rhel7'
-      workingDir: /workspace/source
+      workingDir: /workspace/input-ui-source
       command: ["/bin/bash", "-c"]
-      volumeMounts:
-        #- name: varlibcontainers
-        #  mountPath: /var/lib/containers
-        - name: gen-source
-          mountPath: /gen-source
+
       args:
         - |-
           echo "install yarn"
@@ -31,9 +27,7 @@ spec:
           # use default service name for the fuse backend
           BACKEND_URL="http://nfuse:8080/services/app/expenses"
           echo "backEndUrl=$BACKEND_URL"
-          # set backend url with redirects
-          # set react url just to api - nginx will handle the rest
-          sed -ri  "s|=(.*)|= \"/api\";|g" src/utils/backendUrl.ts
+          # set backend url for redirects
           # set nginx proxy pass url
           sed -ri  "s|proxy_pass.*|proxy_pass $BACKEND_URL;|g" ./nginx.conf
           echo "build for prod"
@@ -45,27 +39,21 @@ spec:
 
     - name: deploy-app
       image: quay.io/openshift/origin-cli:latest
-      workingDir: /workspace/source
+      workingDir: /workspace/input-ui-source
       command: ["/bin/bash", "-c"]
-      volumeMounts:
-        - name: gen-source
-          mountPath: /gen-source
+
       args:
         - |-
           cd build
-          oc get deployment.apps/nodejs-gui
-          if [[ $? -ne 0 ]]
-             then
-                #TODO: add params in task
-                oc new-app nodejs-gui
-                oc new-build --image-stream=nginx  --binary=true --name=nodejs-gui
-                oc start-build nodejs-gui --from-dir=. --follow
-                oc expose svc nodejs-gui
-             else
-                echo "Application already exists. trigger new s2i nginx build"
-                oc start-build nodejs-gui --from-dir=. --follow
-          fi
+          ls -lisa
+          echo "delete previous deployments if exist"
+          oc delete  all --selector=app=nodejs-gui --ignore-not-found
 
-  volumes:
-    - name: gen-source
-      emptyDir: {}
+          oc new-app --name=nodejs-gui --image-stream=openshift/nginx:1.16 --binary=true
+          oc start-build nodejs-gui --from-dir .
+          oc expose svc nodejs-gui
+
+
+
+
+

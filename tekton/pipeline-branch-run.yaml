@@ -1,0 +1,18 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: web-ui-keycloak-branch-run
+spec:
+ # params:
+  #  - name: git-revision
+   #   value: "keycloak"
+  pipelineRef:
+    name: build-expenses-web-ui
+  resources:
+    - name:  expenses-web-ui-git
+      resourceRef:
+        name:   expenses-web-ui-keycloak-git
+    - name: ui-image
+      resourceRef:
+        name: ui-image
+

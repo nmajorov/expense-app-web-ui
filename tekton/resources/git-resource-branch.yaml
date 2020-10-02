@@ -1,0 +1,11 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: expenses-web-ui-keycloak-git
+spec:
+  type: git
+  params:
+    - name: url
+      value: https://github.com/nmajorov/expenses-web-ui.git
+    - name: revision
+      value: keycloak

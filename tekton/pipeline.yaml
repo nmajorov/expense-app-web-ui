@@ -1,8 +1,12 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: build-expenses-web-ui
 spec:
+  #params:
+   # - name: git-revision
+   #   type: string
+    #  default: "master"
   resources:
     - name: expenses-web-ui-git
       type: git
