@@ -5,7 +5,7 @@ metadata:
 spec:
   inputs:
     resources:
-      - name: source
+      - name: expenses-web-ui-git
         type: git
     params:
       - name: VERSION
@@ -20,6 +20,9 @@ spec:
         description: Verify the TLS on the registry endpoint (for push/pull to a non-TLS registry)
         default: "true"
         type: string
+      - name: REVISION
+        description: branch / tag  to checkout from git
+        default: keycloak
 
 
   steps:

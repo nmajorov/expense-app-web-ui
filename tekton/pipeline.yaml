@@ -18,9 +18,10 @@ spec:
         value: "10"
       - name: TLSVERIFY
         value: "false"
+
     resources:
       inputs:
-        - name: source
+        - name: input-ui-source
           resource: expenses-web-ui-git
 
   - name: build-and-deploy
@@ -33,6 +34,6 @@ spec:
       - test
     resources:
       inputs:
-        - name: source
+        - name: input-ui-source
           resource: expenses-web-ui-git
 

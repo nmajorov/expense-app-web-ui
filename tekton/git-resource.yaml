@@ -5,7 +5,5 @@ metadata:
 spec:
   type: git
   params:
-    - name: revision
-      value: keycloak
     - name: url
       value: https://github.com/nmajorov/expenses-web-ui.git

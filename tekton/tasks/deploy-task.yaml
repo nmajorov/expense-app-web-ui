@@ -5,7 +5,7 @@ metadata:
 spec:
   inputs:
     resources:
-      - name: source
+      - name: input-ui-source
         type: git
     params:
       - name: VERSION
