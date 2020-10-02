@@ -8,11 +8,10 @@ spec:
    #   value: "keycloak"
   pipelineRef:
     name: build-expenses-web-ui
-  resources:
-    - name:  expenses-web-ui-git
-      resourceRef:
-        name:   expenses-web-ui-keycloak-git
-    - name: ui-image
-      resourceRef:
-        name: ui-image
-
+  params:
+    - name: GIT_REVISION
+      value: keycloak
+  workspaces:
+    - name: ui-workspace
+      persistentVolumeClaim:
+        claimName: ui-source-pvc

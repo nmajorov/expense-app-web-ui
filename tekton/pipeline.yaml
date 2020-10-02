@@ -1,43 +1,53 @@
+---
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: build-expenses-web-ui
 spec:
-  #params:
-   # - name: git-revision
-   #   type: string
-    #  default: "master"
-  resources:
-    - name: expenses-web-ui-git
-      type: git
+  params:
+    - name: GIT_URL
+      description: "git url of client"
+      default: https://github.com/nmajorov/expenses-web-ui.git
+    - name: GIT_REVISION
+      default: master
     - name: ui-image
-      type: image
+      default: "image-registry.openshift-image-registry.svc:5000/nm-demo/gui:latest"
+
+  workspaces:
+    - name: ui-workspace
+      description: |
+        This workspace will receive the cloned git repo and be passed
+        to the next Task.
 
   tasks:
-  - name: test
-    taskRef:
-      name: test-nodejs-app
-    params:
-      - name: VERSION
-        value: "10"
-      - name: TLSVERIFY
-        value: "false"
-
-    resources:
-      inputs:
-        - name: input-ui-source
-          resource: expenses-web-ui-git
-
-  - name: build-and-deploy
-    taskRef:
-      name: deploy-nodejs-app
-    params:
-      - name: VERSION
-        value: "10"
-    runAfter:
-      - test
-    resources:
-      inputs:
-        - name: input-ui-source
-          resource: expenses-web-ui-git
+    - name: clone
+      taskRef:
+        name: git-clone
+        kind: ClusterTask
+      params:
+        - name: url
+          value: $(params.GIT_URL)
+        - name: revision
+          value: $(params.GIT_REVISION)
+        - name: deleteExisting
+          value: "true"
+      workspaces:
+        - name: output
+          workspace: ui-workspace
+    - name: test
+      taskRef:
+        name: test-nodejs-app
+      runAfter:
+        - clone
+      workspaces:
+        - name: input
+          workspace: ui-workspace
+    - name: build-and-deploy
+      taskRef:
+        name: deploy-nodejs-app
+      runAfter:
+        - test
+      workspaces:
+        - name: input
+          workspace: ui-workspace
 
