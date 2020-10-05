@@ -14,6 +14,7 @@ import InitializingScreen from "./InitializingScreen";
 import SSOComponent from "./components/SSOComponent";
 import { ConnectedRouter } from 'connected-react-router'
 import GlobalAlert from "./components/Alert";
+import ProfileView from "./components/content/ProfileView";
 
 
 
@@ -44,6 +45,8 @@ const App: React.FC = () => {
                         <Route exact path="/" component={DashBoard} />
                   
                         <Route  path="/add" component={ExpensesForm} />
+
+                        <Route  path="/add" component={ProfileView} />
 
                        <Route path="/edit/:id" component={ExpensesForm} />
                       </Switch>         
