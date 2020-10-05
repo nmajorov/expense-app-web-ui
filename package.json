@@ -24,6 +24,7 @@
     "bootstrap": "^4.3.1",
     "connected-react-router": "^6.8.0",
     "keycloak-js": "10.0.2",
+    "node-forge": "^0.10.0",
     "react": "^16.10.2",
     "react-bootstrap": "1.0.0",
     "react-datepicker": "^2.14.1",
