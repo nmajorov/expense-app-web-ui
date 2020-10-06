@@ -74,7 +74,6 @@ const mapStateToProps = (state: AppState, ownProps: Props) => {
     };
 };
 
-
 const mapDispatchToProps = (
     dispatch: ThunkDispatch<AppState, void, AppAction>
 ) => ({

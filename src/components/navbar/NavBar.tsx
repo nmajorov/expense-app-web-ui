@@ -1,7 +1,5 @@
 import React from "react";
-import Navbar from "react-bootstrap/Navbar";
-
-import { NavItem, Nav,Button,Form} from "react-bootstrap";
+import { NavItem,Navbar,NavDropdown, Nav,Button,Form} from "react-bootstrap";
 import { connect } from "react-redux";
 import { AppState } from "../../store/Store";
 import { ThunkDispatch } from "redux-thunk";
@@ -75,12 +73,15 @@ class NavigationBarContainer extends React.Component<Props, State> {
           </NavItem>
         </Navbar.Collapse>
         <Navbar.Collapse className="justify-content-end">
-        <Form inline>
-          {this.props.sso.authenticated  ? (
 
-                  <Navbar.Text>
-                      Signed in as: <a href="#login" onClick={this.login} >{this.props.sso.userProfile.username}</a>
-                  </Navbar.Text>
+          {this.props.sso.authenticated  ? (
+              <NavDropdown title={ "" + this.props.sso.userProfile.username}  id="basic-nav-dropdown">
+                  <NavDropdown.Item href="/profile">profile</NavDropdown.Item>
+
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item href="/logout">SING OUT</NavDropdown.Item>
+              </NavDropdown>
+
 
           ):(
                    <Button variant="primary" onClick={this.login}>
@@ -88,7 +89,7 @@ class NavigationBarContainer extends React.Component<Props, State> {
                   </Button>
                   )
           }
-          </Form>
+
         </Navbar.Collapse>
       </Navbar>
     );

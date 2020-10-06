@@ -5,9 +5,7 @@ import {AppState} from "../../store/Store";
 import {SSO} from "../../types/SSO";
 
 /**
- *
- * hook to show user profile
- *
+ *   show user profile
  */
 const ProfileView = () => {
     const {userProfile} = useSelector<AppState, SSO>((state: AppState) => {
@@ -17,15 +15,15 @@ const ProfileView = () => {
     });
     return (
         <>
-        <Row>
-            <Col sm={4} md={8}>
-                <h4>{userProfile.username}</h4>
-            </Col>
-        </Row>
-        <Row>
-            <Col>Email: {userProfile.email}</Col>
-        </Row>
-    </>
+            <Row>
+                <Col sm={4} md={8}>
+                    <h4>{userProfile.username}</h4>
+                </Col>
+            </Row>
+            <Row>
+                <Col>Email: {userProfile.email}</Col>
+            </Row>
+        </>
     );
 };
 

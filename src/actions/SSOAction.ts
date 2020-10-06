@@ -7,7 +7,8 @@ export const SSOActions = {
     // not easy to check login cause it do callback
     loginActionSuccess: createAction(C.DO_SSO_LOGIN)<SSO>(),
     ssoInitializedSuccess:createAction(C.SSO_INITIALIZED)<SSO>(),
-    userProfileLoadSuccess:createAction(C.USER_PROFILE_LOADED)<SSO>()
+    userProfileLoadSuccess:createAction(C.USER_PROFILE_LOADED)<SSO>(),
+    singOutSuccess: createAction(C.SSO_SIGN_OUT)()
 }
 
 

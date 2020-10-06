@@ -15,6 +15,7 @@ import SSOComponent from "./components/SSOComponent";
 import { ConnectedRouter } from 'connected-react-router'
 import GlobalAlert from "./components/Alert";
 import ProfileView from "./components/content/ProfileView";
+import Logout from "./components/content/Logout";
 
 
 
@@ -46,9 +47,11 @@ const App: React.FC = () => {
                   
                         <Route  path="/add" component={ExpensesForm} />
 
-                        <Route  path="/add" component={ProfileView} />
+                        <Route  path="/profile" component={ProfileView} />
 
                        <Route path="/edit/:id" component={ExpensesForm} />
+
+                        <Route path="/logout" component={Logout} />
                       </Switch>         
                  
 

@@ -92,7 +92,30 @@ const SSOThunkActions = {
           )
 
     }
-  }
+  },
+
+    signOut:() => {
+        return(dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) =>{
+            //fix redirect url to pointing to home
+            return keycloak.logout({redirectUri:window.location.href.replace("logout","")}).then(
+                ok => {
+                    dispatch(SSOActions.singOutSuccess())
+                },
+                err => {
+                    let message = 'Error at signing out';
+
+                    dispatch(ExpensesActions.fetchError(message))
+                    let alertMessage: AlertMessage = {
+                        content: message,
+                        show_notification: true,
+                        type: MessageType.ERROR
+                    }
+                    dispatch(AlertActions.addMessage(alertMessage))
+
+                }
+            )
+        }
+    }
   
 }
 
