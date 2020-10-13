@@ -13,7 +13,7 @@ const Logout = () => {
     useEffect(() => {
         dispatch(SSOThunkActions.signOut())
         history.push("/")
-    }, [])
+    }, [dispatch, history])
 
 
     return (

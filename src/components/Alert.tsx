@@ -96,7 +96,7 @@ class AlertContainer extends React.PureComponent<Props, State> {
       // e.g. If a request takes much time, the next interval will fire up anyway and is
       // possible that it will take much time as well. Instead wait for it to timeout/error to
       // try again.
-      console.log("alert set hide alert timeout: " + hideInterval)
+     // console.log("alert set hide alert timeout: " + hideInterval)
       this.showTimeoutRef = window.setTimeout(
         this.hideAlert,
         hideInterval
@@ -156,7 +156,7 @@ class AlertContainer extends React.PureComponent<Props, State> {
 
 
 const mapStateToProps  = (state: AppState) => {
-  console.log("alert mapStateToProps called state" + JSON.stringify(state))
+//  console.log("alert mapStateToProps called state" + JSON.stringify(state))
   return {
     message : state.alertState.alertMessage,
     pollInterval: state.expensesState.pollInterval

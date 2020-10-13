@@ -4,6 +4,7 @@ import { TimeInMilliseconds } from "../types/Common";
 import { AlertMessage } from "../types/AlertTypes";
 import { SSO } from "../types/SSO";
 import { RouterState } from 'connected-react-router'
+import { Report } from "../types/Report";
 /**
  * state of  warning or info messages
  */
@@ -28,11 +29,17 @@ export interface SSOState{
 }
 
 
+export interface ReportsState {
+    reports : Array<Report>
+}
 
 export interface AppState {
     expensesState: ExpensesState;
     alertState: AlertsState;
     ssoState: SSOState;
+    reportsState: ReportsState;
     routerState: RouterState;
 }
+
+
 

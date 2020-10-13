@@ -68,7 +68,7 @@ class SSOContainer extends React.PureComponent<Props, {}> {
 
 const mapStateToProps = (state: AppState, ownProps: Props) => {
 
-     console.log("mapStateToProps called sso state: " +  JSON.stringify(state.ssoState));
+   //  console.log("mapStateToProps called sso state: " +  JSON.stringify(state.ssoState));
     return {
         sso: state.ssoState.sso
     };

@@ -6,7 +6,8 @@ import {SSO} from "../types/SSO";
 export const SSO_INITIAL_STATE: SSOState = {
     sso: {
         authenticated: false, isInitialized: false,
-        userProfile: {email: "unknown", username: "unknown"}
+        userProfile: {email: "unknown", username: "unknown"},
+        token : ""
     },
 
 }

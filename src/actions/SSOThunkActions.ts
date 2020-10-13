@@ -26,7 +26,9 @@ const SSOThunkActions = {
               {
                 authenticated: keycloak.authenticated ? true : false,
                 isInitialized: true,
-                userProfile:{email:"unknown",username: "unknown"}
+                userProfile:{email:"unknown",username: "unknown"},
+                token: keycloak.token ? keycloak.token :"" 
+                
               }
             )
 
@@ -68,7 +70,8 @@ const SSOThunkActions = {
                       userProfile: {
                         email: keycloak.profile.email ? keycloak.profile.email : "unknown",
                         username: keycloak.profile.username ? keycloak.profile.username : "unknown"
-                      }
+                      },
+                      token: keycloak.token ? keycloak.token :"" 
                     }
                   )
 

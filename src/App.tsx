@@ -16,6 +16,7 @@ import { ConnectedRouter } from 'connected-react-router'
 import GlobalAlert from "./components/Alert";
 import ProfileView from "./components/content/ProfileView";
 import Logout from "./components/content/Logout";
+import ReportView from "./components/content/ReportView";
 
 
 
@@ -44,6 +45,8 @@ const App: React.FC = () => {
                       
                     <Switch>            
                         <Route exact path="/" component={DashBoard} />
+
+                        <Route  path="/report/:id" component={ReportView} />
                   
                         <Route  path="/add" component={ExpensesForm} />
 
