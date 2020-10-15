@@ -67,13 +67,38 @@ export const updateExpense= (expense:Expense) =>{
 
 /**
  * fetch Reports  
- * @param expenseID an expense by id
+ * @param token an OIDC token from a current keycloak session
  */
 export const fetchReports= (token: String) =>{
   return newRequest<Array<Report>>(HTTP_VERBS.GET,{
     Authorization: 'Bearer ' + token
   },url+ "/reports",{},{})
 }
+
+/**
+ * fetch report by id
+ * @param token an OIDC token from a current keycloak session
+ * @param id the report id
+ */
+export const fetchOneReport= (token: String,id:String) =>{
+    return newRequest<Report>(HTTP_VERBS.GET,{
+        Authorization: 'Bearer ' + token
+    },url+ "/reports/" + id,{},{})
+}
+
+
+/**
+ * fetch Reports
+ * @param token an OIDC token from a current keycloak session
+ * @param name the name of report
+ */
+export const addReport= (token: String,name:String) =>{
+    return newRequest<any>(HTTP_VERBS.POST,{
+        Authorization: 'Bearer ' + token
+    },url+ "/reports",{},name)
+}
+
+
 
 
 

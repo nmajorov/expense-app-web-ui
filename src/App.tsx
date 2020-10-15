@@ -2,22 +2,22 @@ import React from "react";
 //import "./App.css";
 import DashBoard from "./components/content/DashBoard";
 import Navigation from "./components/navbar/NavBar";
-import { Switch, Route } from "react-router-dom";
-import { ExpensesForm } from "./components/content/ExpensesForm";
-import { Container, Row, Col } from "react-bootstrap";
+import {Route, Switch} from "react-router-dom";
+import {ExpensesForm} from "./components/content/ExpensesForm";
+import {Col, Container, Row} from "react-bootstrap";
 import Footer from "./components/footer";
 //import CallBack from "./utils/CallBack";
-import { Provider } from 'react-redux';
-import { store, persistor ,history} from './store/ConfigStore';
-import { PersistGate } from 'redux-persist/lib/integration/react';
+import {Provider} from 'react-redux';
+import {history, persistor, store} from './store/ConfigStore';
+import {PersistGate} from 'redux-persist/lib/integration/react';
 import InitializingScreen from "./InitializingScreen";
 import SSOComponent from "./components/SSOComponent";
-import { ConnectedRouter } from 'connected-react-router'
+import {ConnectedRouter} from 'connected-react-router'
 import GlobalAlert from "./components/Alert";
 import ProfileView from "./components/content/ProfileView";
 import Logout from "./components/content/Logout";
 import ReportView from "./components/content/ReportView";
-
+import {ReportForm} from "./components/content/ReportForm";
 
 
 interface AppProps {
@@ -39,27 +39,25 @@ const App: React.FC = () => {
             <Navigation />
             <main role="main">
 
-              <Row>
-                <Col>
-                  
-                      
-                    <Switch>            
-                        <Route exact path="/" component={DashBoard} />
+                <Row>
+                    <Col>
 
-                        <Route  path="/report/:id" component={ReportView} />
-                  
-                        <Route  path="/expenses-add" component={ExpensesForm} />
+                        <Switch>
+                            <Route exact path="/" component={DashBoard}/>
+                            <Route exact pah="/report-add" component={ReportForm}/>
+                            <Route path="/report/:id" component={ReportView}/>
+                            <Route path="/expenses-add" component={ExpensesForm}/>
 
-                        <Route  path="/profile" component={ProfileView} />
+                            <Route path="/profile" component={ProfileView}/>
 
-                       <Route path="/edit/:id" component={ExpensesForm} />
+                            <Route path="/edit/:id" component={ExpensesForm}/>
 
-                        <Route path="/logout" component={Logout} />
-                      </Switch>         
-                 
+                            <Route path="/logout" component={Logout}/>
+                        </Switch>
 
-                </Col>
-              </Row>
+
+                    </Col>
+                </Row>
 
             </main>
 

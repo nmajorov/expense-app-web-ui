@@ -10,19 +10,24 @@ import {Link} from 'react-router-dom'
 import {keycloak} from "../../keycloak";
 import {RouterState} from "connected-react-router";
 
+enum MenuNames {
+    ADD_REPORT = "Create Report",
+    ADD_EXPENSE = "Add Expense"
+}
+
 interface State {
 }
 
 interface OwnProps {
     routerLocation: RouterState;
-  sso:SSO;
+    sso: SSO;
 }
 
 interface DispatchProps {
 
-  loginSSO:() => any;
-  checkLoginDetails:() =>any;
-  initKeycloak:() => any;
+    loginSSO: () => any;
+    checkLoginDetails: () => any;
+    initKeycloak: () => any;
 }
 
 type Props = OwnProps & DispatchProps;
@@ -32,10 +37,10 @@ type Props = OwnProps & DispatchProps;
  * left side navigation
  */
 class NavigationBarContainer extends React.Component<Props, State> {
-  constructor(props:Props) {
-    super(props);
-    this.state = {};
-  }
+    constructor(props: Props) {
+        super(props);
+        this.state = {};
+    }
 
 
     /**
@@ -47,103 +52,100 @@ class NavigationBarContainer extends React.Component<Props, State> {
         switch (pathname) {
             case "/": {
                 result = (<Nav>
-                        <Nav.Link as={Link} to="/">Add Report</Nav.Link>
-                    </Nav>
-                )
+                    <Nav.Link as={Link} to="/report-add">{MenuNames.ADD_REPORT}</Nav.Link>
+                </Nav>)
                 break;
             }
-            case "/report":{
+            case "/report": {
                 result = (<Nav>
-                        <Nav.Link as={Link} to="/expenses-add">Add Expenses</Nav.Link>
+                        <Nav.Link as={Link} to="/expenses-add">{MenuNames.ADD_EXPENSE}</Nav.Link>
                     </Nav>
                 )
                 break;
             }
-
         }
 
         return result
     }
 
 
-  /**
-   * handle login
-   */
-  private login = () => {
-    //redirect to the keycloak
-    keycloak.init({})
-    keycloak.login()
-  }
+    /**
+     * handle login
+     */
+    private login = () => {
+        //redirect to the keycloak
+        keycloak.init({})
+        keycloak.login()
+    }
 
-  render() {
-    return (
-      <Navbar bg="light">
-        <Nav.Link as={Link}  to="/" >Home</Nav.Link>
-      
-        <Navbar.Toggle />
-       
-        <Nav>
-     
-          {this.props.sso.authenticated ? (
-            this.renderMenu(this.props.routerLocation.location.pathname)
-          ) : (
-              <></>
-            )
-          }
-         
-        </Nav>
-        <Navbar.Collapse  className="justify-content-center">
-          <NavItem>
-           
-          </NavItem>
-        </Navbar.Collapse>
-        <Navbar.Collapse className="justify-content-end">
+    render() {
+        return (
+            <Navbar bg="light">
+                <Nav.Link as={Link} to="/">Home</Nav.Link>
 
-          {this.props.sso.authenticated  ? (
-              <NavDropdown title={ "" + this.props.sso.userProfile.username}  id="basic-nav-dropdown">
-                  <NavDropdown.Item href="/profile">profile</NavDropdown.Item>
+                <Navbar.Toggle/>
 
-                  <NavDropdown.Divider />
-                  <NavDropdown.Item href="/logout">SING OUT</NavDropdown.Item>
-              </NavDropdown>
+                <Nav>
+
+                    {this.props.sso.authenticated ? (
+                        this.renderMenu(this.props.routerLocation.location.pathname)
+                    ) : (
+                        <></>
+                    )
+                    }
+
+                </Nav>
+                <Navbar.Collapse className="justify-content-center">
+                    <NavItem>
+
+                    </NavItem>
+                </Navbar.Collapse>
+                <Navbar.Collapse className="justify-content-end">
+
+                    {this.props.sso.authenticated ? (
+                        <NavDropdown title={"" + this.props.sso.userProfile.username} id="basic-nav-dropdown">
+                            <NavDropdown.Item href="/profile">profile</NavDropdown.Item>
+
+                            <NavDropdown.Divider/>
+                            <NavDropdown.Item href="/logout">SING OUT</NavDropdown.Item>
+                        </NavDropdown>
 
 
-          ):(
-                   <Button variant="primary" onClick={this.login}>
-                    Login
-                  </Button>
-                  )
-          }
+                    ) : (
+                        <Button variant="primary" onClick={this.login}>
+                            Login
+                        </Button>
+                    )
+                    }
 
-        </Navbar.Collapse>
-      </Navbar>
-    );
-  }
+                </Navbar.Collapse>
+            </Navbar>
+        );
+    }
 }
 
 
-const mapStateToProps = (state: AppState,ownProps:Props ) => {
-  
-  
-  return {
-      sso: state.ssoState.sso,
-      routerLocation: state.router
-  };
+const mapStateToProps = (state: AppState, ownProps: Props) => {
+
+
+    return {
+        sso: state.ssoState.sso,
+        routerLocation: state.router
+    };
 };
 
 
 const mapDispatchToProps = (
-  dispatch: ThunkDispatch<AppState, void, AppAction>
+    dispatch: ThunkDispatch<AppState, void, AppAction>
 ) => ({
-  
 
-   checkLoginDetails: () =>{
+
+    checkLoginDetails: () => {
         console.info("check login Details  called");
-         
-        },
-    
-  
-    
+
+    },
+
+
 })
 
 
