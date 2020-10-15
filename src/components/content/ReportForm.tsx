@@ -10,9 +10,11 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppState} from "../../store/Store";
 import {SSO} from "../../types/SSO";
 import ReportThunkActions from "../../actions/ReportThunkActions ";
+import { useHistory } from "react-router-dom";
 
 export const ReportForm = () => {
     const dispatch = useDispatch();
+    let history = useHistory();
 
     const [name, setName] = useState(String(""));
 
@@ -33,7 +35,7 @@ export const ReportForm = () => {
         if (sso.authenticated) {
             dispatch(ReportThunkActions.addReport(sso,name))
         }
-
+        history.push("/")
     }
 
 

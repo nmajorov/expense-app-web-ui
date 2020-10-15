@@ -39,12 +39,10 @@ const App: React.FC = () => {
             <Navigation />
             <main role="main">
 
-                <Row>
-                    <Col>
 
                         <Switch>
                             <Route exact path="/" component={DashBoard}/>
-                            <Route exact pah="/report-add" component={ReportForm}/>
+                            <Route path="/report-add" component={ReportForm}/>
                             <Route path="/report/:id" component={ReportView}/>
                             <Route path="/expenses-add" component={ExpensesForm}/>
 
@@ -56,8 +54,6 @@ const App: React.FC = () => {
                         </Switch>
 
 
-                    </Col>
-                </Row>
 
             </main>
 

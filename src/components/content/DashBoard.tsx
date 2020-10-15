@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {AppState, ReportsState} from "../../store/Store";
 import {SSO} from "../../types/SSO";
-import {Card, Container, Jumbotron} from "react-bootstrap";
+import {Card, Col, Container, Jumbotron, Row} from "react-bootstrap";
 import ReportThunkActions from "../../actions/ReportThunkActions ";
 
 
@@ -29,44 +29,40 @@ const DashBoard = () => {
             dispatch(ReportThunkActions.fetchReports(sso))
         }
         /// history.push("/")
-    }, [sso,dispatch])
+    }, [sso, dispatch])
 
 
-    function renderExpenses() {
-        console.log("renderExpenses called" + JSON.stringify(reports))
-        return (
-            <>
+    function renderReports() {
+
+        return (<Row>
                 {
                     reports.map((rp) => {
 
-                        return (
-                            <Card key={rp.id} style={{ width: '18rem' }}>
-
-                                <Card.Body>
-                                    <Card.Title><Card.Link href={"/report/" + rp.id } >{rp.name}</Card.Link></Card.Title>
-                                    <Card.Subtitle className="mb-2 text-muted"> {rp.createdAT}</Card.Subtitle>
-                                </Card.Body>
-                                </Card>
-
-                        );
-
+                        return renderReport(rp)
                     })
-
                 }
+            </Row>
+        );
+    }
 
-            </>
-        )
+    function renderReport(rp) {
+        return (
+            <Col key={rp.id} md={6}>
+                <Card key={rp.id}>
+
+                    <Card.Body>
+                        <Card.Title><Card.Link href={"/report/" + rp.id}>{rp.name}</Card.Link></Card.Title>
+                        <Card.Subtitle className="mb-2 text-muted"> {rp.createdAT}</Card.Subtitle>
+                    </Card.Body>
+                </Card>
+            </Col>
+        );
 
     }
 
-
     return (
-
         sso.authenticated ? (
-
-            renderExpenses()
-
-
+            renderReports()
         ) : (
             <Jumbotron>
                 <Container>
@@ -79,6 +75,8 @@ const DashBoard = () => {
             </Jumbotron>
         )
     );
-};
+
+}
+
 
 export default DashBoard
