@@ -38,7 +38,7 @@ export interface AppState {
     alertState: AlertsState;
     ssoState: SSOState;
     reportsState: ReportsState;
-    routerState: RouterState;
+    router: RouterState;
 }
 
 

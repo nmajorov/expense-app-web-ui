@@ -17,7 +17,7 @@ export const ALERT_MESSAGE_INITIAL_STATE: AlertsState = {
 }
 
 
-const alertMessageReducer = (state: AlertsState = ALERT_MESSAGE_INITIAL_STATE, action: AppAction): AlertsState => {
+const   alertMessageReducer = (state: AlertsState = ALERT_MESSAGE_INITIAL_STATE, action: AppAction): AlertsState => {
   const newState: AlertsState = {
     ...state
   };

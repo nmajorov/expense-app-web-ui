@@ -48,7 +48,7 @@ const App: React.FC = () => {
 
                         <Route  path="/report/:id" component={ReportView} />
                   
-                        <Route  path="/add" component={ExpensesForm} />
+                        <Route  path="/expenses-add" component={ExpensesForm} />
 
                         <Route  path="/profile" component={ProfileView} />
 

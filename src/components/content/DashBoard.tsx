@@ -30,7 +30,7 @@ const DashBoard = () => {
             dispatch(ReportThunkActions.fetchReports(sso))
         }
         /// history.push("/")
-    }, [sso,dispatch])
+    }, [sso])
 
 
 

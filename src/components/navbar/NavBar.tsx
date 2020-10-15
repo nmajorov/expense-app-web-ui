@@ -1,19 +1,20 @@
-import React from "react";
-import { NavItem,Navbar,NavDropdown, Nav,Button} from "react-bootstrap";
-import { connect } from "react-redux";
-import { AppState } from "../../store/Store";
-import { ThunkDispatch } from "redux-thunk";
-import { AppAction } from "../../actions/AppAction";
-import { SSO } from "../../types/SSO";
-import { Link } from 'react-router-dom'
+import React, {ReactElement} from "react";
+import {Button, Nav, Navbar, NavDropdown, NavItem} from "react-bootstrap";
+import {connect} from "react-redux";
+import {AppState} from "../../store/Store";
+import {ThunkDispatch} from "redux-thunk";
+import {AppAction} from "../../actions/AppAction";
+import {SSO} from "../../types/SSO";
+import {Link} from 'react-router-dom'
 
 import {keycloak} from "../../keycloak";
+import {RouterState} from "connected-react-router";
 
 interface State {
 }
 
 interface OwnProps {
-  
+    routerLocation: RouterState;
   sso:SSO;
 }
 
@@ -37,7 +38,32 @@ class NavigationBarContainer extends React.Component<Props, State> {
   }
 
 
- 
+    /**
+     * render menu depends on the current location path
+     * @param pathname current router location path
+     */
+    private renderMenu = (pathname: string) => {
+        let result: ReactElement = <></>
+        switch (pathname) {
+            case "/": {
+                result = (<Nav>
+                        <Nav.Link as={Link} to="/">Add Report</Nav.Link>
+                    </Nav>
+                )
+                break;
+            }
+            case "/report":{
+                result = (<Nav>
+                        <Nav.Link as={Link} to="/expenses-add">Add Expenses</Nav.Link>
+                    </Nav>
+                )
+                break;
+            }
+
+        }
+
+        return result
+    }
 
 
   /**
@@ -59,8 +85,7 @@ class NavigationBarContainer extends React.Component<Props, State> {
         <Nav>
      
           {this.props.sso.authenticated ? (
-            <Nav.Link as={Link} to="/add">Add Expenses</Nav.Link>
-
+            this.renderMenu(this.props.routerLocation.location.pathname)
           ) : (
               <></>
             )
@@ -101,7 +126,8 @@ const mapStateToProps = (state: AppState,ownProps:Props ) => {
   
   
   return {
-      sso: state.ssoState.sso
+      sso: state.ssoState.sso,
+      routerLocation: state.router
   };
 };
 
