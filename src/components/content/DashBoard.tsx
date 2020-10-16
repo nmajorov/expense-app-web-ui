@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppState, ReportsState} from "../../store/Store";
 import {SSO} from "../../types/SSO";
 import {Card, Col, Container, Dropdown, Jumbotron, Row} from "react-bootstrap";
-import ReportThunkActions from "../../actions/ReportThunkActions ";
+import ReportThunkActions from "../../actions/ReportThunkActions";
 import { faTrashAlt, faEdit ,faEllipsisH} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useConfirmDialog } from "./ConfirmDialog";
