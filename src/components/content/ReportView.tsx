@@ -359,7 +359,7 @@ const mapDispatchToProps = (
   },
 
   checkSSO: () =>{
-    dispatch(SSOThunkActions.initKeycloak()) ;
+   // dispatch(SSOThunkActions.initKeycloak()) ;
   }
   });
 

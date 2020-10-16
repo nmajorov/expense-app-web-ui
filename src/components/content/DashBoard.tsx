@@ -25,11 +25,10 @@ const DashBoard = () => {
         console.log("dashboard use effect called authenticated: " + JSON.stringify(sso.authenticated))
 
         if (sso.authenticated) {
-            console.log("calling dispatch")
             dispatch(ReportThunkActions.fetchReports(sso))
         }
         /// history.push("/")
-    }, [sso, dispatch])
+    }, [sso])
 
 
     function renderReports() {

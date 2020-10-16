@@ -5,6 +5,7 @@ import { AlertMessage } from "../types/AlertTypes";
 import { SSO } from "../types/SSO";
 import { RouterState } from 'connected-react-router'
 import { Report } from "../types/Report";
+import { KeycloakInstance } from "keycloak-js";
 /**
  * state of  warning or info messages
  */
@@ -26,6 +27,7 @@ export interface ExpensesState {
 
 export interface SSOState{
     sso: SSO;
+    keycloak: KeycloakInstance;
 }
 
 

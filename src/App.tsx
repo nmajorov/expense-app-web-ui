@@ -1,23 +1,23 @@
 import React from "react";
 //import "./App.css";
 import DashBoard from "./components/content/DashBoard";
-import Navigation from "./components/navbar/NavBar";
+import {NavigationBar as Navigation} from "./components/navbar/NavBar";
 import {Route, Switch} from "react-router-dom";
 import {ExpensesForm} from "./components/content/ExpensesForm";
-import {Col, Container, Row} from "react-bootstrap";
+import {Container} from "react-bootstrap";
 import Footer from "./components/footer";
 //import CallBack from "./utils/CallBack";
 import {Provider} from 'react-redux';
 import {history, persistor, store} from './store/ConfigStore';
 import {PersistGate} from 'redux-persist/lib/integration/react';
 import InitializingScreen from "./InitializingScreen";
-import SSOComponent from "./components/SSOComponent";
 import {ConnectedRouter} from 'connected-react-router'
 import GlobalAlert from "./components/Alert";
 import ProfileView from "./components/content/ProfileView";
 import Logout from "./components/content/Logout";
 import ReportView from "./components/content/ReportView";
 import {ReportForm} from "./components/content/ReportForm";
+
 
 
 interface AppProps {
@@ -33,7 +33,7 @@ const App: React.FC = () => {
       <ConnectedRouter history={history}>
 
       
-        <SSOComponent/>
+      
           <Container fluid="md">
            <GlobalAlert />
             <Navigation />
@@ -53,15 +53,12 @@ const App: React.FC = () => {
                             <Route path="/logout" component={Logout}/>
                         </Switch>
 
-
-
             </main>
 
             <Footer />
 
           </Container>
-         
-          
+       
         </ConnectedRouter>
       </PersistGate>
 

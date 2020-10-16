@@ -2,6 +2,7 @@ import {AppAction} from "../actions/AppAction";
 import {SSOState} from "../store/Store";
 import {ActionKeys as C} from "../utils";
 import {SSO} from "../types/SSO";
+import Keycloak from "keycloak-js";
 
 export const SSO_INITIAL_STATE: SSOState = {
     sso: {
@@ -9,6 +10,7 @@ export const SSO_INITIAL_STATE: SSOState = {
         userProfile: {email: "unknown", username: "unknown"},
         token : ""
     },
+    keycloak: Keycloak()
 
 }
 

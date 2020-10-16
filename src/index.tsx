@@ -3,16 +3,23 @@ import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
 //import * as serviceWorker from './serviceWorker';
-//import  {Spinner}  from './components/content'
+
+import init from "./context/keycloak";
+import { SecurityContext } from './context/SecurityContext';
 
 
-
-
+init().then((keycloak) => {
+      
 ReactDOM.render(
+        <SecurityContext.Provider value={keycloak}>
     
-        <App /> ,
+                 <App /> 
+  
+        </SecurityContext.Provider>,
+       
    
      document.getElementById('root'));
+});
      
 //store.subscribe(() => console.log("current state", store.getState()))
 

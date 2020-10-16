@@ -1,19 +1,17 @@
 import { ThunkDispatch } from "redux-thunk";
 import { AppState } from "../store/Store"
-//import { SSO } from "../types/SSO";
-import { keycloak } from "../keycloak";
-
 import { AppAction } from "./AppAction";
 import { SSOActions } from "./SSOAction";
 import { ExpensesActions } from "./ExpensesAction";
 import { AlertMessage, MessageType } from "../types/AlertTypes";
 import { AlertActions } from "./AlertAction";
+import { KeycloakInstance } from "keycloak-js";
 
 const SSOThunkActions = {
 
 
 
-  initKeycloak: () => {
+  initKeycloak: (keycloak:KeycloakInstance) => {
     return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
       return keycloak.init({ onLoad: 'check-sso', checkLoginIframeInterval: 1 
         // redirectUri: (process.env.REACT_APP_KEYCLOAK_REDIRECT_URL) ?  process.env.REACT_APP_KEYCLOAK_REDIRECT_URL : window.location.origin + '/callback'
@@ -54,10 +52,11 @@ const SSOThunkActions = {
     }
   },
 
-  loadUserProfile: () => {
+  loadUserProfile: (keycloak:KeycloakInstance) => {
 
 
     return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
+
       return keycloak.loadUserProfile().then(
             ok => {
               console.log("load profile was ok" + JSON.stringify(keycloak.profile));
@@ -97,7 +96,7 @@ const SSOThunkActions = {
     }
   },
 
-    signOut:() => {
+    signOut:(keycloak:KeycloakInstance) => {
         return(dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) =>{
             //fix redirect url to pointing to home
             return keycloak.logout({redirectUri:window.location.href.replace("logout","")}).then(

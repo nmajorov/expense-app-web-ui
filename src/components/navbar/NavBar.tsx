@@ -1,14 +1,13 @@
-import React, {ReactElement} from "react";
-import {Button, Nav, Navbar, NavDropdown, NavItem} from "react-bootstrap";
-import {connect} from "react-redux";
-import {AppState} from "../../store/Store";
-import {ThunkDispatch} from "redux-thunk";
-import {AppAction} from "../../actions/AppAction";
-import {SSO} from "../../types/SSO";
-import {Link} from 'react-router-dom'
+import React, { ReactElement, useContext, useEffect } from "react";
+import { Button, Nav, Navbar, NavDropdown, NavItem } from "react-bootstrap";
+import { AppState } from "../../store/Store";
+import { SSO } from "../../types/SSO";
+import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from "react-redux";
 
-import {keycloak} from "../../keycloak";
-import {RouterState} from "connected-react-router";
+import { RouterState } from "connected-react-router";
+import { SecurityContext } from "../../context/SecurityContext";
+import SSOThunkActions from "../../actions/SSOThunkActions";
 
 enum MenuNames {
     ADD_REPORT = "Create Report",
@@ -36,18 +35,22 @@ type Props = OwnProps & DispatchProps;
  *
  * left side navigation
  */
-class NavigationBarContainer extends React.Component<Props, State> {
-    constructor(props: Props) {
-        super(props);
-        this.state = {};
-    }
+export function NavigationBar() {
+    const keycloak = useContext(SecurityContext);
+    const { sso, routerLocation } = useSelector<AppState, SSO, RouterState>((state: AppState) => {
+        return {
+            sso: state.ssoState.sso,
+            routerLocation: state.router.location
+        }
+    });
+    const dispatch = useDispatch();
 
 
     /**
      * render menu depends on the current location path
      * @param pathname current router location path
      */
-    private renderMenu = (pathname: string) => {
+    function renderMenu(pathname: string) {
         let result: ReactElement = <></>
         switch (pathname) {
             case "/": {
@@ -58,8 +61,8 @@ class NavigationBarContainer extends React.Component<Props, State> {
             }
             case "/report": {
                 result = (<Nav>
-                        <Nav.Link as={Link} to="/expenses-add">{MenuNames.ADD_EXPENSE}</Nav.Link>
-                    </Nav>
+                    <Nav.Link as={Link} to="/expenses-add">{MenuNames.ADD_EXPENSE}</Nav.Link>
+                </Nav>
                 )
                 break;
             }
@@ -68,90 +71,58 @@ class NavigationBarContainer extends React.Component<Props, State> {
         return result
     }
 
+    useEffect(()=>{
+        if (keycloak.authenticated){
+            dispatch(SSOThunkActions.loadUserProfile(keycloak)) 
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
 
-    /**
-     * handle login
-     */
-    private login = () => {
-        //redirect to the keycloak
-        keycloak.init({})
-        keycloak.login()
-    }
+    return (
+        <Navbar bg="light">
+            <Nav.Link as={Link} to="/">Home</Nav.Link>
 
-    render() {
-        return (
-            <Navbar bg="light">
-                <Nav.Link as={Link} to="/">Home</Nav.Link>
+            <Navbar.Toggle />
 
-                <Navbar.Toggle/>
+            <Nav>
 
-                <Nav>
-
-                    {this.props.sso.authenticated ? (
-                        this.renderMenu(this.props.routerLocation.location.pathname)
-                    ) : (
+                {sso.authenticated ? (
+                    renderMenu(routerLocation.pathname)
+                ) : (
                         <></>
                     )
-                    }
+                }
 
-                </Nav>
-                <Navbar.Collapse className="justify-content-center">
-                    <NavItem>
+            </Nav>
+            <Navbar.Collapse className="justify-content-center">
+                <NavItem>
 
-                    </NavItem>
-                </Navbar.Collapse>
-                <Navbar.Collapse className="justify-content-end">
+                </NavItem>
+            </Navbar.Collapse>
+            <Navbar.Collapse className="justify-content-end">
 
-                    {this.props.sso.authenticated ? (
-                        <NavDropdown title={"" + this.props.sso.userProfile.username} id="basic-nav-dropdown">
-                            <NavDropdown.Item href="/profile">profile</NavDropdown.Item>
+                {sso.authenticated ? (
+                    <NavDropdown title={"" + sso.userProfile.username} id="basic-nav-dropdown">
+                        <NavDropdown.Item href="/profile">profile</NavDropdown.Item>
 
-                            <NavDropdown.Divider/>
-                            <NavDropdown.Item href="/logout">SING OUT</NavDropdown.Item>
-                        </NavDropdown>
+                        <NavDropdown.Divider />
+                        <NavDropdown.Item href="/logout">SING OUT</NavDropdown.Item>
+                    </NavDropdown>
 
 
-                    ) : (
-                        <Button variant="primary" onClick={this.login}>
+                ) : (
+                        <Button variant="primary" onClick={() => {
+                            keycloak.login()
+                        }}>
                             Login
                         </Button>
                     )
-                    }
+                }
 
-                </Navbar.Collapse>
-            </Navbar>
-        );
-    }
+            </Navbar.Collapse>
+        </Navbar>
+    );
+
 }
 
 
-const mapStateToProps = (state: AppState, ownProps: Props) => {
-
-
-    return {
-        sso: state.ssoState.sso,
-        routerLocation: state.router
-    };
-};
-
-
-const mapDispatchToProps = (
-    dispatch: ThunkDispatch<AppState, void, AppAction>
-) => ({
-
-
-    checkLoginDetails: () => {
-        console.info("check login Details  called");
-
-    },
-
-
-})
-
-
-const decorator = connect(mapStateToProps, mapDispatchToProps);
-
-const NavigationBar = decorator(NavigationBarContainer);
-
-
-export default NavigationBar;
