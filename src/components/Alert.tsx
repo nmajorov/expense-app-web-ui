@@ -35,7 +35,7 @@ const typeVariant = (type: MessageType) => {
     case MessageType.WARNING:
       return 'warning';
     default:
-      throw Error('Unexpected type');
+      return 'info';
   }
 };
 
@@ -76,7 +76,6 @@ class AlertContainer extends React.PureComponent<Props, State> {
    * trigger load of expenses from backend
    */
   private hideAlert = () => {
-    console.log("hideAlert called !")
     this.props.closeAlert()
   };
 

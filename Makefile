@@ -12,9 +12,9 @@ help: ## This help message
 		@echo -e "$$(grep -hE '^\S+:.*##' $(MAKEFILE_LIST) | sed -e 's/:.*##\s*/:/' -e 's/^\(.\+\):\(.*\)/\\x1b[36m\1\\x1b[m:\2/')"
 
 
-#.PHONY: status
-#status: ## check dependencies status
-#	dep status
+.PHONY: status
+status: ## check dependencies status
+	yarn install --check-files
 
 all: help
 

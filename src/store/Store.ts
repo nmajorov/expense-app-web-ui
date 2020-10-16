@@ -32,7 +32,8 @@ export interface SSOState{
 
 
 export interface ReportsState {
-    reports : Array<Report>
+    reports : Array<Report>,
+    changes?: boolean //helper for trigger changes in state 
 }
 
 export interface AppState {

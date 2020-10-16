@@ -87,6 +87,18 @@ export const fetchOneReport= (token: String,id:String) =>{
 }
 
 
+
+/**
+ * delete report by id
+ * @param token an OIDC token from a current keycloak session
+ * @param id the report id
+ */
+export const deleteReport= (token: String,id:String) =>{
+  return newRequest<Report>(HTTP_VERBS.DELETE,{
+      Authorization: 'Bearer ' + token
+  },url+ "/reports/" + id,{},{})
+}
+
 /**
  * fetch Reports
  * @param token an OIDC token from a current keycloak session

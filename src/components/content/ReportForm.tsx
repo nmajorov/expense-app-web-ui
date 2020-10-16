@@ -34,8 +34,9 @@ export const ReportForm = () => {
         event.preventDefault();
         if (sso.authenticated) {
             dispatch(ReportThunkActions.addReport(sso,name))
+            history.push("/")
         }
-        history.push("/")
+       
     }
 
 
@@ -45,7 +46,7 @@ export const ReportForm = () => {
     useEffect(
         () => {
 
-        }
+        },[]
     );
 
     function checkName(input:string){

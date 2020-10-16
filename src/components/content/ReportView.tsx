@@ -20,7 +20,6 @@ import {RouteComponentProps} from "react-router-dom";
 import { withRouter } from "react-router-dom";
 
 import { SSO } from "../../types/SSO";
-import SSOThunkActions from "../../actions/SSOThunkActions";
 import { AlertMessage, MessageType } from "../../types/AlertTypes";
 import { AlertActions } from "../../actions/AlertAction";
 

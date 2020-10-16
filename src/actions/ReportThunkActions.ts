@@ -62,7 +62,13 @@ const ReportThunkActions = {
         return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
             return API.addReport(sso.token, name).then(
                 response => {
-                    dispatch(ReportActions.addReportSuccess)
+                    dispatch(ReportActions.addReportSuccess())
+                    let alertMessage: AlertMessage = {
+                        content: `Report ${name} saved !`,
+                        show_notification: true,
+                        type: MessageType.SUCCESS
+                    }
+                    dispatch(AlertActions.addMessage(alertMessage))
                 },
                 error => {
                     let alertMessage: AlertMessage = {
@@ -94,12 +100,30 @@ const ReportThunkActions = {
             )
         }
     },
-
+    
     updateReport: (report: Report) => {
         return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
 
         }
-    }
+    },
+
+    deleteReport: (sso: SSO, id: String) => {
+        return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
+            return API.deleteReport(sso.token, id).then(
+                response => {
+                    dispatch(ReportActions.deleteActionSuccess())
+                },
+                error => {
+                    let alertMessage: AlertMessage = {
+                            content: 'Cannot delete the report: ' + error.toString(),
+                        show_notification: true,
+                        type: MessageType.ERROR
+                }
+                    dispatch(AlertActions.addMessage(alertMessage))
+                }
+            )
+        }
+    },
 }
 
 
