@@ -7,7 +7,7 @@ export const ReportActions = {
   addReportSuccess: createCustomAction(C.ADD_REPORT),
   fetchOneReportSuccess: createAction(C.FETCH_ONE_REPORT_SUCCESS)<Report>(),
   deleteActionSuccess: createCustomAction(C.REMOVE_REPORT),
-  updateActionSuccess: createCustomAction(C.UPDATE_REPORT),
+  updateActionSuccess: createCustomAction(C.UPDATE_REPORT_SUCCESS),
 };
 
 export type ReportAction = ActionType<typeof ReportActions>;
