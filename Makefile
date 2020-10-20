@@ -19,6 +19,12 @@ status: ## check dependencies status
 all: help
 
 
+.PHONY: lint
+lint: ##  run elint on code 
+	@echo "elint code "
+	yarn lint
+
+
 .PHONY: run
 run: ##  run gui in dev mode
 	@echo "run	app"

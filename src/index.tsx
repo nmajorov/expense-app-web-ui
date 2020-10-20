@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
-//import * as serviceWorker from './serviceWorker';
+// import * as serviceWorker from './serviceWorker';
 
 import init from "./context/keycloak";
 import { SecurityContext } from './context/SecurityContext';
@@ -21,7 +21,7 @@ ReactDOM.render(
      document.getElementById('root'));
 });
      
-//store.subscribe(() => console.log("current state", store.getState()))
+// store.subscribe(() => console.log("current state", store.getState()))
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

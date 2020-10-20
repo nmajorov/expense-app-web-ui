@@ -22,6 +22,7 @@ import { SSO } from '../../types/SSO';
 import { AlertMessage, MessageType } from '../../types/AlertTypes';
 import { AlertActions } from '../../actions/AlertAction';
 
+
 const trashIcon = <FontAwesomeIcon icon={faTrashAlt} />;
 const editIcon = <FontAwesomeIcon icon={faEdit} />;
 

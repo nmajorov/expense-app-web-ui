@@ -19,5 +19,7 @@
     },
     "plugins": ["react", "@typescript-eslint"],
     "ignorePatterns": ["temp.js", "**/*test.ts*"],
-    "rules": {}
+    "rules": {
+        "no-use-before-define": "off"
+    }
 }

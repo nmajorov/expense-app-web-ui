@@ -88,7 +88,7 @@ class AlertContainer extends React.PureComponent<Props, State> {
       // Remove any pending timeout to avoid having multiple requests at once
       this.removeAutoHideTimer();
       if (typeVariant(this.props.message.type) === "danger"){
-        //don't set hide interval for error
+        // don't set hide interval for error
         return;
       }
       // We are using setTimeout instead of setInterval because we have more control over it

@@ -41,7 +41,7 @@ const ReportThunkActions = {
             emsg = "Cannot load the reports: " + error.toString();
           }
 
-          let alertMessage: AlertMessage = {
+          const alertMessage: AlertMessage = {
             content: emsg,
             show_notification: true,
             type: MessageType.ERROR
@@ -60,7 +60,7 @@ const ReportThunkActions = {
       return API.addReport(sso.token, name).then(
         (response) => {
           dispatch(ReportActions.addReportSuccess());
-          let alertMessage: AlertMessage = {
+          const alertMessage: AlertMessage = {
             content: `Report ${name} saved !`,
             show_notification: true,
             type: MessageType.SUCCESS
@@ -68,7 +68,7 @@ const ReportThunkActions = {
           dispatch(AlertActions.addMessage(alertMessage));
         },
         (error) => {
-          let alertMessage: AlertMessage = {
+          const alertMessage: AlertMessage = {
             content: "Cannot add the report: " + error.toString(),
             show_notification: true,
             type: MessageType.ERROR
@@ -89,7 +89,7 @@ const ReportThunkActions = {
           dispatch(ReportActions.fetchOneReportSuccess(response.data));
         },
         (error) => {
-          let alertMessage: AlertMessage = {
+          const alertMessage: AlertMessage = {
             content: "Cannot add the report: " + error.toString(),
             show_notification: true,
             type: MessageType.ERROR
@@ -108,7 +108,7 @@ const ReportThunkActions = {
       return API.updateReport(sso.token, report).then(
         (response) => {
           dispatch(ReportActions.updateActionSuccess());
-          let alertMessage: AlertMessage = {
+          const alertMessage: AlertMessage = {
             content: `Report successfully  updated !`,
             show_notification: true,
             type: MessageType.SUCCESS
@@ -116,7 +116,7 @@ const ReportThunkActions = {
           dispatch(AlertActions.addMessage(alertMessage));
         },
         (error) => {
-          let alertMessage: AlertMessage = {
+          const alertMessage: AlertMessage = {
             content: "Cannot update the report: " + error.toString(),
             show_notification: true,
             type: MessageType.ERROR
@@ -137,12 +137,11 @@ const ReportThunkActions = {
           dispatch(ReportActions.deleteActionSuccess());
         },
         (error) => {
-          let alertMessage: AlertMessage = {
+          dispatch(AlertActions.addMessage({
             content: "Cannot delete the report: " + error.toString(),
             show_notification: true,
             type: MessageType.ERROR
-          };
-          dispatch(AlertActions.addMessage(alertMessage));
+          }));
         }
       );
     };

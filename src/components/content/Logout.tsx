@@ -9,16 +9,17 @@ import { SecurityContext } from "../../context/SecurityContext";
  */
 const Logout = () => {
     const keycloak = useContext(SecurityContext);
-    let history = useHistory();
+    const history = useHistory();
     const dispatch = useDispatch();
 
     useEffect(() => {
+        // TODO rewrite logout 
         if (keycloak === undefined){
             dispatch(SSOThunkActions.initKeycloak(keycloak)) 
         }
         dispatch(SSOThunkActions.signOut(keycloak))
         history.push("/")
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+ 
     }, [])
 
 

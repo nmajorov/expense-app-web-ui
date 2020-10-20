@@ -1,12 +1,10 @@
 import React from "react";
-//import "./App.css";
 import DashBoard from "./components/content/DashBoard";
 import {NavigationBar as Navigation} from "./components/navbar/NavBar";
 import {Route, Switch} from "react-router-dom";
 import {ExpensesForm} from "./components/content/ExpensesForm";
 import {Container} from "react-bootstrap";
 import Footer from "./components/footer";
-//import CallBack from "./utils/CallBack";
 import {Provider} from 'react-redux';
 import {history, persistor, store} from './store/ConfigStore';
 import {PersistGate} from 'redux-persist/lib/integration/react';
@@ -19,10 +17,6 @@ import ReportView from "./components/content/ReportView";
 import {ReportForm} from "./components/content/ReportForm";
 
 
-
-interface AppProps {
-  history: History;
-}
 
 const App: React.FC = () => {
 

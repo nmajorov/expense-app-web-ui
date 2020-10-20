@@ -12,21 +12,21 @@ export const calcDuration = (start: Date, end: Date) => {
        let result = '';
     
 
-    let duration = (end.getTime() - start.getTime()) / 1000;
+    const duration = (end.getTime() - start.getTime()) / 1000;
 
     if (duration <= 60) {
         // just calculate seconds 
         result = duration + "s"
-    } else if (60 < duration && duration < 3600) {
-        //define minutes
+    } else if (duration > 60 && duration < 3600) {
+        // define minutes
         return calculateMinSec(duration);
 
 
     } else if (duration > 3600) {
-        //define hours
-        let hours = Math.floor(duration / 3600)
+        // define hours
+        const hours = Math.floor(duration / 3600)
         result += hours + "h"
-        //calculate min and seconds without hours
+        // calculate min and seconds without hours
         result += " " + calculateMinSec((duration - (hours * 3600)))
     }
 
@@ -43,12 +43,12 @@ export const calcDuration = (start: Date, end: Date) => {
      * @param dr total duration time in seconds
      */
     function calculateMinSec(dr: number) {
-        //console.log("dr: "+ dr)
+        // console.log("dr: "+ dr)
         let result = "";
-        let minuteDuration = Math.round(dr / 60) + "m";
+        const minuteDuration = Math.round(dr / 60) + "m";
         result += minuteDuration;
         if ((dr / 60).toString().indexOf('.') !== -1) {
-            let sec = (dr - Math.floor(dr / 60) * 60);
+            const sec = (dr - Math.floor(dr / 60) * 60);
             let extraSecond = (sec).toString();
             // round for nice view in table
             if (extraSecond.length > 2){

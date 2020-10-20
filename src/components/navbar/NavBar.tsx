@@ -1,4 +1,4 @@
-import React, { ReactElement, useContext, useEffect } from "react";
+import React, {ReactElement, useContext, useEffect } from "react";
 import { Button, Nav, Navbar, NavDropdown, NavItem } from "react-bootstrap";
 import { AppState } from "../../store/Store";
 import { SSO } from "../../types/SSO";

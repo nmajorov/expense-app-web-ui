@@ -11,15 +11,14 @@ import { AppState, ReportsState } from "../../store/Store";
 import { SSO } from "../../types/SSO";
 import ReportThunkActions from "../../actions/ReportThunkActions";
 
-import { useHistory } from "react-router-dom";
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, useHistory  } from "react-router-dom";
 import { Report } from "../../types/Report";
 
 type ReportParams = { id: string };
 
 export const ReportForm = (routerProps: RouteComponentProps<ReportParams>) => {
   const dispatch = useDispatch();
-  let history = useHistory();
+  const history = useHistory();
 
   const [name, setName] = useState(String(""));
   const [isEdit, setIsEdit] = React.useState(false);
@@ -62,7 +61,7 @@ export const ReportForm = (routerProps: RouteComponentProps<ReportParams>) => {
   useEffect(() => {
     if (sso.authenticated) {
       if (history.location.pathname.endsWith("add")) {
-        //we adding the report
+        // we adding the report
       } else {
         setIsEdit(true);
         dispatch(

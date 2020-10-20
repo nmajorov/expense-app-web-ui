@@ -23,8 +23,7 @@ const reportsReducer = (
       break;
 
     case getType(ReportActions.fetchOneReportSuccess):
-      let report = action.payload as Report;
-      newState.reports = [report];
+      newState.reports = [action.payload as Report];
       newState.changes = true;
       break;
 
@@ -40,7 +39,7 @@ const reportsReducer = (
       break;
 
     case getType(ReportActions.deleteActionSuccess):
-      //just to trigger report state
+      // just to trigger report state
       newState.changes = !newState.changes;
       break;
 

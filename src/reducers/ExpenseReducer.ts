@@ -39,7 +39,6 @@ const expensesReducer = (state: ExpensesState = EXPENSES_INITIAL_STATE,
      
     
     case getType(ExpensesActions.showDeleteDialog):
-      //console.log("showDeleteDialog  called" );
       newState.selectedID = action.payload as Number;
       newState.showModal = !newState.showModal;
       break;

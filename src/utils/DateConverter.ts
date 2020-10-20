@@ -1,8 +1,3 @@
-// TODO look in this library  
-//https://github.com/date-fns
-//import { formatRFC7231 } from 'date-fns'
-
-
 
 
 /**
@@ -18,7 +13,7 @@ export const formatDateStr = (input: any):string => {
   if (input.toString().indexOf('-') >=0) {
    return  formatDateISOStr(input.toString())
   }
-  let nd = new Date(input);
+  const nd = new Date(input);
 
   var mm = nd.getMonth() + 1; // getMonth() is zero-based
   var dd = nd.getDate();
@@ -43,36 +38,35 @@ export const formatDateISOStr = (input: string):string => {
 
  
 
-   let tmpArrayDate =  input.split('-');
+   const tmpArrayDate =  input.split('-');
    console.log("tmpArrayDate: " + tmpArrayDate)
-   //let nd = new Date(input);
-
-    let year = tmpArrayDate[0] 
-    let mm = tmpArrayDate[1]
+   
+    const year = tmpArrayDate[0] 
+    const mm = tmpArrayDate[1]
     let dd = tmpArrayDate[2]
     let hours = ''
     
     console.log("dd: " + dd)
-    //if found Time as hours split it again
+    // if found Time as hours split it again
     // 19T22:00:00.000Z split to 19 22:00:0000Z
     if (dd.indexOf('T') > 0 ) {
-      let tmpArrayDayHours = dd.split('T');
+      const tmpArrayDayHours = dd.split('T');
       console.log("tmpArrayDayHours: " + tmpArrayDayHours)
-      //set day 
+      // set day 
       dd = tmpArrayDayHours[0]
       hours = tmpArrayDayHours[1]
       console.log("hours: " + hours)
 
-      let tmpArrayHours = hours.split(':');
+      const tmpArrayHours = hours.split(':');
       console.log("tmpArrayHours: " + tmpArrayHours)
        
-      //now check if  hours has this format 22:00:0000Z
+      // now check if  hours has this format 22:00:0000Z
       if (tmpArrayHours.length > 1){
-        //split  again 
+        // split  again 
         
-        let hours = Number(tmpArrayHours[0]);
+        const hours = Number(tmpArrayHours[0]);
         if (hours >= 22) {
-          //increase date by 1
+          // increase date by 1
           dd = (Number(dd) + 1).toString()
         }
 
@@ -101,8 +95,8 @@ export const formateStrToDate = (input:string) : Date  =>{
     if (!input){
         return new Date()
     }
-    let sd = input.split("-");
-    let result= new Date(Number(sd[0]),Number(sd[1]) - 1 , Number(sd[2]))
+    const sd = input.split("-");
+    const result= new Date(Number(sd[0]),Number(sd[1]) - 1 , Number(sd[2]))
 
     return result;
 }

@@ -20,7 +20,7 @@ interface AppOwnProps {
 
 interface DispatchProps  {
 
-    //expense loaded from backend
+    // expense loaded from backend
     currentInputExpense: Expense;
     loadExpense:(id:string) => any;
     saveExpense:(expense:Expense) => any;
@@ -65,7 +65,7 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
      * @param event change text field event
      */
     private readonly handleDescriptionChange = event =>{
-        let description = event.target.value as string;
+        const description = event.target.value as string;
         this.props.currentInputExpense.description =   description;
         if (description.length>3){
             this.setState(
@@ -92,7 +92,7 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
     console.log("set new amount value:" + event.target.value)
 
     try{
-        let amount = convertStrToAmount(event.target.value);
+        const amount = convertStrToAmount(event.target.value);
       //  console.log("amount value:" + amount)
         this.setState({
             isAmountValid: true,
@@ -111,7 +111,7 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
          */
           this.setState( {
            isAmountValid: false,
-           //keep previous value
+           // keep previous value
            changedAmount: event.target.value
           }
 
@@ -140,12 +140,12 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
 
 
       if (this.props.editExpenseId){
-        //send to update
+        // send to update
        this.props.updateExpense(this.props.currentInputExpense);
       }else{
         // some clean up for timestamp
         this.props.currentInputExpense.tstamp = undefined;
-        //save new
+        // save new
         this.props.saveExpense(this.props.currentInputExpense);
       }
       //
@@ -156,29 +156,29 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
 
   componentDidMount() {
     console.log("componentDidMount started")
-    let id = this.props.editExpenseId;
+    const id = this.props.editExpenseId;
     if (id) {
-      //edit expense
-      //load expense from backend
+      // edit expense
+      // load expense from backend
       this.props.loadExpense(id);
 
       this.setState({
 
-        //amount loaded from database is correct
+        // amount loaded from database is correct
         isDescriptionValid: true,
         isAmountValid: true
       })
 
     } else {
         this.props.currentInputExpense.description="";
-      //handle add expense
+      // handle add expense
       this.setState({
         isDescriptionValid: false,
       })
 
 
-        let newDateStr = (function (): string {
-          let date = new Date();
+        const newDateStr = (function (): string {
+          const date = new Date();
           return date.toString()
         }());
 

@@ -1,6 +1,5 @@
 import React from 'react';
 
-//import { Link } from 'preact-router/match';
 
 class Footer extends React.Component {
   render() {
