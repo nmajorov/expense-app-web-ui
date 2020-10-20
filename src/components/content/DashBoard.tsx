@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {AppState, ReportsState} from "../../store/Store";
 import {SSO} from "../../types/SSO";
+import {Report} from "../../types/SSO";
 import {Card, Col, Container, Dropdown, Jumbotron, Row} from "react-bootstrap";
 import ReportThunkActions from "../../actions/ReportThunkActions";
 import { faTrashAlt, faEdit ,faEllipsisH} from "@fortawesome/free-solid-svg-icons";
@@ -18,9 +19,9 @@ const kebabIcon =<FontAwesomeIcon  icon={faEllipsisH}/>
  *  user see it just after login
  */
 const DashBoard = () => {
-   
+
     const dispatch = useDispatch();
-    const {sso, reports} = useSelector<AppState, SSO, ReportsState>((state: AppState) => {
+    const {sso, reports:Array<Report>} = useSelector<AppState, SSO, ReportsState>((state: AppState) => {
         return {
             sso: state.ssoState.sso,
             reports: state.reportsState.reports
@@ -48,7 +49,7 @@ const DashBoard = () => {
       });
 
 
-  
+
 
     useEffect(() => {
         console.log("dashboard use effect called authenticated: " + JSON.stringify(sso.authenticated))
@@ -56,8 +57,8 @@ const DashBoard = () => {
         if (sso.authenticated) {
             dispatch(ReportThunkActions.fetchReports(sso))
         }
-      
-    }, [sso,reportChanges])
+
+    }, [sso, reportChanges, dispatch])
 
     function openDeleteDialog(id:String){
         setId(id);
@@ -70,47 +71,43 @@ const DashBoard = () => {
         }
      }
 
-    function renderReports() {
-
-        return (<Row>
-                {
-                    reports.map((rp) => {
-
-                        return renderReport(rp)
-                    })
-                }
-            </Row>
-        );
-    }
 
     function renderReport(rp) {
         return (
 
-            <Col key={rp.id} md={6}>
-                <DeleteConfirmDialog/>
-                <Card key={rp.id}>
 
-                    <Card.Body>
-                        <Card.Title><Card.Link href={"/report/" + rp.id}>{rp.name}</Card.Link><div className="float-right">
-                            <Dropdown>
-                                <Dropdown.Toggle size="sm"
-                                    variant="secondary" id="dropdown-basic">
-                                   {kebabIcon}
-                                </Dropdown.Toggle>
+        <Col key={rp.id} md={6}>
+  <DeleteConfirmDialog />
+  <Card key={rp.id}>
+    <Card.Body>
+      <Card.Title>
+        <Card.Link href={"/report/" + rp.id}>{rp.name}</Card.Link>
+        <div className="float-right">
+          <Dropdown>
+            <Dropdown.Toggle size="sm" variant="secondary" id="dropdown-basic">
+              {kebabIcon}
+            </Dropdown.Toggle>
 
-                                <Dropdown.Menu>
-        <Dropdown.Item href="#/action-1">Edit {editIcon}</Dropdown.Item>
-        <Dropdown.Item href="#" onClick={()=>{
-               openDeleteDialog(rp.id);
-        }}>Delete {trashIcon}</Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        </div>
-                        </Card.Title>
-                        <Card.Subtitle className="mb-2 text-muted"> {rp.createdAT}</Card.Subtitle>
-                    </Card.Body>
-                </Card>
-            </Col>
+            <Dropdown.Menu>
+              <Dropdown.Item href="#/action-1">Edit {editIcon}</Dropdown.Item>
+              <Dropdown.Item
+                href="#"
+                onClick={() => {
+                  openDeleteDialog(rp.id);
+                }}
+              >
+                Delete {trashIcon}
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+      </Card.Title>
+      <Card.Subtitle className="mb-2 text-muted"> {rp.createdAT}</Card.Subtitle>
+    </Card.Body>
+  </Card>
+</Col>;
+
+
         );
 
     }
@@ -121,7 +118,14 @@ const DashBoard = () => {
 
     return (
         sso.authenticated ? (
-            renderReports()
+                <Row>
+                  {
+                      reports.map((rp) => {
+
+                          return renderReport(rp)
+                      })
+                  }
+              </Row>
         ) : (
             <Jumbotron>
                 <Container>
