@@ -14,5 +14,5 @@ export interface SSO {
     userProfile: UserProfile;
     isInitialized: boolean;
     authenticated: boolean;
-    token: String;
+    token: string;
 }

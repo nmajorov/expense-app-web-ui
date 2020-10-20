@@ -289,7 +289,7 @@ const mapDispatchToProps = (
   dispatch: ThunkDispatch<AppState, void, AppAction>
 ) => ({
   saveExpense: (expense: Expense) => {
-      dispatch(ExpensesThunkActions.fetchExpensesData());
+  //    dispatch(ExpensesThunkActions.fetchExpensesData());
       dispatch(ExpensesThunkActions.addNewExpense(expense));
 
   },
@@ -299,7 +299,7 @@ const mapDispatchToProps = (
 
   },
   updateExpense: (expense: Expense) => {
-      dispatch(ExpensesThunkActions.fetchExpensesData());
+    //  dispatch(ExpensesThunkActions.fetchExpensesData());
       dispatch(ExpensesThunkActions.updateExpense(expense));
   }
 

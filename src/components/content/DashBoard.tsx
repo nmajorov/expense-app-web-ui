@@ -94,7 +94,9 @@ const DashBoard = () => {
         <Card key={rp.id}>
           <Card.Body>
             <Card.Title>
-              <Card.Link href={"/report/" + rp.id}>{rp.name}</Card.Link>
+              <Card.Link   onClick={() => {
+                  history.push(`/report/${rp.id}`);
+                }} href="#">{rp.name}</Card.Link>
               <div className="float-right">
                 <Dropdown>
                   <Dropdown.Toggle

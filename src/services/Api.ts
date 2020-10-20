@@ -1,37 +1,50 @@
-import axios from "axios";
+import axios from 'axios';
 
-import { HTTP_VERBS } from "../types/Common";
+import { HTTP_VERBS } from '../types/Common';
 /** API URLs */
-import { backEndUrl as url } from "../utils/backendUrl";
-import { Expense } from "../types/Expense";
-import { Report } from "../types/Report";
+import { backEndUrl as url } from '../utils/backendUrl';
+import { Expense } from '../types/Expense';
+import { Report } from '../types/Report';
 
 const newRequest = <P>(
-  method: HTTP_VERBS,
-  headers: any,
-  url: string,
-  queryParams: any,
-  data: any
+    method: HTTP_VERBS,
+    headers: any,
+    url: string,
+    queryParams: any,
+    data: any
 ) => {
-  return axios.request<P>({
-    method: method,
-    url: url,
-    headers: headers,
-    data: data,
-    //  headers: getHeaders(),
-    params: queryParams,
-  });
+    return axios.request<P>({
+        method: method,
+        url: url,
+        headers: headers,
+        data: data,
+        params: queryParams,
+    });
 };
 
 /**
  * fetch all available expenses
  */
-export const fetchExpenses = () => {
-  return newRequest<Array<Expense>>(HTTP_VERBS.GET, {}, url, {}, {});
+export const fetchExpenses = (token: string, reportID: string) => {
+    return newRequest<Array<Expense>>(
+        HTTP_VERBS.GET,
+        {
+            Authorization: 'Bearer ' + token,
+        },
+        `${url}/expenses`,
+        { reportid: reportID },
+        {}
+    );
 };
 
 export const deleteExpense = (ID: string) => {
-  return newRequest<Array<any>>(HTTP_VERBS.DELETE, {}, url + "/" + ID, {}, {});
+    return newRequest<Array<any>>(
+        HTTP_VERBS.DELETE,
+        {},
+        url + '/' + ID,
+        {},
+        {}
+    );
 };
 
 /**
@@ -39,7 +52,7 @@ export const deleteExpense = (ID: string) => {
  *  * @param expense an expense by id
  */
 export const addNewExpense = (expense: Expense) => {
-  return newRequest<Expense>(HTTP_VERBS.POST, {}, url, {}, expense);
+    return newRequest<Expense>(HTTP_VERBS.POST, {}, url, {}, expense);
 };
 
 /**
@@ -47,7 +60,13 @@ export const addNewExpense = (expense: Expense) => {
  * @param expenseID an expense by id
  */
 export const fetchExpense = (expenseID) => {
-  return newRequest<Expense>(HTTP_VERBS.GET, {}, url + "/" + expenseID, {}, {});
+    return newRequest<Expense>(
+        HTTP_VERBS.GET,
+        {},
+        url + '/' + expenseID,
+        {},
+        {}
+    );
 };
 
 /**
@@ -55,7 +74,7 @@ export const fetchExpense = (expenseID) => {
  *  * @param expense an expense by id
  */
 export const updateExpense = (expense: Expense) => {
-  return newRequest<Expense>(HTTP_VERBS.PUT, {}, url, {}, expense);
+    return newRequest<Expense>(HTTP_VERBS.PUT, {}, url, {}, expense);
 };
 
 /**
@@ -63,15 +82,15 @@ export const updateExpense = (expense: Expense) => {
  * @param token an OIDC token from a current keycloak session
  */
 export const fetchReports = (token: String) => {
-  return newRequest<Array<Report>>(
-    HTTP_VERBS.GET,
-    {
-      Authorization: "Bearer " + token,
-    },
-    url + "/reports",
-    {},
-    {}
-  );
+    return newRequest<Array<Report>>(
+        HTTP_VERBS.GET,
+        {
+            Authorization: 'Bearer ' + token,
+        },
+        url + '/reports',
+        {},
+        {}
+    );
 };
 
 /**
@@ -80,15 +99,15 @@ export const fetchReports = (token: String) => {
  * @param id the report id
  */
 export const fetchOneReport = (token: String, id: String) => {
-  return newRequest<Report>(
-    HTTP_VERBS.GET,
-    {
-      Authorization: "Bearer " + token,
-    },
-    url + "/reports/" + id,
-    {},
-    {}
-  );
+    return newRequest<Report>(
+        HTTP_VERBS.GET,
+        {
+            Authorization: 'Bearer ' + token,
+        },
+        url + '/reports/' + id,
+        {},
+        {}
+    );
 };
 
 /**
@@ -98,15 +117,15 @@ export const fetchOneReport = (token: String, id: String) => {
  *
  */
 export const updateReport = (token: String, report: Report) => {
-  return newRequest<Report>(
-    HTTP_VERBS.PUT,
-    {
-      Authorization: "Bearer " + token,
-    },
-    `${url}/reports/`,
-    {},
-    report
-  );
+    return newRequest<Report>(
+        HTTP_VERBS.PUT,
+        {
+            Authorization: 'Bearer ' + token,
+        },
+        `${url}/reports/`,
+        {},
+        report
+    );
 };
 
 /**
@@ -115,15 +134,15 @@ export const updateReport = (token: String, report: Report) => {
  * @param id the report id
  */
 export const deleteReport = (token: String, id: String) => {
-  return newRequest<Report>(
-    HTTP_VERBS.DELETE,
-    {
-      Authorization: "Bearer " + token,
-    },
-    url + "/reports/" + id,
-    {},
-    {}
-  );
+    return newRequest<Report>(
+        HTTP_VERBS.DELETE,
+        {
+            Authorization: 'Bearer ' + token,
+        },
+        url + '/reports/' + id,
+        {},
+        {}
+    );
 };
 
 /**
@@ -132,13 +151,13 @@ export const deleteReport = (token: String, id: String) => {
  * @param name the name of report
  */
 export const addReport = (token: String, name: String) => {
-  return newRequest<any>(
-    HTTP_VERBS.POST,
-    {
-      Authorization: "Bearer " + token,
-    },
-    url + "/reports",
-    {},
-    name
-  );
+    return newRequest<any>(
+        HTTP_VERBS.POST,
+        {
+            Authorization: 'Bearer ' + token,
+        },
+        url + '/reports',
+        {},
+        name
+    );
 };
