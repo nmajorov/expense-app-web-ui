@@ -8,7 +8,7 @@ import { TimeInMilliseconds } from '../../types/Common';
 import { Expense } from '../../types/Expense';
 import ExpensesThunkActions from '../../actions/ExpensesThunkActions';
 import { store } from '../../store/ConfigStore';
-import { Button, Jumbotron, Container } from 'react-bootstrap';
+import { Button, Jumbotron, Container, Row, Card, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faEdit } from '@fortawesome/free-solid-svg-icons';
 import ModalTitle from 'react-bootstrap/ModalTitle';
@@ -21,6 +21,8 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { SSO } from '../../types/SSO';
 import { AlertMessage, MessageType } from '../../types/AlertTypes';
 import { AlertActions } from '../../actions/AlertAction';
+import { Report } from '../../types/Report';
+import ReportThunkActions from '../../actions/ReportThunkActions';
 
 
 const trashIcon = <FontAwesomeIcon icon={faTrashAlt} />;
@@ -38,7 +40,8 @@ interface AppProps {
 }
 
 interface StateProps {
-    reportid: string;
+    reportid:string, //report id as parameter
+    report: Report; //
     sso: SSO;
 }
 
@@ -48,7 +51,7 @@ interface DispatchProps {
     stopShowLoading: () => any;
     startLoading: () => any;
     isLoading: boolean;
-    deleteExpense: (id: number) => any;
+    deleteExpense: (sso:SSO, id: number) => any;
     pollInterval: TimeInMilliseconds;
     setLastRefreshAt: (lastRefreshAt: TimeInMilliseconds) => void;
     hideOrShowDeleteModal: (id?: number) => any;
@@ -152,6 +155,9 @@ class ReportContainer extends React.Component<Props, ProjectsStates> {
         this.props.history.push(`/edit/${id}`);
     };
 
+
+
+
     private renderDeleteDialog() {
         return (
             <Modal
@@ -193,7 +199,7 @@ class ReportContainer extends React.Component<Props, ProjectsStates> {
      */
     private deleteExpense = (id) => {
         this.closeDeleteModalWindow();
-        this.props.deleteExpense(id);
+        this.props.deleteExpense(this.props.sso, id);
     };
 
     private calculateTotalAmount() {
@@ -223,6 +229,7 @@ class ReportContainer extends React.Component<Props, ProjectsStates> {
      */
     private renderExpensesTable() {
         return (
+
             <>
                 <Table striped bordered hover size="sm">
                     <thead>
@@ -296,12 +303,36 @@ class ReportContainer extends React.Component<Props, ProjectsStates> {
         );
     }
 
+
+private renderReportInfo(){
+    if (this.props.report){
+      return(
+        <>
+        <Col>
+        <h2>{this.props.report.name}</h2>
+        </Col>
+        <Col>
+        Created: {this.props.report.createdAT}
+        </Col>
+        </>
+      );
+    }
+
+}
+
     /**
      * render element on the page
      */
     render() {
         return this.props.sso.authenticated ? (
-            this.renderExpenses()
+          <Container fluid>
+          <Row>
+          { this.renderReportInfo()}
+          </Row>
+          <Row>
+          {  this.renderExpenses()}
+          </Row>
+        </Container>
         ) : (
             <Jumbotron>
                 <Container>
@@ -322,6 +353,7 @@ const mapStateToProps = (state: AppState, ownProps: Props) => {
     );
     return {
         reportid: ownProps.match.params.id,
+        report:state.reportsState.reports.length > 0 ? state.reportsState.reports[0]:undefined,
         expenses: state.expensesState.expenses,
         pollInterval: state.expensesState.pollInterval,
         showModal: state.expensesState.showModal,
@@ -347,9 +379,10 @@ const mapDispatchToProps = (
 
     getExpenses: (sso: SSO, reportID: string) => {
         dispatch(ExpensesThunkActions.fetchExpensesData(sso.token, reportID));
+        dispatch(ReportThunkActions.fetchOneReport(sso,reportID))
     },
-    deleteExpense: (id: number) => {
-        dispatch(ExpensesThunkActions.deleteExpense(id));
+    deleteExpense: (sso: SSO,id: number) => {
+        dispatch(ExpensesThunkActions.deleteExpense(sso,id));
         //    dispatch(ExpensesThunkActions.fetchExpensesData());
     },
 

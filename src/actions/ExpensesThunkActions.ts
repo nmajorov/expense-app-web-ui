@@ -6,6 +6,7 @@ import { ExpensesActions } from './ExpensesAction';
 import * as API from '../services/Api';
 import { AlertActions } from './AlertAction';
 import { AlertMessage, MessageType } from '../types/AlertTypes';
+import { SSO } from '../types/SSO';
 
 const ExpensesThunkActions = {
     startFetching: () => {
@@ -67,13 +68,13 @@ const ExpensesThunkActions = {
     /**
      * delete expenses
      */
-    deleteExpense: (id: number) => {
+    deleteExpense: (sso:SSO,id: number) => {
         return (
             dispatch: ThunkDispatch<AppState, undefined, AppAction>,
             getState: () => AppState
         ) => {
-            return API.deleteExpense(id.toString()).then(
-                (response) => {
+            return API.deleteExpense(sso.token,id.toString()).then(
+                (_response) => {
                     dispatch(ExpensesActions.deleteActionSuccess());
                 },
                 (error) => {

@@ -37,11 +37,13 @@ export const fetchExpenses = (token: string, reportID: string) => {
     );
 };
 
-export const deleteExpense = (ID: string) => {
+export const deleteExpense = (token: string,ID: string) => {
     return newRequest<Array<any>>(
         HTTP_VERBS.DELETE,
-        {},
-        url + '/' + ID,
+        {
+            Authorization: 'Bearer ' + token,
+        },
+          `${url}/expenses/${ID}`,
         {},
         {}
     );
