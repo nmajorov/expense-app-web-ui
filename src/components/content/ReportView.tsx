@@ -151,8 +151,7 @@ class ReportContainer extends React.Component<Props, ProjectsStates> {
     };
 
     private callEdit = (id) => {
-        // console.log("call Edit " + id);
-        this.props.history.push(`/edit/${id}`);
+        this.props.history.push(`/expenses/edit/${id}`);
     };
 
 

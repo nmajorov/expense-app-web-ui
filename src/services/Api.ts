@@ -37,13 +37,13 @@ export const fetchExpenses = (token: string, reportID: string) => {
     );
 };
 
-export const deleteExpense = (token: string,ID: string) => {
+export const deleteExpense = (token: string, ID: string) => {
     return newRequest<Array<any>>(
         HTTP_VERBS.DELETE,
         {
             Authorization: 'Bearer ' + token,
         },
-          `${url}/expenses/${ID}`,
+        `${url}/expenses/${ID}`,
         {},
         {}
     );
@@ -69,16 +69,17 @@ export const addNewExpense = (
     );
 };
 
-
 /**
  * fetch an expense by id
  * @param expenseID an expense by id
  */
-export const fetchExpense = (expenseID) => {
+export const fetchExpense = (token: string, expenseID) => {
     return newRequest<Expense>(
         HTTP_VERBS.GET,
-        {},
-        url + '/' + expenseID,
+        {
+            Authorization: 'Bearer ' + token,
+        },
+        `${url}/expenses/${expenseID}`,
         {},
         {}
     );
@@ -88,8 +89,16 @@ export const fetchExpense = (expenseID) => {
  * add new expense to the system
  *  * @param expense an expense by id
  */
-export const updateExpense = (expense: Expense) => {
-    return newRequest<Expense>(HTTP_VERBS.PUT, {}, url, {}, expense);
+export const updateExpense = (token: string, expense: Expense) => {
+    return newRequest<Expense>(
+        HTTP_VERBS.PUT,
+        {
+            Authorization: 'Bearer ' + token,
+        },
+        `${url}/expenses`,
+        {},
+        expense
+    );
 };
 
 /**

@@ -25,9 +25,9 @@ interface DispatchProps  {
 
     // expense loaded from backend
     currentInputExpense: Expense;
-    loadExpense:(id:string) => any;
+    loadExpense:(sso:SSO,id:string) => any;
     saveExpense: (sso:SSO,reportID:string,expense: Expense) => any;
-    updateExpense:(expense:Expense)=>any;
+    updateExpense:(sso:SSO,expense:Expense)=>any;
     sso:SSO;
 }
 
@@ -142,15 +142,15 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
       && this.state.isDateValid){
 
         let expense = this.props.currentInputExpense;
+        let sso= this.props.sso;
 
       if (this.props.editExpenseId){
         // send to update
-       this.props.updateExpense(expense);
+       this.props.updateExpense(sso, expense);
       }else{
         // some clean up for timestamp
-        this.props.currentInputExpense.tstamp = undefined;
+        expense.tstamp = undefined;
         // save new
-        let sso= this.props.sso;
         let report_id =  this.props.report.id.toString();
         this.props.saveExpense(sso,report_id,expense);
       }
@@ -166,7 +166,7 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
     if (id) {
       // edit expense
       // load expense from backend
-      this.props.loadExpense(id);
+      this.props.loadExpense(this.props.sso,id);
 
       this.setState({
 
@@ -299,14 +299,14 @@ const mapDispatchToProps = (
       dispatch(ExpensesThunkActions.addNewExpense(sso,reportID,expense));
 
   },
-  loadExpense: (id: string) => {
+  loadExpense: (sso:SSO,id: string) => {
       console.info("load expense with id: " + id)
-    dispatch(ExpensesThunkActions.fetchOneExpense(id));
+    dispatch(ExpensesThunkActions.fetchOneExpense(sso,id));
 
   },
-  updateExpense: (expense: Expense) => {
+  updateExpense: (sso:SSO,expense: Expense) => {
     //  dispatch(ExpensesThunkActions.fetchExpensesData());
-      dispatch(ExpensesThunkActions.updateExpense(expense));
+      dispatch(ExpensesThunkActions.updateExpense(sso,expense));
   }
 
 })

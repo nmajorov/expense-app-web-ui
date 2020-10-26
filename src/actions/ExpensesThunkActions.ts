@@ -69,8 +69,7 @@ const ExpensesThunkActions = {
      * delete expenses
      */
     deleteExpense: (sso: SSO, id: number) => {
-        return (
-            dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
+        return (dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
             return API.deleteExpense(sso.token, id.toString()).then(
                 (_response) => {
                     dispatch(ExpensesActions.deleteActionSuccess());
@@ -92,15 +91,13 @@ const ExpensesThunkActions = {
         };
     },
     showDeleteDialog: (id: number) => {
-        return (
-            dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
+        return (dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
             return dispatch(ExpensesActions.showDeleteDialog(id));
         };
     },
 
     addNewExpense: (sso: SSO, reportID: string, newExpense: Expense) => {
-        return (
-            dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
+        return (dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
             return API.addNewExpense(sso.token, reportID, newExpense).then(
                 (_response) => {
                     dispatch(ExpensesActions.addNewExpenseSuccess());
@@ -120,12 +117,9 @@ const ExpensesThunkActions = {
         };
     },
 
-    fetchOneExpense: (id: string) => {
-        return (
-            dispatch: ThunkDispatch<AppState, undefined, AppAction>,
-            getState: () => AppState
-        ) => {
-            return API.fetchExpense(id).then(
+    fetchOneExpense: (sso: SSO, id: string) => {
+        return (dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
+            return API.fetchExpense(sso.token, id).then(
                 (response) => {
                     dispatch(
                         ExpensesActions.fetchOneExpenseActionSuccess(
@@ -148,13 +142,10 @@ const ExpensesThunkActions = {
         };
     },
 
-    updateExpense: (expense: Expense) => {
-        return (
-            dispatch: ThunkDispatch<AppState, undefined, AppAction>,
-            getState: () => AppState
-        ) => {
-            return API.updateExpense(expense).then(
-                (response) => {
+    updateExpense: (sso: SSO, expense: Expense) => {
+        return (dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
+            return API.updateExpense(sso.token, expense).then(
+                (_response) => {
                     dispatch(ExpensesActions.addNewExpenseSuccess());
                 },
                 (error) => {
