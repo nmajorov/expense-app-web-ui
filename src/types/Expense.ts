@@ -8,5 +8,4 @@ export type Expense = {
     createdAT: string;
     amount: Number;
     tstamp?: string; // (last modified date)
-
 }

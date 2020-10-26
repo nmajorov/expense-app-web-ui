@@ -353,7 +353,7 @@ const mapStateToProps = (state: AppState, ownProps: Props) => {
     );
     return {
         reportid: ownProps.match.params.id,
-        report:state.reportsState.reports.length > 0 ? state.reportsState.reports[0]:undefined,
+        report:state.reportsState.reports.length === 1 ? state.reportsState.reports[0]:undefined,
         expenses: state.expensesState.expenses,
         pollInterval: state.expensesState.pollInterval,
         showModal: state.expensesState.showModal,

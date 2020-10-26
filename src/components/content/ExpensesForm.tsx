@@ -1,6 +1,6 @@
 import React, {FormEvent} from "react";
 import {RouteComponentProps, withRouter} from "react-router-dom";
-import {Button, Form, Row} from "react-bootstrap";
+import {Button, Form, Row, Container} from "react-bootstrap";
 import {Expense} from "../../types/Expense";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -10,12 +10,15 @@ import {AppState} from "../../store/Store";
 import {ThunkDispatch} from "redux-thunk";
 import {AppAction} from "../../actions/AppAction";
 import ExpensesThunkActions from "../../actions/ExpensesThunkActions";
+import { Report } from "../../types/Report";
+import { SSO } from "../../types/SSO";
 
 
 type OwnProps = RouteComponentProps<{ id: string}>;
 
 interface AppOwnProps {
   editExpenseId?: string
+  report:Report; //report there expence belong
 }
 
 interface DispatchProps  {
@@ -23,8 +26,9 @@ interface DispatchProps  {
     // expense loaded from backend
     currentInputExpense: Expense;
     loadExpense:(id:string) => any;
-    saveExpense:(expense:Expense) => any;
+    saveExpense: (sso:SSO,reportID:string,expense: Expense) => any;
     updateExpense:(expense:Expense)=>any;
+    sso:SSO;
 }
 
 
@@ -137,19 +141,21 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
     if (this.state.isAmountValid && this.state.isDescriptionValid
       && this.state.isDateValid){
 
-
+        let expense = this.props.currentInputExpense;
 
       if (this.props.editExpenseId){
         // send to update
-       this.props.updateExpense(this.props.currentInputExpense);
+       this.props.updateExpense(expense);
       }else{
         // some clean up for timestamp
         this.props.currentInputExpense.tstamp = undefined;
         // save new
-        this.props.saveExpense(this.props.currentInputExpense);
+        let sso= this.props.sso;
+        let report_id =  this.props.report.id.toString();
+        this.props.saveExpense(sso,report_id,expense);
       }
       //
-      this.props.history.push("/");
+      this.props.history.push(`/report/${this.props.report.id}`);
     }
   }
 
@@ -194,7 +200,7 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
     return (
 
 
-      <div id="addForm">
+      <Container key="addForm">
 
         <Row>
           <div className="col-lg-6">
@@ -269,18 +275,18 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
             </div>
           </div>
         </Row>
-      </div>
+      </Container>
     );
   }
 }
 
 
 const mapStateToProps = (state: AppState,ownProps:Props ) => {
-
-  console.log("state: " + JSON.stringify(state.expensesState.newExpense));
   return {
     editExpenseId: ownProps.match.params.id,
-    currentInputExpense: state.expensesState.newExpense
+    currentInputExpense: state.expensesState.newExpense,
+    report:state.reportsState.reports.length === 1 ? state.reportsState.reports[0]:undefined,
+    sso: state.ssoState.sso
   };
 };
 
@@ -288,9 +294,9 @@ const mapStateToProps = (state: AppState,ownProps:Props ) => {
 const mapDispatchToProps = (
   dispatch: ThunkDispatch<AppState, void, AppAction>
 ) => ({
-  saveExpense: (expense: Expense) => {
+  saveExpense: (sso:SSO,reportID:string,expense: Expense) => {
   //    dispatch(ExpensesThunkActions.fetchExpensesData());
-      dispatch(ExpensesThunkActions.addNewExpense(expense));
+      dispatch(ExpensesThunkActions.addNewExpense(sso,reportID,expense));
 
   },
   loadExpense: (id: string) => {

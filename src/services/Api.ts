@@ -53,9 +53,22 @@ export const deleteExpense = (token: string,ID: string) => {
  * add new expense to the system
  *  * @param expense an expense by id
  */
-export const addNewExpense = (expense: Expense) => {
-    return newRequest<Expense>(HTTP_VERBS.POST, {}, url, {}, expense);
+export const addNewExpense = (
+    token: string,
+    reportID: string,
+    expense: Expense
+) => {
+    return newRequest<Expense>(
+        HTTP_VERBS.POST,
+        {
+            Authorization: 'Bearer ' + token,
+        },
+        `${url}/expenses`,
+        { reportid: reportID },
+        expense
+    );
 };
+
 
 /**
  * fetch an expense by id

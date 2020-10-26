@@ -68,12 +68,10 @@ const ExpensesThunkActions = {
     /**
      * delete expenses
      */
-    deleteExpense: (sso:SSO,id: number) => {
+    deleteExpense: (sso: SSO, id: number) => {
         return (
-            dispatch: ThunkDispatch<AppState, undefined, AppAction>,
-            getState: () => AppState
-        ) => {
-            return API.deleteExpense(sso.token,id.toString()).then(
+            dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
+            return API.deleteExpense(sso.token, id.toString()).then(
                 (_response) => {
                     dispatch(ExpensesActions.deleteActionSuccess());
                 },
@@ -95,20 +93,16 @@ const ExpensesThunkActions = {
     },
     showDeleteDialog: (id: number) => {
         return (
-            dispatch: ThunkDispatch<AppState, undefined, AppAction>,
-            getState: () => AppState
-        ) => {
+            dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
             return dispatch(ExpensesActions.showDeleteDialog(id));
         };
     },
 
-    addNewExpense: (newExpense: Expense) => {
+    addNewExpense: (sso: SSO, reportID: string, newExpense: Expense) => {
         return (
-            dispatch: ThunkDispatch<AppState, undefined, AppAction>,
-            getState: () => AppState
-        ) => {
-            return API.addNewExpense(newExpense).then(
-                (response) => {
+            dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
+            return API.addNewExpense(sso.token, reportID, newExpense).then(
+                (_response) => {
                     dispatch(ExpensesActions.addNewExpenseSuccess());
                 },
                 (error) => {

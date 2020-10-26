@@ -52,28 +52,27 @@ export function NavigationBar() {
      */
     function renderMenu(pathname: string) {
         let result: ReactElement = <></>
-        switch (pathname) {
-            case "/": {
+        if (pathname=== "/") {
+
                 result = (<Nav>
                     <Nav.Link as={Link} to="/report-add">{MenuNames.ADD_REPORT}</Nav.Link>
                 </Nav>)
-                break;
             }
-            case "/report": {
+
+            else if  (pathname.startsWith("/report")) {
                 result = (<Nav>
                     <Nav.Link as={Link} to="/expenses-add">{MenuNames.ADD_EXPENSE}</Nav.Link>
                 </Nav>
                 )
-                break;
             }
-        }
+
 
         return result
     }
 
     useEffect(()=>{
         if (keycloak.authenticated){
-            dispatch(SSOThunkActions.loadUserProfile(keycloak)) 
+            dispatch(SSOThunkActions.loadUserProfile(keycloak))
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
@@ -124,5 +123,3 @@ export function NavigationBar() {
     );
 
 }
-
-
