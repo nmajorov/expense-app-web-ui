@@ -18,9 +18,9 @@ const ExpensesThunkActions = {
         };
     },
 
-    fetchExpensesData: (token: string, reportID: string) => {
+    fetchExpensesData: (token: string, reportID: string, sortBy?:string) => {
         return (dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
-            return API.fetchExpenses(token, reportID).then(
+            return API.fetchExpenses(token, reportID,sortBy).then(
                 (response) => {
                     const objArray = response.data;
                     const data: Array<Expense> = [];

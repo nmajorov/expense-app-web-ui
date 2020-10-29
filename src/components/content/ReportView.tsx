@@ -8,9 +8,9 @@ import { TimeInMilliseconds } from '../../types/Common';
 import { Expense } from '../../types/Expense';
 import ExpensesThunkActions from '../../actions/ExpensesThunkActions';
 import { store } from '../../store/ConfigStore';
-import { Button, Jumbotron, Container, Row, Card, Col } from 'react-bootstrap';
+import { Button, Jumbotron, Container, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt, faEdit, faArrowsAltV } from '@fortawesome/free-solid-svg-icons';
 import ModalTitle from 'react-bootstrap/ModalTitle';
 import ModalHeader from 'react-bootstrap/ModalHeader';
 import ModalFooter from 'react-bootstrap/ModalFooter';
@@ -27,6 +27,8 @@ import ReportThunkActions from '../../actions/ReportThunkActions';
 
 const trashIcon = <FontAwesomeIcon icon={faTrashAlt} />;
 const editIcon = <FontAwesomeIcon icon={faEdit} />;
+const arrovVertiacalIcon = <FontAwesomeIcon icon={faArrowsAltV} />;
+
 
 type ProjectsStates = {};
 
@@ -46,7 +48,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-    getExpenses: (sso: SSO, reportID: string) => any;
+    getExpenses: (sso: SSO, reportID: string,sortBy?:string) => any;
     showLoading: () => any;
     stopShowLoading: () => any;
     startLoading: () => any;
@@ -67,7 +69,7 @@ type Props = StateProps & AppProps & OwnProps & DispatchProps;
 class ReportContainer extends React.Component<Props, ProjectsStates> {
     private pollTimeoutRef?: number;
 
-    constructor(props) {
+    constructor(props: Readonly<Props>) {
         super(props);
         this.state = {};
     }
@@ -155,6 +157,21 @@ class ReportContainer extends React.Component<Props, ProjectsStates> {
     };
 
 
+    /**
+     * sort expenses by id
+     */
+    private sortById =() => {
+      this.props.getExpenses(this.props.sso, this.props.reportid,"id_asc");
+    }
+
+
+    /**
+     * sort expenses by date
+     */
+    private sortDate =() => {
+        this.props.getExpenses(this.props.sso, this.props.reportid,"created_asc");
+    }
+
 
 
     private renderDeleteDialog() {
@@ -233,10 +250,10 @@ class ReportContainer extends React.Component<Props, ProjectsStates> {
                 <Table striped bordered hover size="sm">
                     <thead>
                         <tr>
-                            <th>#</th>
+                            <th>#   <button onClick={()=>this.sortById()}>{arrovVertiacalIcon}</button></th>
                             <th>Description</th>
                             <th>Amount</th>
-                            <th>Created</th>
+                            <th>Date  <button  onClick={()=>this.sortDate()}>{arrovVertiacalIcon}</button></th>
                             <th>Last Modified</th>
                             <th>Actions</th>
                             <th></th>
@@ -376,8 +393,8 @@ const mapDispatchToProps = (
         dispatch(ExpensesThunkActions.startFetching());
     },
 
-    getExpenses: (sso: SSO, reportID: string) => {
-        dispatch(ExpensesThunkActions.fetchExpensesData(sso.token, reportID));
+    getExpenses: (sso: SSO, reportID: string,sort?:string) => {
+        dispatch(ExpensesThunkActions.fetchExpensesData(sso.token, reportID,sort));
         dispatch(ReportThunkActions.fetchOneReport(sso,reportID))
     },
     deleteExpense: (sso: SSO,id: number) => {

@@ -25,14 +25,23 @@ const newRequest = <P>(
 /**
  * fetch all available expenses
  */
-export const fetchExpenses = (token: string, reportID: string) => {
+export const fetchExpenses = (token: string, reportID: string,sortBy?:string) => {
+    let params = () =>{
+      if(sortBy){
+        return {reportid:reportID,sort_by:sortBy}
+      }else{
+        return {reportid:reportID}
+      }
+    }
+
+
     return newRequest<Array<Expense>>(
         HTTP_VERBS.GET,
         {
             Authorization: 'Bearer ' + token,
         },
         `${url}/expenses`,
-        { reportid: reportID },
+        params(),
         {}
     );
 };
