@@ -10,7 +10,7 @@ import ExpensesThunkActions from '../../actions/ExpensesThunkActions';
 import { store } from '../../store/ConfigStore';
 import { Button, Jumbotron, Container, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt, faEdit, faArrowsAltV } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt, faEdit, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import ModalTitle from 'react-bootstrap/ModalTitle';
 import ModalHeader from 'react-bootstrap/ModalHeader';
 import ModalFooter from 'react-bootstrap/ModalFooter';
@@ -27,7 +27,8 @@ import ReportThunkActions from '../../actions/ReportThunkActions';
 
 const trashIcon = <FontAwesomeIcon icon={faTrashAlt} />;
 const editIcon = <FontAwesomeIcon icon={faEdit} />;
-const arrovVertiacalIcon = <FontAwesomeIcon icon={faArrowsAltV} />;
+const arrovUpIcon = <FontAwesomeIcon icon={faArrowUp} />;
+const arrovDownIcon = <FontAwesomeIcon icon={faArrowDown} />;
 
 
 type ProjectsStates = {};
@@ -67,7 +68,6 @@ type Props = StateProps & AppProps & OwnProps & DispatchProps;
  *
  */
 class ReportContainer extends React.Component<Props, ProjectsStates> {
-    private pollTimeoutRef?: number;
 
     constructor(props: Readonly<Props>) {
         super(props);
@@ -78,59 +78,27 @@ class ReportContainer extends React.Component<Props, ProjectsStates> {
         console.log('dashboard did mount called');
         if (this.props.sso.authenticated) {
             // run only if authenticated !!
-            this.scheduleNextPollingInterval(0);
+            this.loadExpensesFromBackend()
+        //    this.scheduleNextPollingInterval(0);
         } else {
             console.log('user is not authenticated');
         }
     }
 
-    componentWillUnmount() {
-        this.removePollingIntervalTimer();
-    }
+
 
     componentDidUpdate(prev: Props) {
-        console.log(
-            'update dashboard loading in progress: ' + this.props.isLoading
-        );
+
 
         // schedule an immediate  fetch if needed
         if (this.props.sso.authenticated) {
             const curr = this.props;
-            console.log(
-                'curr.pollInterval: ' +
-                    curr.pollInterval +
-                    '  prevPoolInt: ' +
-                    prev.pollInterval
-            );
 
-            this.scheduleNextPollingInterval(curr.pollInterval);
+          //  this.scheduleNextPollingInterval(curr.pollInterval);
         }
     }
 
-    private scheduleNextPollingInterval(pollInterval: number) {
-        if (pollInterval === 0 || pollInterval === undefined) {
-            this.loadExpensesFromBackend();
-        } else {
-            // Remove any pending timeout to avoid having multiple requests at once
-            this.removePollingIntervalTimer();
-            // We are using setTimeout instead of setInterval because we have more control over it
-            // e.g. If a request takes much time, the next interval will fire up anyway and is
-            // possible that it will take much time as well. Instead wait for it to timeout/error to
-            // try again.
-            this.pollTimeoutRef = window.setTimeout(
-                this.loadExpensesFromBackend,
-                pollInterval
-            );
-        }
-    }
 
-    private removePollingIntervalTimer() {
-        if (this.pollTimeoutRef) {
-            /// console.log("clear previous timeout:" + this.pollTimeoutRef)
-            clearTimeout(this.pollTimeoutRef);
-            this.pollTimeoutRef = undefined;
-        }
-    }
 
     /**
      * trigger load of expenses from backend
@@ -160,18 +128,10 @@ class ReportContainer extends React.Component<Props, ProjectsStates> {
     /**
      * sort expenses by id
      */
-    private sortById =() => {
-      this.props.getExpenses(this.props.sso, this.props.reportid,"id_asc");
+    private sortBy =(sort:string) => {
+        this.props.startLoading();
+        this.props.getExpenses(this.props.sso, this.props.reportid,sort);
     }
-
-
-    /**
-     * sort expenses by date
-     */
-    private sortDate =() => {
-        this.props.getExpenses(this.props.sso, this.props.reportid,"created_asc");
-    }
-
 
 
     private renderDeleteDialog() {
@@ -216,6 +176,7 @@ class ReportContainer extends React.Component<Props, ProjectsStates> {
     private deleteExpense = (id) => {
         this.closeDeleteModalWindow();
         this.props.deleteExpense(this.props.sso, id);
+        this.loadExpensesFromBackend();
     };
 
     private calculateTotalAmount() {
@@ -250,10 +211,15 @@ class ReportContainer extends React.Component<Props, ProjectsStates> {
                 <Table striped bordered hover size="sm">
                     <thead>
                         <tr>
-                            <th>#   <button onClick={()=>this.sortById()}>{arrovVertiacalIcon}</button></th>
+                            <th>#   <button onClick={()=>this.sortBy("id_asc")}>{arrovUpIcon}</button>
+                            &nbsp;  &nbsp;
+                            <button onClick={()=>this.sortBy("id_desc")}>{arrovDownIcon}</button></th>
                             <th>Description</th>
                             <th>Amount</th>
-                            <th>Date  <button  onClick={()=>this.sortDate()}>{arrovVertiacalIcon}</button></th>
+                            <th>Date  <button  onClick={()=>this.sortBy("created_asc")}>{arrovUpIcon}</button>
+                              &nbsp;  &nbsp;
+                              <button onClick={()=>this.sortBy("created_desc")}>{arrovDownIcon}</button>
+                            </th>
                             <th>Last Modified</th>
                             <th>Actions</th>
                             <th></th>
@@ -399,7 +365,7 @@ const mapDispatchToProps = (
     },
     deleteExpense: (sso: SSO,id: number) => {
         dispatch(ExpensesThunkActions.deleteExpense(sso,id));
-        //    dispatch(ExpensesThunkActions.fetchExpensesData());
+
     },
 
     hideOrShowDeleteModal: (id: number) => {
