@@ -13,7 +13,7 @@ export const EXPENSES_INITIAL_STATE: ExpensesState = {
   showModal: false,
   selectedID: 0,
   newExpense: { id: 0, amount: 0.0, createdAT: "", tstamp: "", description: "" },
-  isLoading:false 
+  isLoading:false
 }
 
 
@@ -26,18 +26,19 @@ const expensesReducer = (state: ExpensesState = EXPENSES_INITIAL_STATE,
   switch (action.type) {
     case getType(ExpensesActions.fetchActionSuccess):
       newState.expenses = action.payload as Array<Expense>;
-      newState.pollInterval = 15 * MILLISECONDS;
+
       break;
 
     case getType(ExpensesActions.deleteActionSuccess):
-      newState.pollInterval = 0
+      //empty expense so we can reload it again
+      newState.expenses = []
       break;
 
       case getType(ExpensesActions.isFetching):
         newState.isLoading = action.payload as boolean;
         break;
-     
-    
+
+
     case getType(ExpensesActions.showDeleteDialog):
       newState.selectedID = action.payload as Number;
       newState.showModal = !newState.showModal;
@@ -46,7 +47,7 @@ const expensesReducer = (state: ExpensesState = EXPENSES_INITIAL_STATE,
     case getType(ExpensesActions.fetchError):
       newState.newExpense = { id: 0, amount: 0.0, createdAT: "", tstamp: "", description: "" }
       newState.expenses = []
-      newState.pollInterval = 15 * MILLISECONDS;
+    
       newState.isLoading = false;
       break;
 

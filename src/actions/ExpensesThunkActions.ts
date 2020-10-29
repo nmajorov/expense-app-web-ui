@@ -75,8 +75,7 @@ const ExpensesThunkActions = {
                     dispatch(ExpensesActions.deleteActionSuccess());
                 },
                 (error) => {
-                    const emsg =
-                        'Cannot delete the expenses: ' + error.toString();
+                    const emsg = 'Cannot delete the expenses: ' + error.toString();
 
                     dispatch(ExpensesActions.fetchError(emsg));
                     const alertMessage: AlertMessage = {

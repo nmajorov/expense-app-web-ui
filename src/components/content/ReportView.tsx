@@ -87,14 +87,12 @@ class ReportContainer extends React.Component<Props, ProjectsStates> {
 
 
 
-    componentDidUpdate(prev: Props) {
-
-
+    componentDidUpdate(prevProps: Props) {
         // schedule an immediate  fetch if needed
         if (this.props.sso.authenticated) {
-            const curr = this.props;
-
-          //  this.scheduleNextPollingInterval(curr.pollInterval);
+            if (prevProps.expenses.length !== this.props.expenses.length) {
+              this.loadExpensesFromBackend();
+            }
         }
     }
 
@@ -176,7 +174,6 @@ class ReportContainer extends React.Component<Props, ProjectsStates> {
     private deleteExpense = (id) => {
         this.closeDeleteModalWindow();
         this.props.deleteExpense(this.props.sso, id);
-        this.loadExpensesFromBackend();
     };
 
     private calculateTotalAmount() {
