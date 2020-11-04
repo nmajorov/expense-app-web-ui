@@ -54,17 +54,17 @@ class AlertContainer extends React.PureComponent<Props, State> {
   }
 
 
-   
+
   componentDidMount() {
-   
+
   }
- 
+
   componentDidUpdate(prev: Props) {
    // const curr = this.props;
     if (this.props.message.show_notification){
         this.scheduleHideInterval(2000)
     }
-    
+
   }
 
   componentWillUnmount() {
@@ -111,7 +111,7 @@ class AlertContainer extends React.PureComponent<Props, State> {
   }
 
   private renderSpinner() {
-    
+
       if (this.props.message.content.startsWith("loading data")){
 
         return( <Spinner
@@ -125,29 +125,27 @@ class AlertContainer extends React.PureComponent<Props, State> {
         }else{
          return( <></>)
         }
-    
+
 }
 
 
   render() {
    
-
-    console.log("alert render  this.props.message.show_notification " + this.props.message.show_notification)
-    return (
+      return (
       <>
             <Alert key="e" show={this.props.message.show_notification} variant={typeVariant(this.props.message.type)}
                onClose={() => this.props.closeAlert()} dismissible>
-               
+
                 <p>
-                {this.props.message.content} {this.renderSpinner()} 
+                {this.props.message.content} {this.renderSpinner()}
                 </p>
-               
-               
-                   
-                
+
+
+
+
             </Alert>
     </>
-    
+
     )
   }
 
@@ -165,7 +163,7 @@ const mapStateToProps  = (state: AppState) => {
 
 const mapDispatchToProps = (
     dispatch: ThunkDispatch<AppState, void, AppAction>
- 
+
 ) => ({
   closeAlert: ()=> {
     dispatch(AlertActions.removeMessage())
