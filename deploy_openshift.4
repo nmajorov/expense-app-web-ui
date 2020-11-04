@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # use default service name for the fuse backend
-BACKEND_URL="http://nfuse:8080/services/app/expenses"
+BACKEND_URL="http://expenses-backend-quarkus:8080"
 BUILD_DID=build
 
 if [ -d "$BUILD_DIR" ]
@@ -35,7 +35,3 @@ oc delete  all --selector=app=nodejs-gui --ignore-not-found
 	      oc new-app --name=nodejs-gui --image-stream=openshift/nginx:1.16 --binary=true
         oc start-build nodejs-gui --from-dir .
         oc expose svc nodejs-gui
-   
-
-
-
