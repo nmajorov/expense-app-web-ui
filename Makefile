@@ -1,8 +1,15 @@
 # Needed SHELL since I'm using zsh
-SHELL := /bin/bash
+SHELL = /usr/bin/bash
 
-IMAGE_NAME = centos/nodejs-12-centos7
-CONTAINER_ENGINE := $(shell command -v podman 2> /dev/null | echo docker)
+# get Makefile directory name: http://stackoverflow.com/a/5982798/376773
+THIS_MAKEFILE_PATH:=$(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
+THIS_DIR:=$(shell cd $(dir $(THIS_MAKEFILE_PATH));pwd)
+
+# docker image name
+IMAGE_NAME = majorov.biz/expenses-ui
+
+PODMAN_CHECK=command -v podman
+CONTAINER_ENGINE := $(shell if [ -z $$(command -v podman) ];then echo docker;else echo podman; fi ) 
 
 ts := $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 
@@ -32,6 +39,7 @@ run: ##  run gui in dev mode
 
 
 .PHONY: test
+
 test: ##	run tests
 		@echo "run tests"
 		yarn test
@@ -41,20 +49,24 @@ build: ##  build everything
 		@echo "run js build"
 		yarn build
 
-.PHONY: build-container
-build-container: ## build with container
-		${CONTAINER_ENGINE} build -t $(IMAGE_NAME) .
+.PHONY: docker
+docker: build ## build with container
+	@echo $(CONTAINER_ENGINE)
+	${CONTAINER_ENGINE} build -t $(IMAGE_NAME) .
 
 
 .PHONY: test-container
 test-container: ## test with container
-	 #${CONTAINER_ENGINE} build -t $(IMAGE_NAME)-candidate .
-	# IMAGE_NAME=$(IMAGE_NAME)-candidate test/run
+	#${CONTAINER_ENGINE} build -t $(IMAGE_NAME)-candidate .
+	 #IMAGE_NAME=$(IMAGE_NAME)-candidate test/run
 
 
 .PHONY: clean
 clean: ## clean
-	 @echo "clean"
+	 @echo "run cleaning"
+	 @if [ -d $(THIS_DIR)/build ] ;then \
+	 	rm -r $(THIS_DIR)/build ;\
+	 fi
 
 ###################
 # Unit/CI Testing #

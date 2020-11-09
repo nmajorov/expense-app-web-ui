@@ -10,7 +10,7 @@ spec:
     name: build-expenses-web-ui
   params:
     - name: GIT_REVISION
-      value: keycloak
+      value: reports
   workspaces:
     - name: ui-workspace
       persistentVolumeClaim:

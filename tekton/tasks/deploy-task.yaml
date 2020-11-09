@@ -5,9 +5,28 @@ metadata:
 spec:
   params:
     - name: VERSION
-      description: The version of the nodejs
+      description: The version of the nodejs build image
       default: '10'
       type: string
+
+    - name: sso-url
+      description: "url to keycloak realm"
+      type: string
+      default: http://sso-test:8080/auth/
+
+    - name: sso-realm
+      description: "keycloak realm name"
+      type: string
+      default: basic
+
+
+    - name: sso-client-id
+      description: "keycloak client id"
+      type: string
+      default: app-react
+
+
+
   steps:
     - name: yarn-build-app
       image: 'registry.access.redhat.com/rhscl/nodejs-$(params.VERSION)-rhel7'
@@ -19,17 +38,21 @@ spec:
           echo "current git branch: $(git rev-parse --abbrev-ref HEAD)"
           echo "install yarn"
           npm install -g yarn
-          yarn install
+          echo "yarn version: $(yarn --version)"
 
-          # use default service name for the fuse backend
-          BACKEND_URL="http://nfuse:8080/services/app/expenses"
-          echo "backEndUrl=$BACKEND_URL"
-          # set backend url for redirects
-          # set nginx proxy pass url
-          sed -ri  "s|proxy_pass.*|proxy_pass $BACKEND_URL;|g" ./nginx.conf
-          echo "build for prod"
-          yarn install
+          # echo define env for production
+          echo "REACT_APP_KEYCLOAK_URL=$(params.sso-url)" > .env.production
+          echo "REACT_APP_KEYCLOAK_REALM=$(params.sso-realm)" >> .env.production
+          echo "REACT_APP_KEYCLOAK_CLIENT_ID=$(params.sso-client-id)" >> .env.production
+          echo "SKIP_PREFLIGHT_CHECK=true" >> .env.production
+
+          echo "read react environment"
+          cat .env.production
+
+          echo "start build for prod"
+
           yarn build
+
           #copy web server config
           cp -r ./nginx.conf   ./build
 

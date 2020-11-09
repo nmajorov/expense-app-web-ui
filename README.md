@@ -1,4 +1,4 @@
-# Example React Web 
+# Example React Web
 
 It is a simple  Expenses webapp written in React and Typescript.
 It used for middleware  demo for OpenShift4
@@ -62,8 +62,9 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+## OpenShift4 and react good links
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+https://developers.redhat.com/blog/2020/04/27/modern-web-applications-on-openshift-part-4-openshift-pipelines/
+
+https://github.com/nodeshift/webapp-pipeline-tutorial/blob/master/clustertasks/webapp-build-runtime-task.yaml
