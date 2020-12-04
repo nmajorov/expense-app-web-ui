@@ -1,9 +1,0 @@
-# production environment
-SKIP_PREFLIGHT_CHECK=true
-
-REACT_APP_KEYCLOAK_URL="http://sso-test:8080/auth/"
-REACT_APP_KEYCLOAK_REALM="basic"
-REACT_APP_KEYCLOAK_CLIENT_ID="app-react"
-
-# for prod /api is default url
-#REACT_APP_BACKEND_URL="http://localhost:8080"
