@@ -88,9 +88,9 @@ class ReportContainer extends React.Component<Props, ProjectsStates> {
 
 
     componentDidUpdate(prevProps: Props) {
-        console.log('reportview componentDidUpdate   called');
-        console.log('reportview componentDidUpdate   prevProps.expenses.length: ' + prevProps.expenses.length);
-        console.log('reportview componentDidUpdate   this.props.expenses.length: ' + this.props.expenses.length);
+      //  console.log('reportview componentDidUpdate   called');
+       // console.log('reportview componentDidUpdate   prevProps.expenses.length: ' + prevProps.expenses.length);
+      //  console.log('reportview componentDidUpdate   this.props.expenses.length: ' + this.props.expenses.length);
         // schedule an immediate  fetch if needed
         if (this.props.sso.authenticated) {
             if (prevProps.expenses.length !== this.props.expenses.length){
