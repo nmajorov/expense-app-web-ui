@@ -8,7 +8,7 @@ import { TimeInMilliseconds } from '../../types/Common';
 import { Expense } from '../../types/Expense';
 import ExpensesThunkActions from '../../actions/ExpensesThunkActions';
 import { store } from '../../store/ConfigStore';
-import { Button, Jumbotron, Container, Row, Col } from 'react-bootstrap';
+import { Button, Container, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faEdit, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import ModalTitle from 'react-bootstrap/ModalTitle';
@@ -75,7 +75,7 @@ class ReportContainer extends React.Component<Props, ProjectsStates> {
     }
 
     componentDidMount() {
-        console.log('dashboard did mount called');
+        console.log('reportview did mount called');
         if (this.props.sso.authenticated) {
             // run only if authenticated !!
             this.loadExpensesFromBackend()
@@ -88,11 +88,21 @@ class ReportContainer extends React.Component<Props, ProjectsStates> {
 
 
     componentDidUpdate(prevProps: Props) {
+        console.log('reportview componentDidUpdate   called');
+        console.log('reportview componentDidUpdate   prevProps.expenses.length: ' + prevProps.expenses.length);
+        console.log('reportview componentDidUpdate   this.props.expenses.length: ' + this.props.expenses.length);
         // schedule an immediate  fetch if needed
         if (this.props.sso.authenticated) {
-            if (prevProps.expenses.length !== this.props.expenses.length) {
+            if (prevProps.expenses.length !== this.props.expenses.length){
+                console.log("call loading expense ...")
               this.loadExpensesFromBackend();
+            }else if (prevProps.pollInterval !== this.props.pollInterval){
+                // FIXME: dirty hack for state changes for the first added expense
+                // there  prevProps.expenses.length was 0 already
+                // -> need to review the component !!
+                this.loadExpensesFromBackend();
             }
+
         }
     }
 
@@ -312,23 +322,12 @@ private renderReportInfo(){
           </Row>
         </Container>
         ) : (
-            <Jumbotron>
-                <Container>
-                    <h3>Better travel and expense management.</h3>
-                    <h3>On OpenShift 4!</h3>
-                    <p>
-                        This is an example of application running on OpenShift.
-                    </p>
-                </Container>
-            </Jumbotron>
+            <h2>no authenticated please login</h2>
         );
     } // end of render
 }
 
 const mapStateToProps = (state: AppState, ownProps: Props) => {
-    console.log(
-        'state.expensesState.isLoading: ' + state.expensesState.isLoading
-    );
     return {
         reportid: ownProps.match.params.id,
         report:state.reportsState.reports.length === 1 ? state.reportsState.reports[0]:undefined,

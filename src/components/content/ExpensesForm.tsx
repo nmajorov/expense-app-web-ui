@@ -12,13 +12,14 @@ import {AppAction} from "../../actions/AppAction";
 import ExpensesThunkActions from "../../actions/ExpensesThunkActions";
 import { Report } from "../../types/Report";
 import { SSO } from "../../types/SSO";
+import ReportThunkActions from "../../actions/ReportThunkActions";
 
 
 type OwnProps = RouteComponentProps<{ id: string}>;
 
 interface AppOwnProps {
   editExpenseId?: string
-  report:Report; //  report there expence belong
+  report:Report; //  report there expense belong
 }
 
 interface DispatchProps  {
@@ -163,7 +164,7 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
 
 
   componentDidMount() {
-    console.log("componentDidMount started")
+   // console.log("componentDidMount started")
     const id = this.props.editExpenseId;
     if (id) {
       // edit expense
@@ -202,7 +203,7 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
     return (
 
 
-      <Container key="addForm">
+      <Container key="addForm" className="mt-5">
 
         <Row>
           <div className="col-lg-6">
@@ -299,6 +300,7 @@ const mapDispatchToProps = (
   saveExpense: (sso:SSO,reportID:string,expense: Expense) => {
   //    dispatch(ExpensesThunkActions.fetchExpensesData());
       dispatch(ExpensesThunkActions.addNewExpense(sso,reportID,expense));
+      dispatch(ReportThunkActions.fetchOneReport(sso,reportID));
 
   },
   loadExpense: (sso:SSO,id: string) => {

@@ -89,7 +89,7 @@ export const ReportForm = (routerProps: RouteComponentProps<ReportParams>) => {
   }
 
   return (
-    <div id="addReport">
+    <div id="addReport" className="mt-5">
       <Row>
         <div className="col-lg-6">
           <div className="card shadow mb-3">

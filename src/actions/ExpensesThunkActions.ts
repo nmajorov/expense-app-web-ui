@@ -98,7 +98,7 @@ const ExpensesThunkActions = {
     addNewExpense: (sso: SSO, reportID: string, newExpense: Expense) => {
         return (dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
             return API.addNewExpense(sso.token, reportID, newExpense).then(
-                (_response) => {
+                (response) => {
                     dispatch(ExpensesActions.addNewExpenseSuccess());
                 },
                 (error) => {

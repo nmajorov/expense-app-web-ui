@@ -1,3 +1,4 @@
+
 import React, {useContext, useEffect} from "react";
 import {useDispatch} from "react-redux";
 import SSOThunkActions from "../../actions/SSOThunkActions";
@@ -19,8 +20,8 @@ const Logout = () => {
         }
         dispatch(SSOThunkActions.signOut(keycloak))
         history.push("/")
- 
-    }, [])
+        
+    }, [history,dispatch,keycloak])
 
 
     return (
