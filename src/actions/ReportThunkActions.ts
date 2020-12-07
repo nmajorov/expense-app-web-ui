@@ -31,6 +31,10 @@ const ReportThunkActions = {
         },
         (error) => {
           let emsg: string;
+          console.log(error.response)
+          //if (error.response && error.response.status === 401){
+          //  emsg = "Cannot load the reports  unauthorized ..session expired ? ";
+         // }else 
           if (
             error.response &&
             error.response.data &&
