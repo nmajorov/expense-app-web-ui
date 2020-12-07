@@ -68,3 +68,11 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 https://developers.redhat.com/blog/2020/04/27/modern-web-applications-on-openshift-part-4-openshift-pipelines/
 
 https://github.com/nodeshift/webapp-pipeline-tutorial/blob/master/clustertasks/webapp-build-runtime-task.yaml
+
+
+using express with react:
+
+https://dev.to/loujaybee/using-create-react-app-with-express
+
+and express http proxy:
+https://www.npmjs.com/package/express-http-proxy

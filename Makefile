@@ -35,6 +35,12 @@ lint: ##  run elint on code
 .PHONY: run
 run: ##  run gui in dev mode
 	@echo "run	app"
+	# be sure you remove it from shell 
+	# to be able to pick up local .env files
+	unset REACT_APP_KEYCLOAK_URL
+	unset REACT_APP_KEYCLOAK_REALM
+	unset REACT_APP_KEYCLOAK_CLIENT_ID
+	unset REACT_APP_BACKEND_URL
 	yarn start
 
 
@@ -47,6 +53,10 @@ test: ##	run tests
 .PHONY: build
 build: ##  build everything
 		@echo "run js build"
+		unset REACT_APP_KEYCLOAK_URL
+		unset REACT_APP_KEYCLOAK_REALM
+		unset REACT_APP_KEYCLOAK_CLIENT_ID
+		unset REACT_APP_BACKEND_URL
 		yarn build
 
 .PHONY: docker

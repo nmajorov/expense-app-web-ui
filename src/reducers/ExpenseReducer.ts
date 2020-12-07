@@ -5,7 +5,6 @@ import { AppAction } from "../actions/AppAction";
 import { ExpensesActions } from "../actions/ExpensesAction";
 import { getType } from "typesafe-actions";
 import { Expense } from "../types/Expense";
-import { MILLISECONDS } from "../types/Common";
 
 export const EXPENSES_INITIAL_STATE: ExpensesState = {
   expenses: [],
@@ -30,7 +29,7 @@ const expensesReducer = (state: ExpensesState = EXPENSES_INITIAL_STATE,
       break;
 
     case getType(ExpensesActions.deleteActionSuccess):
-      //empty expense so we can reload it again
+      // empty expense so we can reload it again
       newState.expenses = []
       break;
 

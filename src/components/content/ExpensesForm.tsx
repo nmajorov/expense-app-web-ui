@@ -18,7 +18,7 @@ type OwnProps = RouteComponentProps<{ id: string}>;
 
 interface AppOwnProps {
   editExpenseId?: string
-  report:Report; //report there expence belong
+  report:Report; //  report there expence belong
 }
 
 interface DispatchProps  {
@@ -135,14 +135,16 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
     );
   };
 
+
+  /** handle form submit  */
   private handleSubmit(event: FormEvent) {
     event.preventDefault();
    // console.log("handleSubmit: " + JSON.stringify(this.state.currentInputExpense));
     if (this.state.isAmountValid && this.state.isDescriptionValid
       && this.state.isDateValid){
 
-        let expense = this.props.currentInputExpense;
-        let sso= this.props.sso;
+        const expense = this.props.currentInputExpense;
+        const sso= this.props.sso;
 
       if (this.props.editExpenseId){
         // send to update
@@ -151,8 +153,8 @@ class ExpensesFormContainer extends React.Component<Props, FormState> {
         // some clean up for timestamp
         expense.tstamp = undefined;
         // save new
-        let report_id =  this.props.report.id.toString();
-        this.props.saveExpense(sso,report_id,expense);
+        const reportID =  this.props.report.id.toString();
+        this.props.saveExpense(sso,reportID,expense);
       }
       //
       this.props.history.push(`/report/${this.props.report.id}`);

@@ -43,7 +43,7 @@ interface AppProps {
 }
 
 interface StateProps {
-    reportid:string, //report id as parameter
+    reportid:string, // report id as parameter
     report: Report; //
     sso: SSO;
 }
@@ -112,8 +112,7 @@ class ReportContainer extends React.Component<Props, ProjectsStates> {
     };
 
     private openDeleteModalWindow = (id) => {
-        // console.log("openDeleteModalWindow called " + this.props.showModal);
-        if (!store.getState().expensesState.showModal) {
+         if (!store.getState().expensesState.showModal) {
             this.props.hideOrShowDeleteModal(id);
         }
     };
