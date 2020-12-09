@@ -79,3 +79,12 @@ spec:
       workspaces:
         - name: input
           workspace: ui-workspace
+
+    - name:  deploy-nodejs-app
+      taskRef:
+        name:  deploy-nodejs-app
+      runAfter:
+        - webapp-build-runtime
+      workspaces:
+        - name: input
+          workspace: ui-workspace

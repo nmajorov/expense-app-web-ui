@@ -1,31 +1,16 @@
 # Example React Web
 
-It is a simple  Expenses webapp written in React and Typescript.
-It used for middleware  demo for OpenShift4
-
-https://medium.com/knerd/typescript-tips-series-proper-typing-of-react-redux-connected-components-eda058b6727d
-
-Good example seems to be here:
-
-https://github.com/reduxjs/redux-thunk/issues/213
-
-
-https://github.zhaw.ch/guggiste/typescript-todolist#adding-a-router
-
-
-keycloak integration with vue js app :
-
-https://github.com/akoserwal/devnationtt-vue-keycloak/blob/master/vueapp-demo/src/main.js#L16
-
-
-typesafe-actions
+It is a simple webapp written in React and Typescript.
+It used for middleware  demo for OpenShift 4.x
 
 
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+
+
+## Available JS build Scripts
 
 In the project directory, you can run:
 
@@ -67,6 +52,8 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 
 https://developers.redhat.com/blog/2020/04/27/modern-web-applications-on-openshift-part-4-openshift-pipelines/
 
+https://github.com/nodeshift-starters/react-pipeline-example
+
 https://github.com/nodeshift/webapp-pipeline-tutorial/blob/master/clustertasks/webapp-build-runtime-task.yaml
 
 
@@ -76,3 +63,27 @@ https://dev.to/loujaybee/using-create-react-app-with-express
 
 and express http proxy:
 https://www.npmjs.com/package/express-http-proxy
+
+
+## interesting ReactJs links
+
+
+https://medium.com/knerd/typescript-tips-series-proper-typing-of-react-redux-connected-components-eda058b6727d
+
+Good example seems to be here:
+
+https://github.com/reduxjs/redux-thunk/issues/213
+
+
+https://github.zhaw.ch/guggiste/typescript-todolist#adding-a-router
+
+
+keycloak integration with vue js app :
+
+https://github.com/akoserwal/devnationtt-vue-keycloak/blob/master/vueapp-demo/src/main.js#L16
+
+
+typesafe-actions
+
+
+

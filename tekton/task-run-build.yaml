@@ -1,4 +1,5 @@
 ---
+# test build of image separately
 apiVersion: tekton.dev/v1beta1
 kind: TaskRun
 metadata:
