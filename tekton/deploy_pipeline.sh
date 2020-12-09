@@ -9,7 +9,6 @@ oc delete tasks deploy-nodejs-app test-nodejs-app --ignore-not-found=true
 
 oc delete pipelines.tekton.dev build-expenses-web-ui --ignore-not-found=true
 
-
 echo "deploy resources"
 oc create -f resources/
 

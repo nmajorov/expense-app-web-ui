@@ -60,9 +60,21 @@ build: ##  build everything
 		yarn build
 
 .PHONY: docker
-docker: build ## build with container
+docker: clean ## build with container
 	@echo $(CONTAINER_ENGINE)
+	# back up real production file
+	mv .env.production .env.back_up
+	mv .env.docker .env.local
+	yarn build
+	mv .env.local .env.docker
+	mv .env.back_up .env.production
 	${CONTAINER_ENGINE} build -t $(IMAGE_NAME) .
+
+
+docker-run: ## run locally app in  docker 
+	 @echo run container on port 3000
+	 ${CONTAINER_ENGINE} run -it --rm -p3000:8080 $(IMAGE_NAME)
+
 
 
 .PHONY: test-container

@@ -10,6 +10,8 @@ spec:
       default: https://github.com/nmajorov/expenses-web-ui.git
     - name: GIT_REVISION
       default: master
+    - name: SSO_URL
+      default: http://sso-test:8080/auth/
     - name: ui-image
       default: "image-registry.openshift-image-registry.svc:5000/nm-demo/gui:latest"
 
@@ -45,6 +47,9 @@ spec:
     - name: build-and-deploy
       taskRef:
         name: deploy-nodejs-app
+      params:
+        - name: sso-url
+          value: $(params.SSO_URL)
       runAfter:
         - test
       workspaces:
