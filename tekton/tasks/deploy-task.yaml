@@ -27,7 +27,9 @@ spec:
 
               else
                 echo "Application already exists."
-          	    # oc rollout  nodejs-gui
+          	    oc delete all --selector=app=nodejs-gui
+                oc new-app --name=nodejs-gui --image-stream=gui:latest
+                oc expose svc nodejs-gui
           fi
 
 

@@ -8,6 +8,16 @@ It used for middleware  demo for OpenShift 4.x
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+deploy via tekton pipelines on OpenShift:
+        
+        # I creat this demoproject
+        oc new-project nm-demo
+        cd tekton
+        ./deploy_pipeline.sh
+        
+        # call pipline run with default parameters
+        oc create  -f   pipelinerun-branch-master.yaml
+
 
 
 ## Available JS build Scripts
