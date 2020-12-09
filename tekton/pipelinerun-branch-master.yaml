@@ -7,10 +7,18 @@ spec:
   pipelineRef:
     name: build-expenses-web-ui
   params:
+    - name: GIT_URL
+      value: 'https://github.com/nmajorov/expenses-web-ui.git'
     - name: GIT_REVISION
       value: master
     - name: SSO_URL
-      value: "http://sso-test-nm-demo.apps.ocp-cluster-1.rhlab.ch/auth/"
+      value: 'https://secure-sso-test-nm-demo.apps.ocp-cluster-1.rhlab.ch/auth/'
+    - name: BACKEND_URL
+      value: 'http://expenses-backend-quarkus-nm-demo.apps.ocp-cluster-1.rhlab.ch'
+  resources:
+    - name: ui-image
+      resourceRef:
+        name: ui-image
   workspaces:
     - name: ui-workspace
       persistentVolumeClaim:

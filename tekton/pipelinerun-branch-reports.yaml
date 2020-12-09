@@ -3,15 +3,22 @@ kind: PipelineRun
 metadata:
   generateName: web-ui-keycloak-branch-run
 spec:
- # params:
-  #  - name: git-revision
-   #   value: "keycloak"
   pipelineRef:
     name: build-expenses-web-ui
   params:
+    - name: GIT_URL
+      value: 'https://github.com/nmajorov/expenses-web-ui.git'
     - name: GIT_REVISION
       value: reports
-  workspaces:
-    - name: ui-workspace
-      persistentVolumeClaim:
-        claimName: ui-source-pvc
+    - name: SSO_URL
+      value: 'https://secure-sso-test-nm-demo.apps.ocp-cluster-1.rhlab.ch/auth/'
+    - name: BACKEND_URL
+      value: 'http://expenses-backend-quarkus-nm-demo.apps.ocp-cluster-1.rhlab.ch'
+    resources:
+      - name: ui-image
+        resourceRef:
+          name: ui-image
+    workspaces:
+      - name: ui-workspace
+        persistentVolumeClaim:
+          claimName: ui-source-pvc

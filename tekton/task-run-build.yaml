@@ -1,0 +1,17 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: taskrun-build-ui-image
+spec:
+  taskRef:
+    name: webapp-build-runtime
+  resources:
+    outputs:
+      - name: image
+        resourceRef:
+          name: ui-image
+  workspaces:
+    - name: input
+      persistentVolumeClaim:
+        claimName: ui-source-pvc

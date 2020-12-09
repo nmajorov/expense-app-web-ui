@@ -1,7 +1,7 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: deploy-nodejs-app
+  name: build-nodejs-app
 spec:
   params:
     - name: VERSION
@@ -25,7 +25,9 @@ spec:
       type: string
       default: app-react
 
-
+    - name: backend-url
+      description: "route addr of backend app as full url"
+      type: string
 
   steps:
     - name: yarn-build-app
@@ -44,46 +46,29 @@ spec:
           export REACT_APP_KEYCLOAK_URL="$(params.sso-url)"
           export REACT_APP_KEYCLOAK_REALM="$(params.sso-realm)"
           export REACT_APP_KEYCLOAK_CLIENT_ID="$(params.sso-client-id)"
+          export REACT_APP_BACKEND_URL="$(params.backend-url)"
 
-          # replace them on the env prod file
+          echo "replace .env.production file with parameters from task"
           
           sed -ri  "s|REACT_APP_KEYCLOAK_URL=.*|REACT_APP_KEYCLOAK_URL=$REACT_APP_KEYCLOAK_URL|g" .env.production
           sed -ri  "s|REACT_APP_KEYCLOAK_REALM=.*|REACT_APP_KEYCLOAK_URL=$REACT_APP_KEYCLOAK_REALM|g" .env.production
           sed -ri  "s|REACT_APP_KEYCLOAK_CLIENT_ID=.*|REACT_APP_KEYCLOAK_CLIENT_ID=$REACT_APP_KEYCLOAK_CLIENT_ID|g" .env.production
-
+          sed -ri  "s|REACT_APP_BACKEND_URL=.*|REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL|g" .env.production
+          echo
           echo "read react environment"
           cat .env.production
 
+          echo
+          echo
           echo "start build for prod"
 
           yarn build
 
-          #copy web server config
-          cp -r ./nginx.conf   ./build
+          echo
+          echo
+          echo "copy web server config in build directory"
+          cp -vr ./nginx.conf   ./build
 
-
-    - name: deploy-app
-      image: quay.io/openshift/origin-cli:latest
-      workingDir: /workspace/input-ui-source
-      command: ["/bin/bash", "-c"]
-
-      args:
-        - |-
-
-          cd build
-          ls -lisa
-
-          oc get bc/nodejs-gui
-          if [[ $? -ne 0 ]]
-              then
-          	        oc new-app --name=nodejs-gui --image-stream=openshift/nginx:1.16 --binary=true
-                    oc start-build nodejs-gui --from-dir .
-                    oc expose svc nodejs-gui
-
-              else
-                  echo "Application already exists."
-          	      oc start-build nodejs-gui --from-dir=. --follow
-          fi
 
 
   workspaces:

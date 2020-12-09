@@ -12,8 +12,15 @@ spec:
       default: master
     - name: SSO_URL
       default: http://sso-test:8080/auth/
+
+    # full external url of backend app
+    - name: BACKEND_URL
+
+  resources:
     - name: ui-image
-      default: "image-registry.openshift-image-registry.svc:5000/nm-demo/gui:latest"
+      type: image
+    # "image-registry.openshift-image-registry.svc:5000/nm-demo/gui:latest"
+
 
   workspaces:
     - name: ui-workspace
@@ -44,15 +51,31 @@ spec:
       workspaces:
         - name: input
           workspace: ui-workspace
-    - name: build-and-deploy
+
+
+    - name: build-nodejs-app
       taskRef:
-        name: deploy-nodejs-app
+        name: build-nodejs-app
       params:
         - name: sso-url
           value: $(params.SSO_URL)
+        - name:  backend-url
+          value: $(params.BACKEND_URL)
       runAfter:
         - test
       workspaces:
         - name: input
           workspace: ui-workspace
 
+    - name:  webapp-build-runtime
+      taskRef:
+        name:  webapp-build-runtime
+      resources:
+        outputs:
+          - name: image
+            resource: ui-image
+      runAfter:
+        -  build-nodejs-app
+      workspaces:
+        - name: input
+          workspace: ui-workspace

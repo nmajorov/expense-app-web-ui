@@ -1,0 +1,81 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: webapp-build-runtime
+spec:
+ # inputs:
+ #   resources:
+ #   - name: image
+ #     type: image
+  params:
+    - name: WEB_RUNTIME_IMAGE
+      description: The Web Runtime image to use,  defaults to registry.redhat.io/rhscl/nginx-116-rhel7:1.16
+      # default: registry.redhat.io/rhscl/nginx-116-rhel7:1.16 # need a docker secret in project
+      # use OpenShift internal
+      default: image-registry.openshift-image-registry.svc:5000/openshift/nginx:1.16
+    - name: TLSVERIFY
+      description: Verify the TLS on the registry endpoint (for push/pull to a non-TLS registry)
+      default: "false"
+  resources:
+    outputs:
+      - name: image
+        type: image
+
+
+  steps:
+  - name: copy-source
+    image: quay.io/openshift-pipeline/s2i
+    workingdir: /workspace/source
+    script: |
+      #!/usr/bin/env bash
+      echo "current dir : $(pwd)"
+      echo
+      echo "list directory:"
+      echo
+      ls -lisa
+      echo
+      cp -Rvp $(pwd)/build /gen-source/build
+
+    volumeMounts:
+    - name: gen-source
+      mountPath: /gen-source
+  - name: generate
+    image: quay.io/openshift-pipeline/s2i
+    workingdir: /workspace/source
+    command: ['s2i', 'build', '/gen-source/build', '$(inputs.params.WEB_RUNTIME_IMAGE)', '--as-dockerfile', '/gen-source/Dockerfile.gen']
+    volumeMounts:
+    - name: gen-source
+      mountPath: /gen-source
+    securityContext:
+      privileged: true
+  - name: build
+    image: quay.io/buildah/stable
+    workingdir: /gen-source
+    command: ['buildah', 'bud', '--tls-verify=$(inputs.params.TLSVERIFY)', '--layers', '-f', '/gen-source/Dockerfile.gen', '-t', '$(outputs.resources.image.url)', '.']
+    volumeMounts:
+    - name: varlibcontainers
+      mountPath: /var/lib/containers
+    - name: gen-source
+      mountPath: /gen-source
+    securityContext:
+      privileged: true
+
+  - name: push
+    image: quay.io/buildah/stable
+    command: ['buildah', 'push', '--tls-verify=$(inputs.params.TLSVERIFY)', '$(outputs.resources.image.url)', 'docker://$(outputs.resources.image.url)']
+    volumeMounts:
+    - name: varlibcontainers
+      mountPath: /var/lib/containers
+    securityContext:
+      privileged: true
+
+  volumes:
+    - name: varlibcontainers
+      emptyDir: {}
+    - name: gen-source
+      emptyDir: {}
+
+  workspaces:
+    - name: input
+      mountPath: /workspace/source
