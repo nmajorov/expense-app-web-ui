@@ -82,7 +82,7 @@ export const ConfirmDialogModal = ({
             onHide={toggleDialog}
         //  variant={ModalVariant.small}
         >
-            <ModalHeader closeButton>
+            <ModalHeader translate closeButton>
 
             {titleKey}
 
