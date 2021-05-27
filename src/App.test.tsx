@@ -7,12 +7,16 @@ import { AppState } from "./store/Store";
 import { ALERT_MESSAGE_INITIAL_STATE } from './reducers/AlertMessagesReducer';
 import thunk from 'redux-thunk';
 import { EXPENSES_INITIAL_STATE } from './reducers/ExpenseReducer';
+import { SSO_INITIAL_STATE } from './reducers/SSOReducer';
+import { REPORTS_INITIAL_STATE } from './reducers/ReportsReducer';
 
 const middlewares = [thunk]
 const mockStore = configureStore(middlewares)
 const initialStore: AppState = {
   alertState: ALERT_MESSAGE_INITIAL_STATE,
   expensesState: EXPENSES_INITIAL_STATE,
+  ssoState: SSO_INITIAL_STATE,
+  reportsState: REPORTS_INITIAL_STATE,
   
 }
 

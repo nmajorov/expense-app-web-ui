@@ -27,7 +27,6 @@ const ssoReducer = (state: SSOState = SSO_INITIAL_STATE, action: AppAction): SSO
         case C.SSO_INITIALIZED:
 
             newState.sso = action.payload as SSO;
-            //console.log("state now: " + JSON.stringify(newState));
             break;
 
         case C.USER_PROFILE_LOADED:

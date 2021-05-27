@@ -31,7 +31,7 @@ const kebabIcon = <FontAwesomeIcon icon={faEllipsisH} />;
 const DashBoard = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { sso, reports } = useSelector<AppState, SSO, ReportsState>(
+  const { sso, reports } = useSelector(
     (state: AppState) => {
       return {
         sso: state.ssoState.sso,
@@ -40,7 +40,7 @@ const DashBoard = () => {
     }
   );
 
-  const { reportChanges } = useSelector<AppState, ReportsState>(
+  const { reportChanges } = useSelector(
     (state: AppState) => {
       return {
         reportChanges: state.reportsState.changes,

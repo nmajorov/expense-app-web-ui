@@ -37,7 +37,7 @@ type Props = OwnProps & DispatchProps;
  */
 export function NavigationBar() {
     const keycloak = useContext(SecurityContext);
-    const { sso, routerLocation } = useSelector<AppState, SSO, RouterState>((state: AppState) => {
+    const { sso, routerLocation } = useSelector((state: AppState) => {
         return {
             sso: state.ssoState.sso,
             routerLocation: state.router.location
