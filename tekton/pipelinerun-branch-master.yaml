@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  generateName: web-ui-keycloak-branch-run
+  generateName: expenses-webui-master-branch
 spec:
   pipelineRef:
     name: build-expenses-web-ui
