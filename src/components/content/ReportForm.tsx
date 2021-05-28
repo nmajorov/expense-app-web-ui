@@ -25,14 +25,13 @@ export const ReportForm = (routerProps: RouteComponentProps<ReportParams>) => {
 
   const [isValid, setValid] = useState(false);
 
-  const { sso } = useSelector<AppState, SSO>((state: AppState) => {
+  const { sso } = useSelector((state: AppState) => {
     return {
       sso: state.ssoState.sso
     };
   });
 
-  const reports: Array<Report> = useSelector<AppState, ReportsState>(
-    (state: AppState) => {
+  const reports: Array<Report> = useSelector((state: AppState) => {
       return state.reportsState.reports;
     }
   );

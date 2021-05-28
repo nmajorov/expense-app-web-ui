@@ -8,7 +8,7 @@ import {SSO} from "../../types/SSO";
  *   show user profile
  */
 const ProfileView = () => {
-    const {userProfile} = useSelector<AppState, SSO>((state: AppState) => {
+    const {userProfile} = useSelector((state: AppState) => {
         return {
             userProfile: state.ssoState.sso.userProfile
         }

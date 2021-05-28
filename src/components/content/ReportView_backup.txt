@@ -1,0 +1,379 @@
+import React from 'react';
+import Table from 'react-bootstrap/Table';
+import { AppState } from '../../store/Store';
+import { ThunkDispatch } from 'redux-thunk';
+import { connect } from 'react-redux';
+import { AppAction } from '../../actions/AppAction';
+import { TimeInMilliseconds } from '../../types/Common';
+import { Expense } from '../../types/Expense';
+import ExpensesThunkActions from '../../actions/ExpensesThunkActions';
+import { store } from '../../store/ConfigStore';
+import { Button, Container, Row, Col } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt, faEdit, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
+import ModalTitle from 'react-bootstrap/ModalTitle';
+import ModalHeader from 'react-bootstrap/ModalHeader';
+import ModalFooter from 'react-bootstrap/ModalFooter';
+import ModalBody from 'react-bootstrap/ModalBody';
+import Modal from 'react-bootstrap/Modal';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+
+import { SSO } from '../../types/SSO';
+import { AlertMessage, MessageType } from '../../types/AlertTypes';
+import { AlertActions } from '../../actions/AlertAction';
+import { Report } from '../../types/Report';
+import ReportThunkActions from '../../actions/ReportThunkActions';
+
+
+const trashIcon = <FontAwesomeIcon icon={faTrashAlt} />;
+const editIcon = <FontAwesomeIcon icon={faEdit} />;
+const arrovUpIcon = <FontAwesomeIcon icon={faArrowUp} />;
+const arrovDownIcon = <FontAwesomeIcon icon={faArrowDown} />;
+
+
+type ProjectsStates = {};
+
+type OwnProps = RouteComponentProps<{ id: string }>;
+
+interface AppProps {
+    expenses: Array<Expense>;
+    showModal: boolean;
+    selectedExpenseID: number;
+    isAuthenticated?: boolean;
+}
+
+interface StateProps {
+    reportid:string, // report id as parameter
+    report: Report; //
+    sso: SSO;
+}
+
+interface DispatchProps {
+    getExpenses: (sso: SSO, reportID: string,sortBy?:string) => any;
+    showLoading: () => any;
+    stopShowLoading: () => any;
+    startLoading: () => any;
+    isLoading: boolean;
+    deleteExpense: (sso:SSO, id: number) => any;
+    pollInterval: TimeInMilliseconds;
+    setLastRefreshAt: (lastRefreshAt: TimeInMilliseconds) => void;
+    hideOrShowDeleteModal: (id?: number) => any;
+    checkSSO: () => any;
+}
+
+type Props = StateProps & AppProps & OwnProps & DispatchProps;
+
+/**
+ * dashboard for projects
+ *
+ */
+class ReportContainer extends React.Component<Props, ProjectsStates> {
+
+    constructor(props: Readonly<Props>) {
+        super(props);
+        this.state = {};
+    }
+
+    componentDidMount() {
+        console.log('reportview did mount called');
+        if (this.props.sso.authenticated) {
+            // run only if authenticated !!
+            this.loadExpensesFromBackend()
+        //    this.scheduleNextPollingInterval(0);
+        } else {
+            console.log('user is not authenticated');
+        }
+    }
+
+
+
+    componentDidUpdate(prevProps: Props) {
+      //  console.log('reportview componentDidUpdate   called');
+       // console.log('reportview componentDidUpdate   prevProps.expenses.length: ' + prevProps.expenses.length);
+      //  console.log('reportview componentDidUpdate   this.props.expenses.length: ' + this.props.expenses.length);
+        // schedule an immediate  fetch if needed
+        if (this.props.sso.authenticated) {
+            if (prevProps.expenses.length !== this.props.expenses.length){
+                console.log("call loading expense ...")
+              this.loadExpensesFromBackend();
+            }else if (prevProps.pollInterval !== this.props.pollInterval){
+                // FIXME: dirty hack for state changes for the first added expense
+                // there  prevProps.expenses.length was 0 already
+                // -> need to review the component !!
+                this.loadExpensesFromBackend();
+            }
+
+        }
+    }
+
+
+
+    /**
+     * trigger load of expenses from backend
+     */
+    private loadExpensesFromBackend = () => {
+        this.props.startLoading();
+        this.props.getExpenses(this.props.sso, this.props.reportid);
+    };
+
+    private closeDeleteModalWindow = () => {
+        // console.log("closeDeleteModalWindow called");
+        this.props.hideOrShowDeleteModal();
+    };
+
+    private openDeleteModalWindow = (id) => {
+         if (!store.getState().expensesState.showModal) {
+            this.props.hideOrShowDeleteModal(id);
+        }
+    };
+
+    private callEdit = (id) => {
+        this.props.history.push(`/expenses/edit/${id}`);
+    };
+
+
+    /**
+     * sort expenses by id
+     */
+    private sortBy =(sort:string) => {
+        this.props.startLoading();
+        this.props.getExpenses(this.props.sso, this.props.reportid,sort);
+    }
+
+
+    private renderDeleteDialog() {
+        return (
+            <Modal
+                id="versionPopUp"
+                show={this.props.showModal}
+                onHide={this.closeDeleteModalWindow}
+            >
+                <ModalHeader translate closeButton>
+                    <ModalTitle>
+                        Delete Expense {this.props.selectedExpenseID}
+                    </ModalTitle>
+                </ModalHeader>
+
+                <ModalBody>Are you sure ?</ModalBody>
+
+                <ModalFooter>
+                    <Button
+                        variant="secondary"
+                        onClick={this.closeDeleteModalWindow}
+                    >
+                        Close
+                    </Button>
+                    <Button
+                        variant="danger"
+                        onClick={() =>
+                            this.deleteExpense(this.props.selectedExpenseID)
+                        }
+                    >
+                        Delete
+                    </Button>
+                </ModalFooter>
+            </Modal>
+        );
+    }
+
+    /**
+     * trigger delete of expense by id
+     *
+     */
+    private deleteExpense = (id) => {
+        this.closeDeleteModalWindow();
+        this.props.deleteExpense(this.props.sso, id);
+    };
+
+    private calculateTotalAmount() {
+        const amountArray = this.props.expenses.map((pr) => {
+            return pr.amount;
+        });
+
+        const numOr0 = (n) => (isNaN(n) ? 0 : n);
+
+        return amountArray
+            .reduce(function (acc, val) {
+                return numOr0(acc) + numOr0(val);
+            }, 0)
+            .toFixed(2);
+    }
+
+    private renderExpenses() {
+        return this.props.expenses.length > 0 ? (
+            this.renderExpensesTable()
+        ) : (
+            <p>There is no expenses found</p>
+        );
+    }
+
+    /**
+     * render table with expenses
+     */
+    private renderExpensesTable() {
+        return (
+
+            <>
+                <Table striped bordered hover size="sm">
+                    <thead>
+                        <tr>
+                            <th>#   <button onClick={()=>this.sortBy("id_asc")}>{arrovUpIcon}</button>
+                            &nbsp;  &nbsp;
+                            <button onClick={()=>this.sortBy("id_desc")}>{arrovDownIcon}</button></th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Date  <button  onClick={()=>this.sortBy("created_asc")}>{arrovUpIcon}</button>
+                              &nbsp;  &nbsp;
+                              <button onClick={()=>this.sortBy("created_desc")}>{arrovDownIcon}</button>
+                            </th>
+                            <th>Last Modified</th>
+                            <th>Actions</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {this.props.expenses.map((pr) => {
+                            return (
+                                <tr key={pr.id.toString()}>
+                                    <td>{pr.id}</td>
+                                    <td>{pr.description}</td>
+                                    <td>{pr.amount}</td>
+                                    <td>{pr.createdAT}</td>
+                                    <td>{pr.tstamp}</td>
+                                    <td>
+                                        <Button
+                                            onClick={() => this.callEdit(pr.id)}
+                                        >
+                                            {editIcon}
+                                        </Button>
+                                    </td>
+                                    <td>
+                                        <Button
+                                            onClick={() =>
+                                                this.openDeleteModalWindow(
+                                                    pr.id
+                                                )
+                                            }
+                                            variant="danger"
+                                        >
+                                            {trashIcon}
+                                        </Button>
+                                        {this.renderDeleteDialog()}
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                        <tr>
+                            <td>&#8203;</td>
+                            <td>&#8203;</td>
+                            <td>&#8203;</td>
+                            <td>&#8203;</td>
+                            <td>&#8203;</td>
+                            <td>&#8203;</td>
+                            <td>&#8203;</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Total:</b>
+                            </td>
+                            <td>&#8203;</td>
+                            <td>
+                                <b>{this.calculateTotalAmount()} </b>
+                            </td>
+                            <td>&#8203;</td>
+                            <td>&#8203;</td>
+                            <td>&#8203;</td>
+                            <td>&#8203;</td>
+                        </tr>
+                    </tbody>
+                </Table>
+            </>
+        );
+    }
+
+
+private renderReportInfo(){
+    if (this.props.report){
+      return(
+        <>
+        <Col>
+        <h2>{this.props.report.name}</h2>
+        </Col>
+        <Col>
+        Created: {this.props.report.createdAT}
+        </Col>
+        </>
+      );
+    }
+
+}
+
+    /**
+     * render element on the page
+     */
+    render() {
+        return this.props.sso.authenticated ? (
+          <Container fluid>
+          <Row>
+          { this.renderReportInfo()}
+          </Row>
+          <Row>
+          {  this.renderExpenses()}
+          </Row>
+        </Container>
+        ) : (
+            <h2>no authenticated please login</h2>
+        );
+    } // end of render
+}
+
+const mapStateToProps = (state: AppState, ownProps: Props) => {
+    return {
+        reportid: ownProps.match.params.id,
+        report:state.reportsState.reports.length === 1 ? state.reportsState.reports[0]:undefined,
+        expenses: state.expensesState.expenses,
+        pollInterval: state.expensesState.pollInterval,
+        showModal: state.expensesState.showModal,
+        selectedExpenseID: state.expensesState.selectedID,
+        sso: state.ssoState.sso,
+        isLoading: state.expensesState.isLoading,
+    };
+};
+
+const mapDispatchToProps = (
+    dispatch: ThunkDispatch<AppState, void, AppAction>
+) => ({
+    startLoading: () => {
+        const loadMessage: AlertMessage = {
+            content: 'loading data ',
+            show_notification: true,
+            type: MessageType.INFO,
+        };
+
+        dispatch(AlertActions.addMessage(loadMessage));
+        dispatch(ExpensesThunkActions.startFetching());
+    },
+
+    getExpenses: (sso: SSO, reportID: string,sort?:string) => {
+        dispatch(ExpensesThunkActions.fetchExpensesData(sso.token, reportID,sort));
+        dispatch(ReportThunkActions.fetchOneReport(sso,reportID))
+    },
+    deleteExpense: (sso: SSO,id: number) => {
+        dispatch(ExpensesThunkActions.deleteExpense(sso,id));
+
+    },
+
+    hideOrShowDeleteModal: (id: number) => {
+        dispatch(ExpensesThunkActions.showDeleteDialog(id));
+    },
+
+    checkSSO: () => {
+        // dispatch(SSOThunkActions.initKeycloak()) ;
+    },
+});
+
+const decorator = connect<Props>(mapStateToProps, mapDispatchToProps);
+
+const ReportView = withRouter(decorator(ReportContainer));
+
+export default ReportView;

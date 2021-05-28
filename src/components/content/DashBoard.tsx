@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppState, ReportsState } from "../../store/Store";
-import { SSO } from "../../types/SSO";
+import { AppState } from "../../store/Store";
 import {
   Card,
   Col,

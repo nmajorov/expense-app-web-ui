@@ -1,11 +1,10 @@
 import React, {ReactElement, useContext, useEffect } from "react";
 import { Button, Nav, Navbar, NavDropdown, NavItem } from "react-bootstrap";
 import { AppState } from "../../store/Store";
-import { SSO } from "../../types/SSO";
+
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from "react-redux";
 
-import { RouterState } from "connected-react-router";
 import { SecurityContext } from "../../context/SecurityContext";
 import SSOThunkActions from "../../actions/SSOThunkActions";
 
@@ -14,22 +13,8 @@ enum MenuNames {
     ADD_EXPENSE = "Add Expense"
 }
 
-interface State {
-}
 
-interface OwnProps {
-    routerLocation: RouterState;
-    sso: SSO;
-}
 
-interface DispatchProps {
-
-    loginSSO: () => any;
-    checkLoginDetails: () => any;
-    initKeycloak: () => any;
-}
-
-type Props = OwnProps & DispatchProps;
 
 /**
  *
@@ -74,7 +59,7 @@ export function NavigationBar() {
         if (keycloak.authenticated){
             dispatch(SSOThunkActions.loadUserProfile(keycloak))
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+ 
     },[])
 
     return (

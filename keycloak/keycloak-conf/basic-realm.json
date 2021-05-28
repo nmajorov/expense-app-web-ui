@@ -1,6 +1,6 @@
 {
-  "id": "geektour",
-  "realm": "geektour",
+  "id": "basic",
+  "realm": "basic",
   "notBefore": 0,
   "revokeRefreshToken": false,
   "refreshTokenMaxReuse": 0,
@@ -43,7 +43,7 @@
         "name": "user",
         "composite": false,
         "clientRole": false,
-        "containerId": "geektour",
+        "containerId": "basic",
         "attributes": {}
       },
       {
@@ -52,7 +52,7 @@
         "description": "${role_uma_authorization}",
         "composite": false,
         "clientRole": false,
-        "containerId": "geektour",
+        "containerId": "basic",
         "attributes": {}
       },
       {
@@ -61,7 +61,7 @@
         "description": "${role_offline-access}",
         "composite": false,
         "clientRole": false,
-        "containerId": "geektour",
+        "containerId": "basic",
         "attributes": {}
       }
     ],
@@ -279,7 +279,7 @@
         }
       ],
       "security-admin-console": [],
-      "geektourclient": [],
+      "basicclient": [],
       "admin-cli": [],
       "account-console": [],
       "broker": [
@@ -432,7 +432,7 @@
       "clientId": "account",
       "name": "${client_account}",
       "rootUrl": "${authBaseUrl}",
-      "baseUrl": "/realms/geektour/account/",
+      "baseUrl": "/realms/basic/account/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
@@ -443,7 +443,7 @@
         "view-profile"
       ],
       "redirectUris": [
-        "/realms/geektour/account/*"
+        "/realms/basic/account/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -479,14 +479,14 @@
       "clientId": "account-console",
       "name": "${client_account-console}",
       "rootUrl": "${authBaseUrl}",
-      "baseUrl": "/realms/geektour/account/",
+      "baseUrl": "/realms/basic/account/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "/realms/geektour/account/*"
+        "/realms/basic/account/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -609,7 +609,7 @@
     },
     {
       "id": "6f1bd5dc-be3b-4eee-8107-7e9d5cb49a9b",
-      "clientId": "geektourclient",
+      "clientId": "basicclient",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
@@ -708,14 +708,14 @@
       "clientId": "security-admin-console",
       "name": "${client_security-admin-console}",
       "rootUrl": "${authAdminUrl}",
-      "baseUrl": "/admin/geektour/console/",
+      "baseUrl": "/admin/basic/console/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "/admin/geektour/console/*"
+        "/admin/basic/console/*"
       ],
       "webOrigins": [
         "+"
@@ -2048,8 +2048,8 @@
   "keycloakVersion": "9.0.3",
   "userManagedAccessAllowed": false
 }{
-  "id": "geektour",
-  "realm": "geektour",
+  "id": "basic",
+  "realm": "basic",
   "notBefore": 0,
   "revokeRefreshToken": false,
   "refreshTokenMaxReuse": 0,
@@ -2094,7 +2094,7 @@
         "name": "user",
         "composite": false,
         "clientRole": false,
-        "containerId": "geektour",
+        "containerId": "basic",
         "attributes": {}
       },
       {
@@ -2103,7 +2103,7 @@
         "description": "${role_uma_authorization}",
         "composite": false,
         "clientRole": false,
-        "containerId": "geektour",
+        "containerId": "basic",
         "attributes": {}
       },
       {
@@ -2112,7 +2112,7 @@
         "description": "${role_offline-access}",
         "composite": false,
         "clientRole": false,
-        "containerId": "geektour",
+        "containerId": "basic",
         "attributes": {}
       }
     ],
@@ -2330,7 +2330,7 @@
         }
       ],
       "security-admin-console": [],
-      "geektourclient": [],
+      "basicclient": [],
       "admin-cli": [],
       "backend": [],
       "account-console": [],
@@ -2484,7 +2484,7 @@
       "clientId": "account",
       "name": "${client_account}",
       "rootUrl": "${authBaseUrl}",
-      "baseUrl": "/realms/geektour/account/",
+      "baseUrl": "/realms/basic/account/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
@@ -2495,7 +2495,7 @@
         "view-profile"
       ],
       "redirectUris": [
-        "/realms/geektour/account/*"
+        "/realms/basic/account/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -2531,14 +2531,14 @@
       "clientId": "account-console",
       "name": "${client_account-console}",
       "rootUrl": "${authBaseUrl}",
-      "baseUrl": "/realms/geektour/account/",
+      "baseUrl": "/realms/basic/account/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "/realms/geektour/account/*"
+        "/realms/basic/account/*"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -2716,7 +2716,7 @@
     },
     {
       "id": "6f1bd5dc-be3b-4eee-8107-7e9d5cb49a9b",
-      "clientId": "geektourclient",
+      "clientId": "basicclient",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
@@ -2815,14 +2815,14 @@
       "clientId": "security-admin-console",
       "name": "${client_security-admin-console}",
       "rootUrl": "${authAdminUrl}",
-      "baseUrl": "/admin/geektour/console/",
+      "baseUrl": "/admin/basic/console/",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "/admin/geektour/console/*"
+        "/admin/basic/console/*"
       ],
       "webOrigins": [
         "+"
