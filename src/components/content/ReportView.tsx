@@ -8,6 +8,11 @@ import ModalTitle from 'react-bootstrap/ModalTitle';
 import ModalHeader from 'react-bootstrap/ModalHeader';
 import ModalFooter from 'react-bootstrap/ModalFooter';
 import ModalBody from 'react-bootstrap/ModalBody';
+import { AppState } from "../../store/Store";
+import { useDispatch, useSelector } from "react-redux";
+
+import ReportThunkActions from "../../actions/ReportThunkActions";
+import ExpensesThunkActions from "../../actions/ExpensesThunkActions";
 
 const trashIcon = <FontAwesomeIcon icon={faTrashAlt} />;
 const editIcon = <FontAwesomeIcon icon={faEdit} />;
@@ -16,7 +21,21 @@ const arrovDownIcon = <FontAwesomeIcon icon={faArrowDown} />;
 
 
 const ReportView = () => {
-  // const [count, setCount] = React.useState(0);
+
+  const dispatch = useDispatch();
+  const { sso, expenses,reportID } = useSelector(
+    (state: AppState) => {
+      return {
+        sso: state.ssoState.sso,
+        expenses: state.expensesState.expenses,
+        reportID: state.router.location.pathname.replace('/report/','')
+        
+      };
+    }
+  );
+
+  // const [id, setId] = React.useState<String | null>(null);
+
   /**
       * sort expenses by id
       */
@@ -125,6 +144,18 @@ const ReportView = () => {
 
   }
 
+
+  React.useEffect(() => {
+
+
+
+    if (sso.authenticated) {
+      console.log("viewing report id: "+ reportID);
+      //    dispatch(ExpensesThunkActions.fetchExpensesData(sso.token, reportID,sort));
+      //   dispatch(ReportThunkActions.fetchOneReport(sso,reportID))
+    
+    }
+  }, [sso, expenses, dispatch]);
 
   return (
     /**
