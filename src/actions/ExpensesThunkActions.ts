@@ -17,6 +17,15 @@ const ExpensesThunkActions = {
             return dispatch(ExpensesActions.isFetching(true));
         };
     },
+    stopFetching: () => {
+        return (
+            dispatch: ThunkDispatch<AppState, undefined, AppAction>,
+            getState: () => AppState
+        ) => {
+            return dispatch(ExpensesActions.isFetching(false));
+        };
+    },
+
 
     fetchExpensesData: (token: string, reportID: string, sortBy?:string) => {
         return (dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
@@ -33,9 +42,9 @@ const ExpensesThunkActions = {
                             tstamp: element.tstamp,
                         });
                     });
-
+                    // console.log("fetched data: " + JSON.stringify(data))
                     dispatch(ExpensesActions.fetchActionSuccess(data));
-                    dispatch(ExpensesActions.isFetching(false));
+                    
                 },
                 (error) => {
                     let emsg: string;
