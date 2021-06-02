@@ -9,7 +9,9 @@
  * @param input current in calender element in  browser selected date
  */
 export const formatDateStr = (input: any):string => {
-
+  if (input == null){
+    return formatDateISOStr(new Date().toISOString());
+  }
   if (input.toString().indexOf('-') >=0) {
    return  formatDateISOStr(input.toString())
   }

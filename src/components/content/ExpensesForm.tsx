@@ -1,11 +1,11 @@
 
-import {Button, Form, Row, Container} from "react-bootstrap";
-// import {Expense} from "../../types/Expense";
-// import DatePicker from "react-datepicker";
+import { Button, Form, Row, Container } from "react-bootstrap";
+import { Expense } from "../../types/Expense";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 // import {connect} from "react-redux";
-// import {convertAmountToStr, convertStrToAmount, formatDateStr, formateStrToDate} from "../../utils"
-import {AppState} from "../../store/Store";
+import { convertAmountToStr, convertStrToAmount, formatDateStr, formateStrToDate } from "../../utils";
+import { AppState } from "../../store/Store";
 // import {ThunkDispatch} from "redux-thunk";
 // import {AppAction} from "../../actions/AppAction";
 // import ExpensesThunkActions from "../../actions/ExpensesThunkActions";
@@ -20,11 +20,11 @@ import { useDispatch, useSelector } from "react-redux";
  *
  * main content wrapper
  */
-export const  ExpensesForm =  () =>{
+export const ExpensesForm = () => {
 
   const history = useHistory();
   const dispatch = useDispatch();
-  
+
   const { sso, reports } = useSelector(
     (state: AppState) => {
       return {
@@ -42,26 +42,91 @@ export const  ExpensesForm =  () =>{
     }
   );
 
-  const [id, setId] = useState<String | null>(null);
+
+  /**
+    * change description of item
+    * @param event change text field event
+    */
+  const handleDescriptionChange = event => {
+    const description = event.target.value as string;
+    setDescription(description);
+
+    if (description.length > 3) {
+
+      setIsDescriptionValid(true);
+
+    } else {
+      setIsDescriptionValid(false);
+    }
+  };
+
+  /***
+   * handle amount changes on the field
+   */
+  const handleAmountChange = event => {
+
+    console.log("set new amount value:" + event.target.value)
+
+    try {
+      const amountAsNumber = convertStrToAmount(event.target.value);
+      console.log("amount value:" + amountAsNumber)
+      setIsAmountValid(true)
+      setAmount(event.target.value)
+
+    } catch {
+      console.log("error new amount value:" + event.target.value)
+      /**
+       * throwing exception if amount is not correct
+       */
+      setIsAmountValid(false)
+      setAmount(event.target.value);
+    }
+  };
 
 
-    return (
+  const handleDateChange = (date: string) => {
+    console.log("new-date: " + date)
+
+    setCreatedAT(formatDateStr(date));
+    setIsDateValid(true)
+
+  };
 
 
-      <Container key="addForm" className="mt-5">
 
-        <Row>
-          <div className="col-lg-6">
-            <div className="card shadow mb-3">
-              <div className="card-header py-3">
-                <h6 className="m-0 font-weight-bold text-primary">
-                  {/**  this.props.editExpenseId ? "Edit": "Add" *
-                   */} 
+
+
+
+  // const [id, setId] = useState<String | null>(null);
+
+  const [description, setDescription] = useState("");
+  const [isDescriptionValid, setIsDescriptionValid] = useState(false);
+
+  const [amount, setAmount] = useState("");
+  const [isAmountValid, setIsAmountValid] = useState(false);
+  const [createdAT, setCreatedAT] = useState("");
+  const [isDateValid, setIsDateValid] = useState(true);
+
+
+
+
+  return (
+
+
+    <Container key="addForm" className="mt-5">
+
+      <Row>
+        <div className="col-lg-6">
+          <div className="card shadow mb-3">
+            <div className="card-header py-3">
+              <h6 className="m-0 font-weight-bold text-primary">
+                {/**  this.props.editExpenseId ? "Edit": "Add" *
+                   */}
                   Expense
                 </h6>
-              </div>
-              <div className="card-body">
-                <Form>
+            </div>
+            <div className="card-body">
+              <Form>
                 <div className="col-sm-10">
                   <Form.Group>
 
@@ -70,47 +135,64 @@ export const  ExpensesForm =  () =>{
                       className="form-control"
                       contentEditable
                       id="Description"
+                      value={description}
+                      onChange={handleDescriptionChange}
+                      isValid={isDescriptionValid}
+                      isInvalid={!isDescriptionValid}
                       placeholder="description"
                       aria-label="Description"
                     />
 
 
-                     </Form.Group>
-                     </div>
-                     <Form.Group>
-                    <div className="col-sm-5">
+                  </Form.Group>
+                </div>
+                <Form.Group>
+                  <div className="col-sm-5">
                     <Form.Label>Amount</Form.Label>
                     <Form.Control
                       className="form-control"
                       contentEditable
                       id="amount"
-                      placeholder="0.0"
-                      aria-label="amount"
-                      />
-                   </div>
-                    </Form.Group>
+                      onChange={handleAmountChange}
+                      value={amount}
 
-                    <div className="col-sm-6">
-                    <Form.Label>Date of Expenses</Form.Label>
+                      placeholder="0.00"
+                      aria-label="amount"
+                      isValid={isAmountValid}
+                      isInvalid={!isAmountValid}
+                    />
+                  </div>
+                </Form.Group>
+
+                <div className="col-sm-6">
+                  <Form.Label>Date of Expenses</Form.Label>
+                  <Form.Group controlId="expensesDate">
                     <Form.Group controlId="expensesDate">
 
+                      <DatePicker selected={formateStrToDate(createdAT)} id="datepicker"
+                        dateFormat="yyyy-MM-dd"
+                        className={isDateValid ? "form-control is-valid" : "form-control is-invalid"}
+                        onChange={handleDateChange} />
 
                     </Form.Group>
-                    </div>
 
 
-                    <Form.Group>
-                      <div className="col-sm-3">
-                      <Button type="submit">Submit</Button>
-                      </div>
                   </Form.Group>
-                </Form>
-              </div>
+                </div>
+
+
+                <Form.Group>
+                  <div className="col-sm-3">
+                    <Button type="submit" disabled={!((isAmountValid && isDateValid && isDescriptionValid))}>Submit</Button>
+                  </div>
+                </Form.Group>
+              </Form>
             </div>
           </div>
-        </Row>
-      </Container>
-    );
+        </div>
+      </Row>
+    </Container>
+  );
 }
 
 

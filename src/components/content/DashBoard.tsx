@@ -88,7 +88,7 @@ const DashBoard = () => {
 
   function renderReport(rp) {
     return (
-      <Col key={rp.id} md={6}>
+      <Col key={rp.id} md={6} className="mt-3">
         <DeleteConfirmDialog />
         <Card key={rp.id}>
           <Card.Body>
@@ -113,7 +113,7 @@ const DashBoard = () => {
                         history.push("/report/edit/" + rp.id);
                       }}
                     >
-                      Edit {editIcon}
+                      Change Name {editIcon}
                     </Dropdown.Item>
                     <Dropdown.Item
                       href="#"
