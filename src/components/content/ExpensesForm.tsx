@@ -103,18 +103,20 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<ReportParams>) =>
   const handleSubmit = (event) => {
     event.preventDefault();
     if (sso.authenticated) {
+      const reportId= routerProps.match.params.reportId.trim();
       if (isEdit) {
       //  reports[0].name = name;
 
        // dispatch(ReportThunkActions.updateReport(sso, reports[0]));
       } else {
-        const reportId= routerProps.match.params.reportId.trim();
+       
 
         const expense:Expense = {id:NaN,amount:convertStrToAmount(amount),description,createdAT:createdAT};
         console.info(`add expnense ${JSON.stringify(expense)} to report ${reportId}`)
         dispatch(ExpensesThunkActions.addNewExpense(sso, reportId,expense));
+       
       }
-      history.push("/");
+      history.push(`/report/${reportId}`);
     }
   }
 

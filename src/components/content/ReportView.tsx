@@ -2,7 +2,7 @@ import * as React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faEdit, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import Table from 'react-bootstrap/Table';
-import { Button, Container , Row,Col} from 'react-bootstrap';
+import { Button, Container, Row, Col } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 import ModalTitle from 'react-bootstrap/ModalTitle';
 import ModalHeader from 'react-bootstrap/ModalHeader';
@@ -15,7 +15,7 @@ import ReportThunkActions from "../../actions/ReportThunkActions";
 import ExpensesThunkActions from "../../actions/ExpensesThunkActions";
 import { AlertMessage, MessageType } from "../../types/AlertTypes";
 import { AlertActions } from "../../actions/AlertAction";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Expense } from "../../types/Expense";
 
 const trashIcon = <FontAwesomeIcon icon={faTrashAlt} />;
@@ -47,6 +47,52 @@ const ReportView = () => {
   const dispatch = useDispatch();
 
 
+  const [deleteExpenseDialogOpen, setDeleteExpenseDialogOpen] = useState(false);
+
+  const startLoading = () => {
+    const loadMessage: AlertMessage = {
+      content: 'loading data ',
+      show_notification: true,
+      type: MessageType.INFO,
+    };
+
+    dispatch(AlertActions.addMessage(loadMessage));
+
+  }
+
+  const openDeleteModalWindow = (id) => {
+    setDeleteExpenseDialogOpen(!deleteExpenseDialogOpen);
+  };
+
+
+
+  function callEdit(id: Number): void {
+    throw new Error("Function not implemented.");
+  }
+
+
+    /**
+     * sort expenses by id
+     */
+  const sortBy =(sort:string) => {
+    startLoading()
+    dispatch(ExpensesThunkActions.fetchExpensesData(token, reportID, sort));
+  }
+
+  const  calculateTotalAmount =(expenses: Expense[]) => {
+    const amountArray = expenses.map((pr) => {
+        return pr.amount;
+    });
+
+    const numOr0 = (n) => (isNaN(n) ? 0 : n);
+
+    return amountArray
+        .reduce(function (acc, val) {
+            return numOr0(acc) + numOr0(val);
+        }, 0)
+        .toFixed(2);
+}
+
 
 
   // very important statements for use effect hook
@@ -56,13 +102,7 @@ const ReportView = () => {
     if (authenticated) {
       console.log("viewing report id: " + reportID);
 
-      const loadMessage: AlertMessage = {
-        content: 'loading data ',
-        show_notification: true,
-        type: MessageType.INFO,
-      };
-
-      dispatch(AlertActions.addMessage(loadMessage));
+      startLoading()
       dispatch(ExpensesThunkActions.fetchExpensesData(token, reportID));
 
     }
@@ -71,19 +111,25 @@ const ReportView = () => {
   }, [dispatch]);
 
 
-  return (
-    <>
 
+ /**
+  * render view 
+  */
+ return (
+  <Container fluid="md" className="mt-3">
+  <Row>
+  <Col>
       {
         expenses.length > 0 ? renderTable(expenses) : emptyPlaceHolder()
       }
+      </Col>
+     </Row>
+    </Container>
 
-    </>
-
-    //    renderTable(expenses)
   );
 
-};
+
+
 
 
 /**
@@ -92,25 +138,20 @@ const ReportView = () => {
  * @returns JSX empty placeholder
  */
 function emptyPlaceHolder() {
-  return (
-    <Container fluid="md" className="mt-3">
-  <Row>
-    <Col>    <p>There is no expenses in this report.</p> </Col>
-  </Row>
-</Container>
-
-
-  );
+  return (<p>There is no expenses in this report.</p>);
 }
 
+
+/**
+ * 
+ * Render all expenses of report
+ * 
+ * @param expenses expense of report
+ * @returns JSX element table with expenses
+ */
 function renderTable(expenses: Expense[]) {
   return (
-    /**
-    * render table with expenses
-    */
 
-
-    <>
       <Table striped bordered hover size="sm">
         <thead>
           <tr>
@@ -150,7 +191,7 @@ function renderTable(expenses: Expense[]) {
                     variant="danger">
                     {trashIcon}
                   </Button>
-                  {renderDeleteDialog()}
+
                 </td>
               </tr>
             );
@@ -170,7 +211,7 @@ function renderTable(expenses: Expense[]) {
             </td>
             <td>&#8203;</td>
             <td>
-              <b>{calculateTotalAmount} </b>
+              <b>{ calculateTotalAmount(expenses)} </b>
             </td>
             <td>&#8203;</td>
             <td>&#8203;</td>
@@ -179,125 +220,12 @@ function renderTable(expenses: Expense[]) {
           </tr>
         </tbody>
       </Table>
-    </>);
+ );
 }
 
-/**
-   * trigger load of expenses from backend
-   */
-// const loadExpensesFromBackend = () => {
 
 
-// dispatch(AlertActions.addMessage(loadMessage));
-//  dispatch(ExpensesThunkActions.startFetching());
-
-
-// dispatch(ReportThunkActions.fetchOneReport(sso,reportID))
-//  dispatch(ExpensesThunkActions.stopFetching());
-//}
-
-
-const closeDeleteModalWindow = () => {
-  // console.log("closeDeleteModalWindow called");
-  // this.props.hideOrShowDeleteModal();
 };
-
-const openDeleteModalWindow = (id) => {
-  //     if (!store.getState().expensesState.showModal) {
-  //       this.props.hideOrShowDeleteModal(id);
-  //   }
-};
-
-function callEdit(id: Number): void {
-  throw new Error("Function not implemented.");
-}
-
-// const [id, setId] = React.useState<String | null>(null);
-
-/**
-    * sort expenses by id
-    */
-const sortBy = (sort: string) => {
-  // this.props.startLoading();
-  // this.props.getExpenses(this.props.sso, this.props.reportid,sort);
-}
-
-
-const renderDeleteDialog = () => {
-  return (
-
-    <Modal
-      id="versionPopUp"
-      show={() => {
-        return false;
-        // showModal
-      }
-      }
-      onHide={() => {
-
-        console.info("close modal");
-        //  closeDeleteModalWindow
-      }}
-    >
-      <ModalHeader translate closeButton>
-        <ModalTitle>
-          Delete Expense {
-            // selectedExpenseID
-          }
-        </ModalTitle>
-      </ModalHeader>
-
-      <ModalBody>Are you sure ?</ModalBody>
-
-      <ModalFooter>
-        <Button
-          variant="secondary"
-          onClick={
-            () => { }// closeDeleteModalWindow
-          }
-        >
-          Close
-              </Button>
-        <Button
-          variant="danger"
-          onClick={() => { }
-            //  deleteExpense(/**selectedExpenseID**/)
-          }
-        >
-          Delete
-              </Button>
-      </ModalFooter>
-    </Modal>
-  );
-}
-
-
-/**
- * trigger delete of expense by id
- *
- */
-const deleteExpense = (id) => {
-  // this.closeDeleteModalWindow();
-  // this.props.deleteExpense(this.props.sso, id);
-};
-
-const calculateTotalAmount = () => {
-  /**
-    const amountArray = this.props.expenses.map((pr) => {
-        return pr.amount;
-    });
-  
-    const numOr0 = (n) => (isNaN(n) ? 0 : n);
-  
-    return amountArray
-        .reduce(function (acc, val) {
-            return numOr0(acc) + numOr0(val);
-        }, 0)
-        .toFixed(2);
-  
-   **/
-}
-
 export default ReportView;
 
 
