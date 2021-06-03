@@ -49,6 +49,7 @@ export type ButtonVariant = 'info'
 export interface ConfirmDialogModalProps extends ConfirmDialogProps {
     open: boolean;
     toggleDialog: () => void;
+    closeButton?: boolean;
 }
 
 export type ConfirmDialogProps = {
@@ -73,6 +74,7 @@ export const ConfirmDialogModal = ({
     children,
     open = true,
     toggleDialog,
+    closeButton =true
 }: ConfirmDialogModalProps) => {
 
     return (
@@ -82,7 +84,7 @@ export const ConfirmDialogModal = ({
             onHide={toggleDialog}
         //  variant={ModalVariant.small}
         >
-            <ModalHeader translate closeButton>
+            <ModalHeader translate="true" closeButton>
 
             {titleKey}
 

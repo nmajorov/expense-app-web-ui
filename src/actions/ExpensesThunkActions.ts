@@ -9,23 +9,7 @@ import { AlertMessage, MessageType } from '../types/AlertTypes';
 import { SSO } from '../types/SSO';
 
 const ExpensesThunkActions = {
-    startFetching: () => {
-        return (
-            dispatch: ThunkDispatch<AppState, undefined, AppAction>,
-            getState: () => AppState
-        ) => {
-            return dispatch(ExpensesActions.isFetching(true));
-        };
-    },
-    stopFetching: () => {
-        return (
-            dispatch: ThunkDispatch<AppState, undefined, AppAction>,
-            getState: () => AppState
-        ) => {
-            return dispatch(ExpensesActions.isFetching(false));
-        };
-    },
-
+   
 
     fetchExpensesData: (token: string, reportID: string, sortBy?:string) => {
         return (dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
@@ -67,7 +51,6 @@ const ExpensesThunkActions = {
                         type: MessageType.ERROR,
                     };
                     // remove if any
-                    dispatch(ExpensesActions.isFetching(false));
                     dispatch(AlertActions.addMessage(alertMessage));
                 }
             );
@@ -77,9 +60,9 @@ const ExpensesThunkActions = {
     /**
      * delete expenses
      */
-    deleteExpense: (sso: SSO, id: number) => {
+    deleteExpense: (token: string, id: number) => {
         return (dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
-            return API.deleteExpense(sso.token, id.toString()).then(
+            return API.deleteExpense(token, id.toString()).then(
                 (_response) => {
                     dispatch(ExpensesActions.deleteActionSuccess());
                 },
@@ -98,12 +81,7 @@ const ExpensesThunkActions = {
             );
         };
     },
-    showDeleteDialog: (id: number) => {
-        return (dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
-            return dispatch(ExpensesActions.showDeleteDialog(id));
-        };
-    },
-
+    
     addNewExpense: (sso: SSO, reportID: string, newExpense: Expense) => {
         return (dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
             return API.addNewExpense(sso.token, reportID, newExpense).then(

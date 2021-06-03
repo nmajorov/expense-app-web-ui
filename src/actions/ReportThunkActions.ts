@@ -83,12 +83,12 @@ const ReportThunkActions = {
     };
   },
 
-  fetchOneReport: (sso: SSO, id: string) => {
+  fetchOneReport: (token:string, id: string) => {
     return (
       dispatch: ThunkDispatch<AppState, undefined, AppAction>,
       getState: () => AppState
     ) => {
-      return API.fetchOneReport(sso.token, id).then(
+      return API.fetchOneReport(token, id).then(
         (response) => {
           dispatch(ReportActions.fetchOneReportSuccess(response.data));
         },

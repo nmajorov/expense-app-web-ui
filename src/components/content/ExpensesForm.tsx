@@ -4,7 +4,7 @@ import { Expense } from "../../types/Expense";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 // import {connect} from "react-redux";
-import { convertAmountToStr, convertStrToAmount, formatDateStr, formateStrToDate } from "../../utils";
+import { convertStrToAmount, formatDateStr, formateStrToDate } from "../../utils";
 import { AppState } from "../../store/Store";
 // import {ThunkDispatch} from "redux-thunk";
 // import {AppAction} from "../../actions/AppAction";

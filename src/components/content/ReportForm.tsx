@@ -7,8 +7,7 @@
 import React, { FormEvent, useEffect, useState } from "react";
 import { Button, Form, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { AppState, ReportsState } from "../../store/Store";
-import { SSO } from "../../types/SSO";
+import { AppState } from "../../store/Store";
 import ReportThunkActions from "../../actions/ReportThunkActions";
 
 import { RouteComponentProps, useHistory  } from "react-router-dom";
@@ -64,7 +63,7 @@ export const ReportForm = (routerProps: RouteComponentProps<ReportParams>) => {
       } else {
         setIsEdit(true);
         dispatch(
-          ReportThunkActions.fetchOneReport(sso, routerProps.match.params.id)
+          ReportThunkActions.fetchOneReport(sso.token, routerProps.match.params.id)
         );
       }
     }

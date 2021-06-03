@@ -21,7 +21,7 @@ export interface ExpensesState {
     showModal: boolean;
     selectedID: Number;
     newExpense: Expense;
-    isLoading: boolean;
+    changed: boolean;
 }
 
 export interface SSOState {

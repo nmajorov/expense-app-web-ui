@@ -3,21 +3,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faEdit, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import Table from 'react-bootstrap/Table';
 import { Button, Container, Row, Col } from 'react-bootstrap';
-import Modal from 'react-bootstrap/Modal';
-import ModalTitle from 'react-bootstrap/ModalTitle';
-import ModalHeader from 'react-bootstrap/ModalHeader';
-import ModalFooter from 'react-bootstrap/ModalFooter';
-import ModalBody from 'react-bootstrap/ModalBody';
 import { AppState } from "../../store/Store";
 import { useDispatch, useSelector } from "react-redux";
-
-import ReportThunkActions from "../../actions/ReportThunkActions";
+import { ConfirmDialogModal } from "./ConfirmDialog";
 import ExpensesThunkActions from "../../actions/ExpensesThunkActions";
 import { AlertMessage, MessageType } from "../../types/AlertTypes";
 import { AlertActions } from "../../actions/AlertAction";
 import { useEffect, useState } from "react";
 import { Expense } from "../../types/Expense";
-
+import { useHistory } from "react-router";
 const trashIcon = <FontAwesomeIcon icon={faTrashAlt} />;
 const editIcon = <FontAwesomeIcon icon={faEdit} />;
 const arrovUpIcon = <FontAwesomeIcon icon={faArrowUp} />;
@@ -30,24 +24,30 @@ const arrovDownIcon = <FontAwesomeIcon icon={faArrowDown} />;
 
 const ReportView = () => {
 
-  const { authenticated, expenses, token, reportID } = useSelector(
+  const { authenticated, expenses, sso, reportID , expensesChanged} = useSelector(
     (state: AppState) => {
       console.log("use selector expenses: " +
         JSON.stringify(state.expensesState.expenses));
 
       return {
         authenticated: state.ssoState.sso.authenticated,
-        token: state.ssoState.sso.token,
+        sso: state.ssoState.sso,
         expenses: state.expensesState.expenses,
+        expensesChanged: state.expensesState.changed,
         reportID: state.router.location.pathname.replace('/report/', '')
       };
     }
   );
 
   const dispatch = useDispatch();
+  const history = useHistory();
 
 
   const [deleteExpenseDialogOpen, setDeleteExpenseDialogOpen] = useState(false);
+
+  const [toDeleteId,setToDeleteId]= useState(Number.NaN);
+
+
 
   const startLoading = () => {
     const loadMessage: AlertMessage = {
@@ -60,7 +60,7 @@ const ReportView = () => {
 
   }
 
-  const openDeleteModalWindow = (id) => {
+  const openDeleteModalWindow = () => {
     setDeleteExpenseDialogOpen(!deleteExpenseDialogOpen);
   };
 
@@ -71,27 +71,51 @@ const ReportView = () => {
   }
 
 
-    /**
-     * sort expenses by id
+  /**
+     * trigger delete of expense by id
+     *
      */
-  const sortBy =(sort:string) => {
+  const deleteExpense = () => {
+    console.log("delete expense: " + toDeleteId);
+    if (!Number.isNaN(toDeleteId)){
+      dispatch(ExpensesThunkActions.deleteExpense(sso.token,toDeleteId));
+    }
+
+    history.push("/report/"+ reportID)
+
+  };
+
+
+  /**
+   * load expenses to report
+   */
+  const loadExpenses =() =>{
     startLoading()
-    dispatch(ExpensesThunkActions.fetchExpensesData(token, reportID, sort));
+    dispatch(ExpensesThunkActions.fetchExpensesData(sso.token, reportID));
+
+  } 
+
+  /**
+   * sort expenses by id
+   */
+  const sortBy = (sort: string) => {
+    startLoading()
+    dispatch(ExpensesThunkActions.fetchExpensesData(sso.token, reportID, sort));
   }
 
-  const  calculateTotalAmount =(expenses: Expense[]) => {
+  const calculateTotalAmount = (expenses: Expense[]) => {
     const amountArray = expenses.map((pr) => {
-        return pr.amount;
+      return pr.amount;
     });
 
     const numOr0 = (n) => (isNaN(n) ? 0 : n);
 
     return amountArray
-        .reduce(function (acc, val) {
-            return numOr0(acc) + numOr0(val);
-        }, 0)
-        .toFixed(2);
-}
+      .reduce(function (acc, val) {
+        return numOr0(acc) + numOr0(val);
+      }, 0)
+      .toFixed(2);
+  }
 
 
 
@@ -102,28 +126,28 @@ const ReportView = () => {
     if (authenticated) {
       console.log("viewing report id: " + reportID);
 
-      startLoading()
-      dispatch(ExpensesThunkActions.fetchExpensesData(token, reportID));
+      loadExpenses();
+      
 
     }
 
+  // use sso if client reload the page manually from browser
+  }, [sso,expensesChanged,dispatch]);
 
-  }, [dispatch]);
 
 
-
- /**
-  * render view 
-  */
- return (
-  <Container fluid="md" className="mt-3">
-  <Row>
-  <Col>
-      {
-        expenses.length > 0 ? renderTable(expenses) : emptyPlaceHolder()
-      }
-      </Col>
-     </Row>
+  /**
+   * render view 
+   */
+  return (
+    <Container fluid="md" className="mt-3">
+      <Row>
+        <Col>
+          {
+            expenses.length > 0 ? renderTable(expenses) : emptyPlaceHolder()
+          }
+        </Col>
+      </Row>
     </Container>
 
   );
@@ -132,96 +156,110 @@ const ReportView = () => {
 
 
 
-/**
- * Render  empty placeholder if no expenses assigned to report
- * 
- * @returns JSX empty placeholder
- */
-function emptyPlaceHolder() {
-  return (<p>There is no expenses in this report.</p>);
-}
+  /**
+   * Render  empty placeholder if no expenses assigned to report
+   * 
+   * @returns JSX empty placeholder
+   */
+  function emptyPlaceHolder() {
+    return (<p>There is no expenses in this report.</p>);
+  }
 
 
-/**
- * 
- * Render all expenses of report
- * 
- * @param expenses expense of report
- * @returns JSX element table with expenses
- */
-function renderTable(expenses: Expense[]) {
-  return (
+  /**
+   * 
+   * Render all expenses of report
+   * 
+   * @param expenses expense of report
+   * @returns JSX element table with expenses
+   */
+  function renderTable(expenses: Expense[]) {
+    return (
+      <>
+        <ConfirmDialogModal
+          continueButtonLabel="yes"
+          titleKey={"Delete this item ?"}
+          open={deleteExpenseDialogOpen}
+          continueButtonVariant={'danger'}
+          toggleDialog={openDeleteModalWindow}
+          onConfirm={deleteExpense}
+        >
+        </ConfirmDialogModal>
+        <Table striped bordered hover size="sm">
 
-      <Table striped bordered hover size="sm">
-        <thead>
-          <tr>
-            <th>#   <button onClick={() => sortBy("id_asc")}>{arrovUpIcon}</button>
+          <thead>
+            <tr>
+              <th>#   <button onClick={() => sortBy("id_asc")}>{arrovUpIcon}</button>
                             &nbsp;  &nbsp;
                     <button onClick={() => sortBy("id_desc")}>{arrovDownIcon}</button></th>
-            <th>Description</th>
-            <th>Amount</th>
-            <th>Date  <button onClick={() => sortBy("created_asc")}>{arrovUpIcon}</button>
+              <th>Description</th>
+              <th>Amount</th>
+              <th>Date  <button onClick={() => sortBy("created_asc")}>{arrovUpIcon}</button>
                               &nbsp;  &nbsp;
                       <button onClick={() => sortBy("created_desc")}>{arrovDownIcon}</button>
-            </th>
-            <th>Last Modified</th>
-            <th>Actions</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {expenses.map((pr) => {
-            return (
-              <tr key={pr.id.toString()}>
-                <td>{pr.id}</td>
-                <td>{pr.description}</td>
-                <td>{pr.amount}</td>
-                <td>{pr.createdAT}</td>
-                <td>{pr.tstamp}</td>
-                <td>
-                  <Button
-                    onClick={() => callEdit(pr.id)}
-                  >
-                    {editIcon}
-                  </Button>
-                </td>
-                <td>
-                  <Button
-                    onClick={() => { openDeleteModalWindow(pr.id) }}
-                    variant="danger">
-                    {trashIcon}
-                  </Button>
+              </th>
+              <th>Last Modified</th>
+              <th>Actions</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {expenses.map((pr) => {
+              return (
+                <tr key={pr.id.toString()}>
+                  <td>{pr.id}</td>
+                  <td>{pr.description}</td>
+                  <td>{pr.amount}</td>
+                  <td>{pr.createdAT}</td>
+                  <td>{pr.tstamp}</td>
+                  <td>
+                    <Button
+                      onClick={() => callEdit(pr.id)}
+                    >
+                      {editIcon}
+                    </Button>
+                  </td>
+                  <td>
+                    <Button
+                      onClick={() => {
+                                      setToDeleteId(pr.id.valueOf());
+                                      openDeleteModalWindow()
+                                    }}
+                      variant="danger">
+                      {trashIcon}
+                    </Button>
 
-                </td>
-              </tr>
-            );
-          })}
-          <tr>
-            <td>&#8203;</td>
-            <td>&#8203;</td>
-            <td>&#8203;</td>
-            <td>&#8203;</td>
-            <td>&#8203;</td>
-            <td>&#8203;</td>
-            <td>&#8203;</td>
-          </tr>
-          <tr>
-            <td>
-              <b>Total:</b>
-            </td>
-            <td>&#8203;</td>
-            <td>
-              <b>{ calculateTotalAmount(expenses)} </b>
-            </td>
-            <td>&#8203;</td>
-            <td>&#8203;</td>
-            <td>&#8203;</td>
-            <td>&#8203;</td>
-          </tr>
-        </tbody>
-      </Table>
- );
-}
+                  </td>
+                </tr>
+              );
+            })}
+            <tr>
+              <td>&#8203;</td>
+              <td>&#8203;</td>
+              <td>&#8203;</td>
+              <td>&#8203;</td>
+              <td>&#8203;</td>
+              <td>&#8203;</td>
+              <td>&#8203;</td>
+            </tr>
+            <tr>
+              <td>
+                <b>Total:</b>
+              </td>
+              <td>&#8203;</td>
+              <td>
+                <b>{calculateTotalAmount(expenses)} </b>
+              </td>
+              <td>&#8203;</td>
+              <td>&#8203;</td>
+              <td>&#8203;</td>
+              <td>&#8203;</td>
+            </tr>
+          </tbody>
+        </Table>
+      </>
+    );
+  }
 
 
 
