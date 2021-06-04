@@ -87,6 +87,12 @@ const ExpensesThunkActions = {
             return API.addNewExpense(sso.token, reportID, newExpense).then(
                 (response) => {
                     dispatch(ExpensesActions.addNewExpenseSuccess());
+                    const alertMessage: AlertMessage = {
+                        content: "Expense successfully added",
+                        show_notification: true,
+                        type: MessageType.SUCCESS,
+                    };
+                    dispatch(AlertActions.addMessage(alertMessage));
                 },
                 (error) => {
                     const emsg = 'Cannot add the expenses: ' + error.toString();
@@ -103,9 +109,9 @@ const ExpensesThunkActions = {
         };
     },
 
-    fetchOneExpense: (sso: SSO, id: string) => {
+    fetchOneExpense: (token: string, id: string) => {
         return (dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
-            return API.fetchExpense(sso.token, id).then(
+            return API.fetchExpense(token, id).then(
                 (response) => {
                     dispatch(
                         ExpensesActions.fetchOneExpenseActionSuccess(
@@ -128,11 +134,17 @@ const ExpensesThunkActions = {
         };
     },
 
-    updateExpense: (sso: SSO, expense: Expense) => {
+    updateExpense: (token:string, expense: Expense) => {
         return (dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
-            return API.updateExpense(sso.token, expense).then(
+            return API.updateExpense(token, expense).then(
                 (_response) => {
                     dispatch(ExpensesActions.addNewExpenseSuccess());
+                    const alertMessage: AlertMessage = {
+                        content: "Expense successfully updated",
+                        show_notification: true,
+                        type: MessageType.SUCCESS,
+                    };
+                    dispatch(AlertActions.addMessage(alertMessage));
                 },
                 (error) => {
                     const emsg = 'Cannot add the expenses: ' + error.toString();

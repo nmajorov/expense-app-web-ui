@@ -26,8 +26,8 @@ const ReportView = () => {
 
   const { authenticated, expenses, sso, reportID , expensesChanged} = useSelector(
     (state: AppState) => {
-      console.log("use selector expenses: " +
-        JSON.stringify(state.expensesState.expenses));
+     // console.log("use selector expenses: " +
+     //   JSON.stringify(state.expensesState.expenses));
 
       return {
         authenticated: state.ssoState.sso.authenticated,
@@ -67,7 +67,7 @@ const ReportView = () => {
 
 
   function callEdit(id: Number): void {
-    throw new Error("Function not implemented.");
+    history.push(`/expenses/edit/${id}`);
   }
 
 
@@ -124,15 +124,11 @@ const ReportView = () => {
   useEffect(() => {
 
     if (authenticated) {
-      console.log("viewing report id: " + reportID);
-
-      loadExpenses();
-      
-
+        loadExpenses();
     }
 
   // use sso if client reload the page manually from browser
-  }, [sso,expensesChanged,dispatch]);
+  }, [authenticated,expensesChanged,dispatch]);
 
 
 

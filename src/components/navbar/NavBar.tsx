@@ -46,7 +46,7 @@ export function NavigationBar() {
 
             else if  (pathname.startsWith("/report")) {
                 result = (<Nav>
-                    <Nav.Link as={Link} to={"/expenses-add/ " + routerLocation.pathname.replace('/report/', '')}>{MenuNames.ADD_EXPENSE}</Nav.Link>
+                    <Nav.Link as={Link} to={"/expenses-add/" + routerLocation.pathname.replace('/report/', '')}>{MenuNames.ADD_EXPENSE}</Nav.Link>
                 </Nav>
                 )
             }

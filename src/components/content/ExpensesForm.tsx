@@ -4,7 +4,7 @@ import { Expense } from "../../types/Expense";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 // import {connect} from "react-redux";
-import { convertStrToAmount, formatDateStr, formateStrToDate } from "../../utils";
+import { convertAmountToStr, convertStrToAmount, formatDateStr, formateStrToDate } from "../../utils";
 import { AppState } from "../../store/Store";
 // import {ThunkDispatch} from "redux-thunk";
 // import {AppAction} from "../../actions/AppAction";
@@ -18,32 +18,46 @@ import { useDispatch, useSelector } from "react-redux";
 import ExpensesThunkActions from "../../actions/ExpensesThunkActions";
 
 
-type ReportParams = { reportId: string };
+type IdParams = { id: string };
 
 /**
  *
  * main content wrapper
  */
-export const ExpensesForm =  (routerProps: RouteComponentProps<ReportParams>) => {
+export const ExpensesForm =  (routerProps: RouteComponentProps<IdParams>) => {
 
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const { sso } = useSelector(
+
+  // const [id, setId] = useState<String | null>(null);
+
+  const [description, setDescription] = useState("");
+  const [isDescriptionValid, setIsDescriptionValid] = useState(false);
+
+  const [amount, setAmount] = useState("");
+  const [isAmountValid, setIsAmountValid] = useState(false);
+  const [createdAT, setCreatedAT] = useState(formatDateStr(new Date()));
+  const [isDateValid, setIsDateValid] = useState(true);
+  const [isEdit, setIsEdit] = useState(false);
+
+
+
+  const { sso, expense } = useSelector(
     (state: AppState) => {
+      console.log("use selector ExpensesForm: " +
+      JSON.stringify(state.expensesState.newExpense));
+      
       return {
         sso: state.ssoState.sso,
+        expense:state.expensesState.newExpense
      };
     }
   );
 
-  // const { reportChanges } = useSelector(
-  //   (state: AppState) => {
-  //     return {
-  //       reportChanges: state.reportsState.changes,
-  //     };
-  //   }
-  // );
+
+
+
 
 
   /**
@@ -52,6 +66,7 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<ReportParams>) =>
     */
   const handleDescriptionChange = event => {
     const description = event.target.value as string;
+    
     setDescription(description);
 
     if (description.length > 3) {
@@ -103,35 +118,26 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<ReportParams>) =>
   const handleSubmit = (event) => {
     event.preventDefault();
     if (sso.authenticated) {
-      const reportId= routerProps.match.params.reportId.trim();
+    
       if (isEdit) {
-      //  reports[0].name = name;
+        const expenseId= routerProps.match.params.id.trim();
+        const expense:Expense = {id: Number(expenseId),amount:convertStrToAmount(amount),description,createdAT:createdAT};
+        dispatch(ExpensesThunkActions.updateExpense(sso.token, expense));
 
-       // dispatch(ReportThunkActions.updateReport(sso, reports[0]));
       } else {
        
-
+        const reportId= routerProps.match.params.id.trim();
         const expense:Expense = {id:NaN,amount:convertStrToAmount(amount),description,createdAT:createdAT};
         console.info(`add expnense ${JSON.stringify(expense)} to report ${reportId}`)
         dispatch(ExpensesThunkActions.addNewExpense(sso, reportId,expense));
-       
-      }
-      history.push(`/report/${reportId}`);
+       }
+  
+       history.push("/");
+      
     }
   }
 
 
-
-  // const [id, setId] = useState<String | null>(null);
-
-  const [description, setDescription] = useState("");
-  const [isDescriptionValid, setIsDescriptionValid] = useState(false);
-
-  const [amount, setAmount] = useState("");
-  const [isAmountValid, setIsAmountValid] = useState(false);
-  const [createdAT, setCreatedAT] = useState(formatDateStr(new Date()));
-  const [isDateValid, setIsDateValid] = useState(true);
-  const [isEdit, setIsEdit] = useState(false);
 
 
    /**
@@ -143,15 +149,29 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<ReportParams>) =>
         if (!(history.location.pathname.match("expenses-add"))) {
           // we adding the report
           setIsEdit(true);
-         // dispatch(
-           // ReportThunkActions.fetchOneReport(sso, routerProps.match.params.id)
-          // );
+          dispatch(
+            ExpensesThunkActions.fetchOneExpense(sso.token, routerProps.match.params.id)
+           );
+
         }
+
       }
     }, [dispatch]);
 
+    useEffect(() => {
+      if (expense.id > 0){
+        setDescription(expense.description);
+        setIsDescriptionValid(true);
+        setAmount(convertAmountToStr(expense.amount));
+        setIsAmountValid(true);
+        setCreatedAT(expense.createdAT);
+      }
 
-  return (
+    }, [expense]);
+
+
+
+  const renderForm = () => { return (
 
 
     <Container key="addForm" className="mt-5">
@@ -231,7 +251,15 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<ReportParams>) =>
         </div>
       </Row>
     </Container>
-  );
+  );}
+
+
+
+  return (<>{ 
+  
+    renderForm()
+
+  }</>);
 }
 
 

@@ -39,7 +39,7 @@ const App: React.FC = () => {
                             <Route exact path="/report-add" component={ReportForm}/>
                             <Route exact path="/report/edit/:id"  component={ReportForm}/>
                             <Route exact path="/report/:id" component={ReportView}/>
-                            <Route exact path="/expenses-add/:reportId" component={ExpensesForm}/>
+                            <Route exact path="/expenses-add/:id" component={ExpensesForm}/>
 
                             <Route exact path="/profile" component={ProfileView}/>
 
