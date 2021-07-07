@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-PROJECT=$(oc  project -q)                                                                                                                                         
-                                                                                                                                                                  
+PROJECT=$(oc  project -q)
+
 DIRNAME=`dirname "$0"`
 
 echo "delete existing tasks first "
@@ -18,7 +18,7 @@ echo
 echo
 
 echo "deploy resources"
-cat "$DIRNAME/resources/image-resource.yaml" | sed -e "s/nm-demo/$PROJECT/g" | oc create -f -                                                                     
+cat "$DIRNAME/resources/image-resource.yaml" | sed -e "s/nm-demo/$PROJECT/g" | oc create -f -
 
 
 oc apply -f "$DIRNAME/resources/git-resource.yaml"
@@ -29,4 +29,3 @@ oc create -f tasks/
 
 echo "deploy pipeline"
 oc create -f pipeline.yaml
-

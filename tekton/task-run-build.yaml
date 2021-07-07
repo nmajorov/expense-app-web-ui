@@ -9,7 +9,7 @@ spec:
     name: webapp-build-runtime
   resources:
     outputs:
-      - name: image
+      - name: ui-image
         resourceRef:
           name: ui-image
   workspaces:

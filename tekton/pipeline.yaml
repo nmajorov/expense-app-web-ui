@@ -19,7 +19,6 @@ spec:
   resources:
     - name: ui-image
       type: image
-    # "image-registry.openshift-image-registry.svc:5000/nm-demo/gui:latest"
 
 
   workspaces:
@@ -72,7 +71,7 @@ spec:
         name:  webapp-build-runtime
       resources:
         outputs:
-          - name: image
+          - name: ui-image
             resource: ui-image
       runAfter:
         -  build-nodejs-app
