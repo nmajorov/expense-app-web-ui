@@ -26,6 +26,7 @@
         "dotenv": "^8.2.0",
         "history": "^4.7.2",
         "keycloak-js": "10.0.2",
+        "merge-deep": "^3.0.3",
         "node-forge": "^0.10.0",
         "react": "^17.0.2",
         "react-bootstrap": "1.6.0",
