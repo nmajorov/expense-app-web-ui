@@ -9,9 +9,13 @@ import { ConfirmDialogModal } from "./ConfirmDialog";
 import ExpensesThunkActions from "../../actions/ExpensesThunkActions";
 import { AlertMessage, MessageType } from "../../types/AlertTypes";
 import { AlertActions } from "../../actions/AlertAction";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Expense } from "../../types/Expense";
 import { useHistory } from "react-router";
+import { SecurityContext } from "../../context/SecurityContext";
+
+
+
 const trashIcon = <FontAwesomeIcon icon={faTrashAlt} />;
 const editIcon = <FontAwesomeIcon icon={faEdit} />;
 const arrovUpIcon = <FontAwesomeIcon icon={faArrowUp} />;
@@ -23,7 +27,7 @@ const arrovDownIcon = <FontAwesomeIcon icon={faArrowDown} />;
 
 
 const ReportView = () => {
-
+  const keycloak = useContext(SecurityContext);
   const { authenticated, expenses, sso, reportID , expensesChanged} = useSelector(
     (state: AppState) => {
      // console.log("use selector expenses: " +
@@ -124,7 +128,13 @@ const ReportView = () => {
   useEffect(() => {
 
     if (authenticated) {
+      keycloak.updateToken(30).then(function () {
         loadExpenses();
+      }).catch(function () {
+        console.error('Failed to refresh token');
+      });
+
+      
     }
 
   // use sso if client reload the page manually from browser

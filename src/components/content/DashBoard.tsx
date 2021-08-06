@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppState } from "../../store/Store";
 import {
@@ -18,6 +18,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useConfirmDialog } from "./ConfirmDialog";
 import { useHistory } from "react-router-dom";
+import { SecurityContext } from "../../context/SecurityContext";
 
 const trashIcon = <FontAwesomeIcon color="red" icon={faTrashAlt} />;
 const editIcon = <FontAwesomeIcon icon={faEdit} />;
@@ -30,6 +31,8 @@ const kebabIcon = <FontAwesomeIcon icon={faEllipsisH} />;
 const DashBoard = () => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const keycloak = useContext(SecurityContext);
+
   const { sso, reports } = useSelector(
     (state: AppState) => {
       return {
@@ -60,10 +63,19 @@ const DashBoard = () => {
 
   useEffect(() => {
 
+    // update token to avoid error
+
     if (sso.authenticated) {
-      dispatch(ReportThunkActions.fetchReports(sso));
+      keycloak.updateToken(30).then(function () {
+        dispatch(ReportThunkActions.fetchReports(sso));
+      }).catch(function () {
+        console.error('Failed to refresh token');
+      });
     }
-  }, [sso, reportChanges,dispatch]);
+
+
+
+  }, [sso, reportChanges, dispatch]);
 
   function openDeleteDialog(id: String) {
     setId(id);
@@ -93,9 +105,9 @@ const DashBoard = () => {
         <Card key={rp.id}>
           <Card.Body>
             <Card.Title>
-              <Card.Link   onClick={() => {
-                  history.push(`/report/${rp.id}`);
-                }} href="#">{rp.name}</Card.Link>
+              <Card.Link onClick={() => {
+                history.push(`/report/${rp.id}`);
+              }} href="#">{rp.name}</Card.Link>
               <div className="float-right">
                 <Dropdown>
                   <Dropdown.Toggle
