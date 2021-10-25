@@ -1,0 +1,25 @@
+# run pipeline on master branch
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: expenses-webui-ocp5
+spec:
+  pipelineRef:
+    name: build-expenses-web-ui
+  params:
+    - name: GIT_URL
+      value: 'https://github.com/nmajorov/expenses-web-ui.git'
+    - name: GIT_REVISION
+      value: react17
+    - name: SSO_URL
+      value: 'https://secure-sso-test-expenses.apps.ocp001.rhlab.ch/auth'
+    - name: BACKEND_URL
+      value: 'http://expenses-backend-quarkus-expenses.apps.ocp5.stormshift.coe.muc.redhat.com'
+  resources:
+    - name: ui-image
+      resourceRef:
+        name: ui-image
+  workspaces:
+    - name: ui-workspace
+      persistentVolumeClaim:
+        claimName: ui-source-pvc
