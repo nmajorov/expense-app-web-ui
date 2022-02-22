@@ -2,7 +2,6 @@ import {Col, Row} from "react-bootstrap";
 import React from "react";
 import {useSelector} from "react-redux";
 import {AppState} from "../../store/Store";
-import {SSO} from "../../types/SSO";
 
 /**
  *   show user profile
