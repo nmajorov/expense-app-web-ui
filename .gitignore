@@ -27,3 +27,5 @@ yarn-error.log*
 # vim
 *.swp
 
+#any logs
+*.log
