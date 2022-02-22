@@ -38,6 +38,10 @@ const ssoReducer = (state: SSOState = SSO_INITIAL_STATE, action: AppAction): SSO
         case C.SSO_SIGN_OUT:
             newState.sso = SSO_INITIAL_STATE.sso;
             break;
+        
+        case C.SESSION_EXPIRED:
+            
+            break;
 
         default:
             break;
