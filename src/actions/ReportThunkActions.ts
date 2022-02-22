@@ -30,30 +30,25 @@ const ReportThunkActions = {
           dispatch(ReportActions.fetchReportsSuccess(data));
         },
         (error) => {
-          let emsg: string;
+          let errorMessage: string;
           console.log(error.response)
-          //if (error.response && error.response.status === 401){
-          //  emsg = "Cannot load the reports  unauthorized ..session expired ? ";
-         // }else 
-          if (
-            error.response &&
-            error.response.data &&
-            error.response.data.error
-          ) {
-            emsg = "Cannot load the reports: " + error.response.data.error;
-          } else {
-            emsg = "Cannot load the reports: " + error.toString();
+          if (error.response && error.response.status === 401){
+            errorMessage = "Cannot load the reports  unauthorized ..session expired ? ";
           }
-
-          const alertMessage: AlertMessage = {
-            content: emsg,
-            show_notification: true,
-            type: MessageType.ERROR
-          };
-          dispatch(AlertActions.addMessage(alertMessage));
-        }
+          else {
+            errorMessage = "Cannot load the reports: " + error;
+          }
+        const alertMessage: AlertMessage = {
+          content: errorMessage,
+          show_notification: true,
+          type: MessageType.ERROR
+        };
+        dispatch(AlertActions.addMessage(alertMessage));
+      }
       );
-    };
+    }  
+        
+    
   },
 
   addReport: (sso: SSO, name: String) => {

@@ -28,9 +28,9 @@ axios.interceptors.response.use(
     return response;
   },
   error => {
+    console.log(error);
     // The response was rejected, turn off the spinning
-   
-    if (error.response.status === 401) {
+    if (error.response === undefined || error.response.status === 401){
 
       const alertMessage: AlertMessage = {
         content: "Your session expired",
