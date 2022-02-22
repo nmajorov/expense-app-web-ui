@@ -75,7 +75,7 @@ const DashBoard = () => {
 
 
 
-  }, [sso, reportChanges, dispatch]);
+  }, [sso, reportChanges, dispatch,keycloak]);
 
   function openDeleteDialog(id: String) {
     setId(id);

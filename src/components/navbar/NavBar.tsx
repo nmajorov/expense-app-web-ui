@@ -60,7 +60,7 @@ export function NavigationBar() {
             dispatch(SSOThunkActions.loadUserProfile(keycloak))
         }
  
-    },[dispatch])
+    },[dispatch,keycloak])
 
     return (
         <Navbar bg="light">

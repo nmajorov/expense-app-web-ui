@@ -139,7 +139,7 @@ const ReportView = () => {
     }
 
   // use sso if client reload the page manually from browser
-  }, [authenticated,expensesChanged,dispatch]);
+  }, [authenticated,expensesChanged,dispatch,keycloak]);
 
 
 
