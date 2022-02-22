@@ -14,8 +14,8 @@ import {
   faTrashAlt,
   faEdit,
   faEllipsisH,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+} from "@fortawesome/fontawesome-free";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useConfirmDialog } from "./ConfirmDialog";
 import { useHistory } from "react-router-dom";
 import { SecurityContext } from "../../context/SecurityContext";

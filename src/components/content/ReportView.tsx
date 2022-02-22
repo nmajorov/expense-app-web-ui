@@ -1,6 +1,7 @@
 import * as React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt, faEdit, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt, faEdit, faArrowUp, faArrowDown } from "@fortawesome/fontawesome-free";
+
 import Table from 'react-bootstrap/Table';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import { AppState } from "../../store/Store";
