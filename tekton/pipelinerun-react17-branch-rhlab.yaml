@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  generateName: expenses-webui-ocp5
+  generateName: expenses-webui-react17
 spec:
   pipelineRef:
     name: build-expenses-web-ui

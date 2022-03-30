@@ -28,10 +28,18 @@ spec:
         to the next Task.
 
   tasks:
+    - name: clean-workspace
+      taskRef:
+        name: clean-up
+      workspaces:
+        - name: input
+          workspace: ui-workspace
     - name: clone
       taskRef:
         name: git-clone
         kind: ClusterTask
+      runAfter:
+        - clean-workspace
       params:
         - name: url
           value: $(params.GIT_URL)
@@ -58,7 +66,7 @@ spec:
       params:
         - name: sso-url
           value: $(params.SSO_URL)
-        - name:  backend-url
+        - name: backend-url
           value: $(params.BACKEND_URL)
       runAfter:
         - test
@@ -66,22 +74,22 @@ spec:
         - name: input
           workspace: ui-workspace
 
-    - name:  webapp-build-runtime
+    - name: webapp-build-runtime
       taskRef:
-        name:  webapp-build-runtime
+        name: webapp-build-runtime
       resources:
         outputs:
           - name: ui-image
             resource: ui-image
       runAfter:
-        -  build-nodejs-app
+        - build-nodejs-app
       workspaces:
         - name: input
           workspace: ui-workspace
 
-    - name:  deploy-nodejs-app
+    - name: deploy-nodejs-app
       taskRef:
-        name:  deploy-nodejs-app
+        name: deploy-nodejs-app
       runAfter:
         - webapp-build-runtime
       workspaces:

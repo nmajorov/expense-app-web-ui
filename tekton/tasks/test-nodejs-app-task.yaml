@@ -25,6 +25,10 @@ spec:
             yarn --version
             echo "install dependencies"
             yarn install
+
+            echo "add react-scripts"
+            yarn add react-scripts
+
             echo "run tests"
             yarn test
   workspaces:
