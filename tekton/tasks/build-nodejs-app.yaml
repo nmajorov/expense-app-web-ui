@@ -49,7 +49,7 @@ spec:
           export REACT_APP_BACKEND_URL="$(params.backend-url)"
 
           echo "replace .env.production file with parameters from task"
-          
+
           sed -ri  "s|REACT_APP_KEYCLOAK_URL=.*|REACT_APP_KEYCLOAK_URL=$REACT_APP_KEYCLOAK_URL|g" .env.production
           sed -ri  "s|REACT_APP_KEYCLOAK_REALM=.*|REACT_APP_KEYCLOAK_URL=$REACT_APP_KEYCLOAK_REALM|g" .env.production
           sed -ri  "s|REACT_APP_KEYCLOAK_CLIENT_ID=.*|REACT_APP_KEYCLOAK_CLIENT_ID=$REACT_APP_KEYCLOAK_CLIENT_ID|g" .env.production
@@ -59,10 +59,11 @@ spec:
           cat .env.production
 
           echo
-          echo
-          echo "start build for prod"
+          echo "node version"
+          node --version
+          echo "start build for prod works with node < 17"
 
-          yarn build
+          yarn build-old
 
           echo
           echo
