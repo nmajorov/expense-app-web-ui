@@ -10,11 +10,11 @@ spec:
     - name: GIT_URL
       value: 'https://github.com/nmajorov/expenses-web-ui.git'
     - name: GIT_REVISION
-      value: react17
+      value: "react17"
     - name: SSO_URL
-      value: 'https://secure-sso-test-expenses.apps.ocp001.rhlab.ch/auth'
+      value: 'https://secure-sso-test-nm-demo.apps.ocp001.rhlab.ch/auth'
     - name: BACKEND_URL
-      value: 'http://expenses-backend-quarkus-expenses.apps.ocp5.stormshift.coe.muc.redhat.com'
+      value: 'http://expenses-backend-quarkus-nm-demo.apps.ocp001.rhlab.ch'
   resources:
     - name: ui-image
       resourceRef:
