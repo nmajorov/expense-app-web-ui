@@ -12,9 +12,9 @@ spec:
     - name: GIT_REVISION
       value: "react17"
     - name: SSO_URL
-      value: 'https://secure-sso-test-nm-demo.apps.ocp001.rhlab.ch/auth'
+      value: 'http://sso-test-nm-demo.apps-crc.testing/auth'
     - name: BACKEND_URL
-      value: 'https://expenses-backend-quarkus-nm-demo.apps.ocp001.rhlab.ch'
+      value: 'http://expenses-backend-quarkus-nm-demo.apps-crc.testing'
   resources:
     - name: ui-image
       resourceRef:
