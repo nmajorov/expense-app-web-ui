@@ -4,6 +4,8 @@ PROJECT=$(oc  project -q)
 
 DIRNAME=`dirname "$0"`
 
+
+
 echo "delete existing tasks first "
 #CUR_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 oc delete pipelineresources.tekton.dev  expenses-web-ui-git ui-image --ignore-not-found=true
