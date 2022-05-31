@@ -31,6 +31,10 @@ spec:
                 oc new-app --name=nodejs-gui --image-stream=gui:latest
                 oc expose svc nodejs-gui
           fi
+          
+          echo "add nice nodejs icon on top"
+
+          oc label deployment/nodejs-gui  app.kubernetes.io/name=nodejs --overwrite
 
 
   workspaces:
