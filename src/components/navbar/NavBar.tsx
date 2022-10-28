@@ -9,6 +9,10 @@ import { SecurityContext } from "../../context/SecurityContext";
 import SSOThunkActions from "../../actions/SSOThunkActions";
 
 
+enum MenuNames {
+    ADD_REPORT = "Create Report",
+    ADD_EXPENSE = "Add Expense"
+}
 
 
 
