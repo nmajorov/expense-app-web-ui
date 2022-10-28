@@ -20,7 +20,7 @@ spec:
     - name: STORAGE_DRIVER
       description: Set buildah storage driver
       type: string
-      default: vfs
+      default: "vfs"
   resources:
     outputs:
       - name: ui-image
@@ -53,9 +53,24 @@ spec:
       mountPath: /gen-source
    
   - name: build
-    image: quay.io/buildah/stable
+    image: quay.io/buildah/stable:v1.27.0
     workingdir: /gen-source
-    command: ['buildah','--storage-driver=$(inputs.params.STORAGE_DRIVER)',  'bud', ' --tls-verify=$(inputs.params.TLSVERIFY)', '--layers', '-f', '/gen-source/Dockerfile.gen', '-t', '$(outputs.resources.ui-image.url)', '.']
+    script: |
+      #!/usr/bin/env bash
+
+      echo "working dir:  $PWD"
+      cat /gen-source/Dockerfile.gen
+
+      echo
+      buildah version
+      echo
+      echo
+      echo "run buildah "
+      echo " output image:  $(outputs.resources.image.url)"
+      echo
+      buildah --storage-driver=$(inputs.params.STORAGE_DRIVER) bud  --tls-verify=$(inputs.params.TLSVERIFY) \
+        --layers -f /gen-source/Dockerfile.gen -t  $(outputs.resources.ui-image.url) .
+
     volumeMounts:
     - name: varlibcontainers
       mountPath: /var/lib/containers
@@ -66,7 +81,16 @@ spec:
 
   - name: push
     image: quay.io/buildah/stable
-    command: ['buildah','--storage-driver=$(inputs.params.STORAGE_DRIVER)', 'push', '--tls-verify=$(inputs.params.TLSVERIFY)', '$(outputs.resources.ui-image.url)', 'docker://$(outputs.resources.ui-image.url)']
+    script: |
+      #!/usr/bin/env bash
+      echo "working dir:  $PWD"
+      echo
+      echo
+      echo
+      echo "push image " 
+      buildah --storage-driver=$(inputs.params.STORAGE_DRIVER) push --tls-verify=$(inputs.params.TLSVERIFY) \
+        $(outputs.resources.ui-image.url)  docker://$(outputs.resources.ui-image.url)
+
     volumeMounts:
     - name: varlibcontainers
       mountPath: /var/lib/containers
@@ -81,7 +105,7 @@ spec:
       emptyDir: {}
     - name: devfuse
       emptyDir: { }
-      
+
   workspaces:
     - name: input
       mountPath: /workspace/source
