@@ -8,10 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { SecurityContext } from "../../context/SecurityContext";
 import SSOThunkActions from "../../actions/SSOThunkActions";
 
-enum MenuNames {
-    ADD_REPORT = "Create Report",
-    ADD_EXPENSE = "Add Expense"
-}
 
 
 
@@ -19,6 +15,8 @@ enum MenuNames {
 /**
  *
  * left side navigation
+ * 
+ *
  */
 export function NavigationBar() {
     const keycloak = useContext(SecurityContext);
