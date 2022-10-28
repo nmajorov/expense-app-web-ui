@@ -13,7 +13,7 @@ spec:
       description: The Web Runtime image to use,  defaults to registry.redhat.io/rhscl/nginx-116-rhel7:1.16
       # default: registry.redhat.io/rhscl/nginx-116-rhel7:1.16 # need a docker secret in project
       # use OpenShift internal
-      default: image-registry.openshift-image-registry.svc:5000/openshift/nginx:1.18-ubi7
+      default: quay.io/sclorg/nginx-118-c8s:c8s
     - name: TLSVERIFY
       description: Verify the TLS on the registry endpoint (for push/pull to a non-TLS registry)
       default: "false"
@@ -28,8 +28,8 @@ spec:
 
 
   steps:
-  - name: copy-source
-    image: quay.io/openshift-pipeline/s2i
+  - name: dockerfile
+    image: quay.io/openshift-pipeline/s2i:v0.8.0
     workingdir: /workspace/source
     script: |
       #!/usr/bin/env bash
@@ -39,51 +39,39 @@ spec:
       echo
       ls -lisa
       echo
-      cp -Rvp $(pwd)/build /gen-source/build
+      
+    
+      echo "create  s2i upload dir  need it for docker build"
+      mkdir -p upload/src
 
-    volumeMounts:
-    - name: gen-source
-      mountPath: /gen-source
-  - name: generate
-    image: quay.io/openshift-pipeline/s2i
-    workingdir: /workspace/source
-    command: ['s2i', 'build', '/gen-source/build', '$(inputs.params.WEB_RUNTIME_IMAGE)', '--as-dockerfile', '/gen-source/Dockerfile.gen']
-    volumeMounts:
-    - name: gen-source
-      mountPath: /gen-source
+      cp $(pwd)/build upload/src
+
+      s2i build $(pwd)/src $(inputs.params.WEB_RUNTIME_IMAGE) --as-dockerfile Dockerfile.gen
    
-  - name: build
+
+  - name: dockerbuild
     image: quay.io/buildah/stable:v1.27.0
-    workingdir: /gen-source
+    workingdir: /workspace/source
     script: |
       #!/usr/bin/env bash
 
       echo "working dir:  $PWD"
-      cat /gen-source/Dockerfile.gen
+      cat Dockerfile.gen
 
       echo
+
+      echo 
+      
+      echo "buildah version"
       buildah version
       echo
       echo
-      echo "run buildah "
-      echo " output image:  $(outputs.resources.image.url)"
+      echo "run buildah to create docker image"
+      echo " output image:   $(outputs.resources.ui-image.url)"
       echo
       buildah --storage-driver=$(inputs.params.STORAGE_DRIVER) bud  --tls-verify=$(inputs.params.TLSVERIFY) \
-        --layers -f /gen-source/Dockerfile.gen -t  $(outputs.resources.ui-image.url) .
+        --layers -f Dockerfile.gen -t  $(outputs.resources.ui-image.url) .
 
-    volumeMounts:
-    - name: varlibcontainers
-      mountPath: /var/lib/containers
-    - name: gen-source
-      mountPath: /gen-source
-    - name: devfuse
-      mountPath: /dev/fuse
-
-  - name: push
-    image: quay.io/buildah/stable
-    script: |
-      #!/usr/bin/env bash
-      echo "working dir:  $PWD"
       echo
       echo
       echo
@@ -100,8 +88,6 @@ spec:
 
   volumes:
     - name: varlibcontainers
-      emptyDir: {}
-    - name: gen-source
       emptyDir: {}
     - name: devfuse
       emptyDir: { }
