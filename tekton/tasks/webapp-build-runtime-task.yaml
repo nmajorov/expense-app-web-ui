@@ -41,12 +41,9 @@ spec:
       echo
       
     
-      echo "create  s2i upload dir  need it for docker build"
-      mkdir -p upload/src
+    
 
-      cp $(pwd)/build upload/src
-
-      s2i build $(pwd)/src $(inputs.params.WEB_RUNTIME_IMAGE) --as-dockerfile Dockerfile.gen
+      s2i build $(pwd)/build $(inputs.params.WEB_RUNTIME_IMAGE) --as-dockerfile Dockerfile.gen
    
 
   - name: dockerbuild
