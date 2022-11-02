@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  generateName: expenses-webui-master-branch
+  generateName: expenses-webui-feature-branch
 spec:
   pipelineRef:
     name: build-expenses-web-ui
@@ -10,7 +10,7 @@ spec:
     - name: GIT_URL
       value: 'https://github.com/nmajorov/expenses-web-ui.git'
     - name: GIT_REVISION
-      value: develop
+      value: "feature/keyckloack8"
     - name: SSO_URL
       value: 'https://keycloak-nm-sso.apps.p30775tl.westeurope.aroapp.io/auth'
     - name: BACKEND_URL
@@ -23,3 +23,6 @@ spec:
     - name: ui-workspace
       persistentVolumeClaim:
         claimName: ui-source-pvc
+ # taskRunSpecs:
+ #   - pipelineTaskName: webapp-build-runtime
+ #     taskServiceAccountName: builder
