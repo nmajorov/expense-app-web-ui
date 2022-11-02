@@ -23,6 +23,12 @@ echo
 echo "deploy resources"
 cat "$DIRNAME/resources/image-resource.yaml" | sed -e "s/nm-demo/$PROJECT/g" | oc create -f -
 
+echo
+echo " ********** deploy buildah tasks from catalog ***********"
+oc  apply -f https://api.hub.tekton.dev/v1/resource/tekton/task/buildah/0.5/raw
+echo
+echo
+
 
 oc apply -f "$DIRNAME/resources/git-resource.yaml"
 oc apply -f "$DIRNAME/resources/pvc-workspace.yaml"

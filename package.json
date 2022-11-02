@@ -24,7 +24,7 @@
         "connected-react-router": "^6.9.1",
         "dotenv": "^8.2.0",
         "history": "^4.7.2",
-        "keycloak-js": "^16.1.1",
+        "keycloak-js": "^18.0.1",
         "merge-deep": "^3.0.3",
         "node-forge": "^1.2.1",
         "postcss": "^8.4.6",

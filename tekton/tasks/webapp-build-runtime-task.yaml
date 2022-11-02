@@ -21,10 +21,6 @@ spec:
       description: Set buildah storage driver
       type: string
       default: "vfs"
-  resources:
-    outputs:
-      - name: ui-image
-        type: image
 
 
   steps:
@@ -34,61 +30,18 @@ spec:
     script: |
       #!/usr/bin/env bash
       echo "current dir : $(pwd)"
-      echo "output ui-image: $(outputs.resources.ui-image.url)"
       echo "list directory:"
       echo
       ls -lisa
       echo
-      
+      echo "current user: $(id -a)"
     
     
 
       s2i build $(pwd)/build $(inputs.params.WEB_RUNTIME_IMAGE) --as-dockerfile Dockerfile.gen
    
 
-  - name: dockerbuild
-    image: quay.io/buildah/stable:v1.27.0
-    workingdir: /workspace/source
-    script: |
-      #!/usr/bin/env bash
-
-      echo "working dir:  $PWD"
-      cat Dockerfile.gen
-
-      echo
-
-      echo 
-      
-      echo "buildah version"
-      buildah version
-      echo
-      echo
-      echo "run buildah to create docker image"
-      echo " output image:   $(outputs.resources.ui-image.url)"
-      echo
-      buildah --storage-driver=$(inputs.params.STORAGE_DRIVER) bud  --tls-verify=$(inputs.params.TLSVERIFY) \
-        --layers -f Dockerfile.gen -t  $(outputs.resources.ui-image.url) .
-
-      echo
-      echo
-      echo
-      echo "push image " 
-      buildah --storage-driver=$(inputs.params.STORAGE_DRIVER) push --tls-verify=$(inputs.params.TLSVERIFY) \
-        $(outputs.resources.ui-image.url)  docker://$(outputs.resources.ui-image.url)
-
-    volumeMounts:
-    - name: varlibcontainers
-      mountPath: /var/lib/containers
-    - name: devfuse
-      mountPath: /dev/fuse
-   
-
-  volumes:
-    - name: varlibcontainers
-      emptyDir: {}
-    - name: devfuse
-      emptyDir: { }
-
   workspaces:
-    - name: input
-      mountPath: /workspace/source
+  - name: input
+    mountPath: /workspace/source
+

@@ -13,7 +13,7 @@ oc get sa
 
 echo 
 echo "add scc anyuid to user pipeline"
-oc adm policy add-scc-to-user anyuid -z pipeline
+oc adm policy add-scc-to-user anyuid -z pipeline -n $PROJECT
 
 
 echo 
