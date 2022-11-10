@@ -129,6 +129,19 @@ const ReportThunkActions = {
             show_notification: true,
             type: MessageType.SUCCESS
           };
+          sendEvent({
+            body: {
+                timestamp: Date.now(),
+                user_id: 11,
+                event_name: 'report updated',
+                event_data: {},
+            },
+          }).then((response) => {
+                console.log('event send to azure');
+            })
+            .catch(function () {
+                console.error('error publish event');
+          });
           dispatch(AlertActions.addMessage(alertMessage));
         },
         (error) => {
@@ -155,7 +168,7 @@ const ReportThunkActions = {
             body: {
                 timestamp: Date.now(),
                 user_id: 11,
-                event_name: 'expense deleted',
+                event_name: 'report deleted',
                 event_data: {},
             },
           }).then((response) => {
