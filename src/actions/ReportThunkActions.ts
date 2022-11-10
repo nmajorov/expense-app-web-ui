@@ -151,6 +151,19 @@ const ReportThunkActions = {
       return API.deleteReport(sso.token, id).then(
         (response) => {
           dispatch(ReportActions.deleteActionSuccess());
+          sendEvent({
+            body: {
+                timestamp: Date.now(),
+                user_id: 11,
+                event_name: 'expense deleted',
+                event_data: {},
+            },
+          }).then((response) => {
+                console.log('event send to azure');
+            })
+            .catch(function () {
+                console.error('error publish event');
+          });
         },
         (error) => {
           dispatch(AlertActions.addMessage({
