@@ -70,7 +70,7 @@ const ExpensesThunkActions = {
                         body: {
                             timestamp: Date.now(),
                             user_id: 11,
-                            event_name: 'expense deleted',
+                            event_name: 'expense_deleted',
                             event_data: {},
                         },
                     }).then((response) => {
@@ -112,7 +112,7 @@ const ExpensesThunkActions = {
                         body: {
                             timestamp: Date.now(),
                             user_id: 11,
-                            event_name: 'expense created',
+                            event_name: 'expense_created',
                             event_data: {},
                         },
                     }).then((response) => {
@@ -177,7 +177,7 @@ const ExpensesThunkActions = {
                         body: {
                             timestamp: Date.now(),
                             user_id: 11,
-                            event_name: 'expense updated',
+                            event_name: 'expense_updated',
                             event_data: {},
                         },
                     }).then((response) => {

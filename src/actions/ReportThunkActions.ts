@@ -71,7 +71,7 @@ const ReportThunkActions = {
               body: {
                   timestamp: Date.now(),
                   user_id: 11,
-                  event_name: 'report created',
+                  event_name: 'report_created',
                   event_data: {},
               },
           }).then((response) => {
@@ -133,7 +133,7 @@ const ReportThunkActions = {
             body: {
                 timestamp: Date.now(),
                 user_id: 11,
-                event_name: 'report updated',
+                event_name: 'report_updated',
                 event_data: {},
             },
           }).then((response) => {
@@ -168,7 +168,7 @@ const ReportThunkActions = {
             body: {
                 timestamp: Date.now(),
                 user_id: 11,
-                event_name: 'report deleted',
+                event_name: 'report_deleted',
                 event_data: {},
             },
           }).then((response) => {
