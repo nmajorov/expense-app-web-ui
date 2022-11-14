@@ -7,6 +7,7 @@ import * as API from '../services/Api';
 import { AlertActions } from './AlertAction';
 import { AlertMessage, MessageType } from '../types/AlertTypes';
 import { SSO } from '../types/SSO';
+import { sendEvent } from '../utils/EventProducer';
 
 const ExpensesThunkActions = {
    
@@ -65,6 +66,19 @@ const ExpensesThunkActions = {
             return API.deleteExpense(token, id.toString()).then(
                 (_response) => {
                     dispatch(ExpensesActions.deleteActionSuccess());
+                    sendEvent({
+                        body: {
+                            timestamp: Date.now(),
+                            user_id: 11,
+                            event_name: 'expense_deleted',
+                            event_data: {},
+                        },
+                    }).then((response) => {
+                            console.log('event send to azure');
+                        })
+                        .catch(function () {
+                            console.error('error publish event');
+                    });
                 },
                 (error) => {
                     const emsg = 'Cannot delete the expenses: ' + error.toString();
@@ -77,6 +91,7 @@ const ExpensesThunkActions = {
                     };
 
                     dispatch(AlertActions.addMessage(alertMessage));
+                    
                 }
             );
         };
@@ -93,6 +108,19 @@ const ExpensesThunkActions = {
                         type: MessageType.SUCCESS,
                     };
                     dispatch(AlertActions.addMessage(alertMessage));
+                    sendEvent({
+                        body: {
+                            timestamp: Date.now(),
+                            user_id: 11,
+                            event_name: 'expense_created',
+                            event_data: {},
+                        },
+                    }).then((response) => {
+                            console.log('event send to azure');
+                        })
+                        .catch(function () {
+                            console.error('error publish event');
+                    });
                 },
                 (error) => {
                     const emsg = 'Cannot add the expenses: ' + error.toString();
@@ -145,6 +173,19 @@ const ExpensesThunkActions = {
                         type: MessageType.SUCCESS,
                     };
                     dispatch(AlertActions.addMessage(alertMessage));
+                    sendEvent({
+                        body: {
+                            timestamp: Date.now(),
+                            user_id: 11,
+                            event_name: 'expense_updated',
+                            event_data: {},
+                        },
+                    }).then((response) => {
+                            console.log('event send to azure');
+                        })
+                        .catch(function () {
+                            console.error('error publish event');
+                    });
                 },
                 (error) => {
                     const emsg = 'Cannot add the expenses: ' + error.toString();

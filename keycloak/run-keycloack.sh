@@ -5,14 +5,17 @@ echo "run keycloak server"
 
 DIRNAME=`dirname "$0"`
 #IMAGE= "docker.io/jboss/keycloak"
-#IMAGE="quay.io/keycloak/keycloak:18.0"
+IMAGE="quay.io/keycloak/keycloak:18.0"
 
-IMAGE="quay.io/keycloak/keycloak:19.0"
-
+#IMAGE="quay.io/keycloak/keycloak:19.0"
+TARGET_PORT="7080"
 
 start_dev(){
-   podman run --rm  -p 7080:8080  --security-opt label=disable  -e KEYCLOAK_ADMIN=admin \
-      -e KEYCLOAK_ADMIN_PASSWORD=admin  $IMAGE start --optimized --http-enabled=true --hostname-strict=false --hostname-strict-https=false
+   echo
+   echo "start container $IMAGE mapped port $TARGET_PORT"
+   echo 
+   podman run --rm  -p $TARGET_PORT:8080  --security-opt label=disable  -e KEYCLOAK_ADMIN=admin \
+      -e KEYCLOAK_ADMIN_PASSWORD=admin  $IMAGE start --http-enabled=true --hostname-strict=false --hostname-strict-https=false
 }
 
 start_legacy() {

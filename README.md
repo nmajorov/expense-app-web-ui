@@ -57,6 +57,7 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
+
 ## OpenShift4 and react good links
 
 
@@ -95,5 +96,10 @@ https://github.com/akoserwal/devnationtt-vue-keycloak/blob/master/vueapp-demo/sr
 
 typesafe-actions
 
+## SSO 
+
+to check openid configuration on the local SSO:
+
+http://localhost:7080/realms/basic/.well-known/openid-configuration
 
 

@@ -7,6 +7,7 @@ import { AlertMessage, MessageType } from "../types/AlertTypes";
 import { Report } from "../types/Report";
 import { ReportActions } from "./ReportAction";
 import { SSO } from "../types/SSO";
+import { sendEvent } from "../utils/EventProducer";
 
 const ReportThunkActions = {
   fetchReports: (sso: SSO) => {
@@ -65,6 +66,21 @@ const ReportThunkActions = {
             type: MessageType.SUCCESS
           };
           dispatch(AlertActions.addMessage(alertMessage));
+          
+          sendEvent({
+              body: {
+                  timestamp: Date.now(),
+                  user_id: 11,
+                  event_name: 'report_created',
+                  event_data: {},
+              },
+          }).then((response) => {
+                  console.log('event send to azure');
+              })
+              .catch(function () {
+                  console.error('error publish event');
+          });
+          
         },
         (error) => {
           const alertMessage: AlertMessage = {
@@ -75,6 +91,7 @@ const ReportThunkActions = {
           dispatch(AlertActions.addMessage(alertMessage));
         }
       );
+      
     };
   },
 
@@ -112,6 +129,19 @@ const ReportThunkActions = {
             show_notification: true,
             type: MessageType.SUCCESS
           };
+          sendEvent({
+            body: {
+                timestamp: Date.now(),
+                user_id: 11,
+                event_name: 'report_updated',
+                event_data: {},
+            },
+          }).then((response) => {
+                console.log('event send to azure');
+            })
+            .catch(function () {
+                console.error('error publish event');
+          });
           dispatch(AlertActions.addMessage(alertMessage));
         },
         (error) => {
@@ -134,6 +164,19 @@ const ReportThunkActions = {
       return API.deleteReport(sso.token, id).then(
         (response) => {
           dispatch(ReportActions.deleteActionSuccess());
+          sendEvent({
+            body: {
+                timestamp: Date.now(),
+                user_id: 11,
+                event_name: 'report_deleted',
+                event_data: {},
+            },
+          }).then((response) => {
+                console.log('event send to azure');
+            })
+            .catch(function () {
+                console.error('error publish event');
+          });
         },
         (error) => {
           dispatch(AlertActions.addMessage({
