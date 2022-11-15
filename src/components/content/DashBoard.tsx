@@ -6,7 +6,6 @@ import {
   Col,
   Container,
   Dropdown,
-  Jumbotron,
   Row,
 } from "react-bootstrap";
 import ReportThunkActions from "../../actions/ReportThunkActions";
@@ -61,6 +60,11 @@ const DashBoard = () => {
     continueButtonVariant: "danger",
   });
 
+
+
+
+
+
   useEffect(() => {
 
     // update token to avoid error
@@ -90,7 +94,7 @@ const DashBoard = () => {
 
   function renderReports() {
     return (
-      <Row>
+      <Row className="row-cols-1 row-cols-md-3 mt-3">
         {reports.map((rp) => {
           return renderReport(rp);
         })}
@@ -100,15 +104,18 @@ const DashBoard = () => {
 
   function renderReport(rp) {
     return (
-      <Col key={rp.id} md={6} className="mt-3">
+      <Col key={rp.id}>
         <DeleteConfirmDialog />
         <Card key={rp.id}>
           <Card.Body>
             <Card.Title>
+              <Row>
+                <Col xs="10">
               <Card.Link onClick={() => {
                 history.push(`/report/${rp.id}`);
               }} href="#">{rp.name}</Card.Link>
-              <div className="float-right">
+              </Col>
+              <Col md="auto"> 
                 <Dropdown>
                   <Dropdown.Toggle
                     size="sm"
@@ -137,7 +144,8 @@ const DashBoard = () => {
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
-              </div>
+                </Col>
+              </Row>
             </Card.Title>
             <Card.Subtitle className="mb-2 text-muted">
               {" "}
@@ -147,18 +155,22 @@ const DashBoard = () => {
         </Card>
       </Col>
     );
-  }
+  };
+
+
 
   return sso.authenticated ? (
     renderReports()
   ) : (
-    <Jumbotron>
-      <Container>
+    <div className={"p-5 mb-4 bg-light rounded-3"}>
+      <Container className={"container-fluid py-5"}>
+      <div className={"h-100 p-5  rounded-3"}>
         <h3>Better travel and expense management.</h3>
         <h3>On OpenShift 4!</h3>
-        <p>This is an example of application running on OpenShift.</p>
+        <p className={"col-md-8 fs-4"}>This is an example of application running on OpenShift.</p>
+        </div>
       </Container>
-    </Jumbotron>
+    </div>
   );
 };
 

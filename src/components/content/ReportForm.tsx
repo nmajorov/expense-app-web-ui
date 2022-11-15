@@ -98,8 +98,8 @@ export const ReportForm = (routerProps: RouteComponentProps<ReportParams>) => {
             </div>
             <div className="card-body">
               <Form onSubmit={handleSubmit}>
-                <div className="col-sm-10">
-                  <Form.Group>
+               
+                  <Form.Group className="mb-3">
                     <Form.Label>Name</Form.Label>
                     <Form.Control
                       className="form-control"
@@ -110,13 +110,14 @@ export const ReportForm = (routerProps: RouteComponentProps<ReportParams>) => {
                       isValid={isValid}
                       isInvalid={!isValid}
                     />
-                  </Form.Group>
-                </div>
-                <Form.Group>
-                  <div className="col-sm-3">
-                    <Button type="submit">Submit</Button>
-                  </div>
+                  
+                
+              
+                  
+               
+                  
                 </Form.Group>
+                <Button type="submit" className="btn-lg btn-primary">Submit</Button>
               </Form>
             </div>
           </div>
