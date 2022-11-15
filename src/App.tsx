@@ -61,7 +61,8 @@ const App: React.FC = () => {
           <Container fluid="md">
            <GlobalAlert />
             <Navigation />
-            <main>
+            <main >
+           
 
 
                         <Switch>
