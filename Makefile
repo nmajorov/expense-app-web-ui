@@ -44,6 +44,17 @@ run: ##  run gui in dev mode
 	yarn start
 
 
+.PHONY: run-old
+run-old: ##  run gui in dev mode for node-js version  <17
+	@echo "run	app for node version <17"
+	# be sure you remove it from shell 
+	# to be able to pick up local .env files
+	unset REACT_APP_KEYCLOAK_URL
+	unset REACT_APP_KEYCLOAK_REALM
+	unset REACT_APP_KEYCLOAK_CLIENT_ID
+	unset REACT_APP_BACKEND_URL
+	yarn start-old
+
 .PHONY: test
 
 test: ##	run tests
