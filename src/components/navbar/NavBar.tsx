@@ -1,5 +1,5 @@
 import React, {ReactElement, useContext, useEffect } from "react";
-import { Button, Nav, Navbar, NavDropdown, NavItem } from "react-bootstrap";
+import { Button, Nav, Navbar, NavDropdown, NavItem ,Container} from "react-bootstrap";
 import { AppState } from "../../store/Store";
 
 import { Link } from 'react-router-dom'
@@ -41,7 +41,7 @@ export function NavigationBar() {
         let result: ReactElement = <></>
         if (pathname=== "/") {
 
-                result = (<Nav>
+                result = (<Nav >
                     <Nav.Link as={Link} to="/report-add">{MenuNames.ADD_REPORT}</Nav.Link>
                 </Nav>)
             }
@@ -65,7 +65,8 @@ export function NavigationBar() {
     },[dispatch,keycloak])
 
     return (
-        <Navbar bg="light">
+        <Navbar bg="light" expand="lg">
+              <Container>
             <Nav.Link as={Link} to="/">Home</Nav.Link>
 
             <Navbar.Toggle />
@@ -78,7 +79,7 @@ export function NavigationBar() {
                         <></>
                     )
                 }
-
+                
             </Nav>
             <Navbar.Collapse className="justify-content-center">
                 <NavItem>
@@ -106,6 +107,7 @@ export function NavigationBar() {
                 }
 
             </Navbar.Collapse>
+            </Container>
         </Navbar>
     );
 

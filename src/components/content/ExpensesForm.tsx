@@ -206,7 +206,7 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<IdParams>) => {
                   </Form.Group>
                 </div>
                 <Form.Group>
-                  <div className="col-sm-5">
+                  <div className="col-sm-5 mt-4">
                     <Form.Label>Amount</Form.Label>
                     <Form.Control
                       className="form-control"
@@ -223,7 +223,7 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<IdParams>) => {
                   </div>
                 </Form.Group>
 
-                <div className="col-sm-6">
+                <div className="col-sm-6 mt-4">
                   <Form.Label>Date of Expenses</Form.Label>
                   <Form.Group controlId="expensesDate">
                     <Form.Group controlId="expensesDate">
@@ -241,7 +241,7 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<IdParams>) => {
 
 
                 <Form.Group>
-                  <div className="col-sm-3">
+                  <div className="col-sm-3 mt-5">
                     <Button type="submit" disabled={!((isAmountValid && isDateValid && isDescriptionValid))}>Submit</Button>
                   </div>
                 </Form.Group>
