@@ -40,6 +40,6 @@ export const convertStrToAmount = (input: string): Number => {
 
 export const convertAmountToStr = (input: Number): string => {
     const result = String(input);
-    console.log("convertAmountToStr " + result)
+    console.debug("convertAmountToStr " + result)
     return result.valueOf();
 }

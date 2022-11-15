@@ -1,3 +1,4 @@
+/* eslint-disable handle-callback-err */
 import { ThunkDispatch } from "redux-thunk";
 import { AppState } from "../store/Store"
 import { AppAction } from "./AppAction";
@@ -98,16 +99,16 @@ const SSOThunkActions = {
 
     signOut:(keycloak:KeycloakInstance) => {
         return(dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) =>{
-            //fix redirect url to pointing to home
+            // fix redirect url to pointing to home
             return keycloak.logout({redirectUri:window.location.href.replace("logout","")}).then(
                 ok => {
                     dispatch(SSOActions.singOutSuccess())
                 },
                 err => {
-                    let message = 'Error at signing out';
+                    const message = 'Error at signing out';
 
                     dispatch(ExpensesActions.fetchError(message))
-                    let alertMessage: AlertMessage = {
+                    const alertMessage: AlertMessage = {
                         content: message,
                         show_notification: true,
                         type: MessageType.ERROR

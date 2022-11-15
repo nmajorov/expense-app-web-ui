@@ -1,5 +1,5 @@
 
-import { Button, Form, Row, Container } from "react-bootstrap";
+import { Button, Form, Row, Container, DropdownButton, Dropdown} from "react-bootstrap";
 import { Expense } from "../../types/Expense";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -45,9 +45,9 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<IdParams>) => {
 
   const { sso, expense } = useSelector(
     (state: AppState) => {
-      console.log("use selector ExpensesForm: " +
-      JSON.stringify(state.expensesState.newExpense));
-      
+        // console.log("use selector ExpensesForm: " +
+        //  JSON.stringify(state.expensesState.newExpense));
+          
       return {
         sso: state.ssoState.sso,
         expense:state.expensesState.newExpense
@@ -78,23 +78,23 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<IdParams>) => {
     }
   };
 
+
   /***
    * handle amount changes on the field
    */
   const handleAmountChange = event => {
 
-    console.log("set new amount value:" + event.target.value)
-
+    
     try {
       const amountAsNumber = convertStrToAmount(event.target.value);
-      console.log("amount value:" + amountAsNumber)
+      console.debug("amount value:" + amountAsNumber)
       setIsAmountValid(true)
       setAmount(event.target.value)
 
     } catch {
-      console.log("error new amount value:" + event.target.value)
+       console.debug("error new amount value:" + event.target.value)
       /**
-       * throwing exception if amount is not correct
+       * catch exception if amount is not correct
        */
       setIsAmountValid(false)
       setAmount(event.target.value);
@@ -103,7 +103,7 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<IdParams>) => {
 
 
   const handleDateChange = (date: string) => {
-    console.log("new-date: " + date)
+    console.debug("new-date: " + date)
 
     setCreatedAT(formatDateStr(date));
     setIsDateValid(true)
@@ -136,6 +136,26 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<IdParams>) => {
       
     }
   }
+
+  const handleRateSelect = (eventKey) => {
+  
+    console.log("call convert to:" + eventKey)
+    
+  }
+
+  /**
+   * render drop down with currency conversion
+   * @returns Dropdown menu
+   */
+  const renderExchangeDropDown = () => { 
+      return (
+          <DropdownButton disabled={!isAmountValid} id="dropdown-fx-btn" onSelect={handleRateSelect} title="Exchange Rate Conversion">
+              <Dropdown.Item eventKey="EUR_CHF">EUR_CHF</Dropdown.Item>
+              <Dropdown.Item eventKey="USD_CHF">USD_CHF</Dropdown.Item>
+              <Dropdown.Item eventKey="GBP_CHF">GBP_CHF</Dropdown.Item>
+          </DropdownButton>
+      );
+  };
 
 
 
@@ -220,9 +240,19 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<IdParams>) => {
                       isValid={isAmountValid}
                       isInvalid={!isAmountValid}
                     />
+
+                 
+                  </div>
+                </Form.Group>
+                <Form.Group>
+                  <div className="col-sm-5 mt-4">
+                  
+                    {renderExchangeDropDown()}
+
                   </div>
                 </Form.Group>
 
+              
                 <div className="col-sm-6 mt-4">
                   <Form.Label>Date of Expenses</Form.Label>
                   <Form.Group controlId="expensesDate">

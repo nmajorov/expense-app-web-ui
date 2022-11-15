@@ -5,6 +5,7 @@ import { SSO } from '../types/SSO';
 import { RouterState } from 'connected-react-router';
 import { Report } from '../types/Report';
 import { KeycloakInstance } from 'keycloak-js';
+import { ExchangeQuote } from '../types/ExchangeQuote';
 /**
  * state of  warning or info messages
  */
@@ -33,6 +34,12 @@ export interface ReportsState {
     reports: Array<Report>;
     changes?: boolean; // helper for trigger changes in state
 }
+
+
+export interface ExchangeQuotesState {
+    quotes: Array<ExchangeQuote>;
+}
+
 
 export interface AppState {
     expensesState: ExpensesState;

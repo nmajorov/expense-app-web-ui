@@ -5,6 +5,7 @@ import { HTTP_VERBS } from '../types/Common';
 import { backEndUrl as url } from '../utils/backendUrl';
 import { Expense } from '../types/Expense';
 import { Report } from '../types/Report';
+import { ExchangeQuote } from '../types/ExchangeQuote';
 
 const newRequest = <P>(
     method: HTTP_VERBS,
@@ -82,17 +83,32 @@ export const addNewExpense = (
  * fetch an expense by id
  * @param expenseID an expense by id
  */
-export const fetchExpense = (token: string, expenseID) => {
-    return newRequest<Expense>(
+export const fetchExchangeQuotes = () => {
+    return newRequest<Array<ExchangeQuote>>(
         HTTP_VERBS.GET,
-        {
-            Authorization: 'Bearer ' + token,
-        },
-        `${url}/expenses/${expenseID}`,
+        {},
+        `${url}/exchange`,
         {},
         {}
     );
 };
+
+/*
+* fetch exchange rate quotes
+* @param expenseID an expense by id
+*/
+export const fetchExpense = (token: string, expenseID) => {
+   return newRequest<Expense>(
+       HTTP_VERBS.GET,
+       {
+           Authorization: 'Bearer ' + token,
+       },
+       `${url}/expenses/${expenseID}`,
+       {},
+       {}
+   );
+};
+
 
 /**
  * add new expense to the system
