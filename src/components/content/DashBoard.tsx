@@ -106,7 +106,7 @@ const DashBoard = () => {
     return (
       <Col key={rp.id}>
         <DeleteConfirmDialog />
-        <Card key={rp.id}>
+        <Card key={rp.id} className="mt-3">
           <Card.Body>
             <Card.Title>
               <Row>
@@ -162,7 +162,7 @@ const DashBoard = () => {
   return sso.authenticated ? (
     renderReports()
   ) : (
-    <div className={"p-5 mb-4 bg-light rounded-3"}>
+    <div className={"p-5 mb-4 mt-4 bg-light rounded-3"}>
       <Container className={"container-fluid py-5"}>
       <div className={"h-100 p-5  rounded-3"}>
         <h3>Better travel and expense management.</h3>
