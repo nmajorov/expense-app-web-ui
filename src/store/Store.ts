@@ -47,4 +47,5 @@ export interface AppState {
     ssoState: SSOState;
     reportsState: ReportsState;
     router: RouterState;
+    exchangeQuotesState: ExchangeQuotesState;
 }

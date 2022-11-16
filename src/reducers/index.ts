@@ -4,6 +4,7 @@ import { combineReducers } from 'redux'
 import alertMessageReducer from './AlertMessagesReducer';
 import ssoReducer from './SSOReducer';
 import expensesReducer from "./ExpenseReducer";
+import  exchangeQuotesReducer  from "./ExchangeQuotesReducer"
 import { connectRouter } from 'connected-react-router'
 import { History } from 'history'
 import reportsReducer from './ReportsReducer';
@@ -13,6 +14,7 @@ const rootReducer = (history: History) =>  combineReducers({
         expensesState: expensesReducer,
         ssoState: ssoReducer,
         reportsState: reportsReducer,
+        exchangeQuotesState: exchangeQuotesReducer,
         router: connectRouter(history)
 
 

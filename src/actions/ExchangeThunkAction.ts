@@ -1,13 +1,11 @@
 import { ThunkDispatch } from 'redux-thunk';
 import { AppState } from '../store/Store';
-import { Expense } from '../types/Expense';
 import { AppAction } from './AppAction';
-import { ExpensesActions } from './ExpensesAction';
+import { ExchangeActions } from './ExchangeAction';
 import * as API from '../services/Api';
 import { AlertActions } from './AlertAction';
 import { AlertMessage, MessageType } from '../types/AlertTypes';
-import { SSO } from '../types/SSO';
-import { sendEvent } from '../utils/EventProducer';
+// import { sendEvent } from '../utils/EventProducer';
 
 const ExchangeThunkAction = {
    
@@ -16,10 +14,8 @@ const ExchangeThunkAction = {
         return (dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
             return API.fetchExchangeQuotes().then(
                 (response) => {
-                    const objArray = response.data;
-                    
-                    // console.log("fetched data: " + JSON.stringify(data))
-                    dispatch(ExpensesActions.fetchActionSuccess(objArray));
+                    console.debug("fetched  quotes data: " + JSON.stringify(response.data))
+                    dispatch(ExchangeActions.fetchExchangeQuotesSuccess(response.data));
                     
                 },
                 (error) => {
@@ -30,13 +26,13 @@ const ExchangeThunkAction = {
                         error.response.data.error
                     ) {
                         emsg =
-                            'Cannot load the expenses: ' +
+                            'Cannot load the quotes: ' +
                             error.response.data.error;
                     } else {
-                        emsg = 'Cannot load the expenses: ' + error.toString();
+                        emsg = 'Cannot load the quotes: ' + error.toString();
                     }
 
-                    dispatch(ExpensesActions.fetchError(emsg));
+                    
                     const alertMessage: AlertMessage = {
                         content: emsg,
                         show_notification: true,

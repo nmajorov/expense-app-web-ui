@@ -27,7 +27,7 @@ const newRequest = <P>(
  * fetch all available expenses
  */
 export const fetchExpenses = (token: string, reportID: string,sortBy?:string) => {
-    let params = () =>{
+    const params = () =>{
       if(sortBy){
         return {reportid:reportID,sort_by:sortBy}
       }else{
