@@ -3,7 +3,7 @@
  * represent Currencies Exchange Quote  types from  backend
  */
  export type ExchangeQuote = {
-    id: Number;
-    name: string;
+    id: number;
+    currencyPair: string;
     quote: Number;
 };

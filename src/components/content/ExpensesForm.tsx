@@ -4,7 +4,7 @@ import { Expense } from "../../types/Expense";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 // import {connect} from "react-redux";
-import { convertAmountToStr, convertStrToAmount, formatDateStr, formateStrToDate } from "../../utils";
+import { convertAmountToStr, convertStrToAmount, formatDateStr, formateStrToDate, exchange } from "../../utils";
 import { AppState } from "../../store/Store";
 // import {ThunkDispatch} from "redux-thunk";
 // import {AppAction} from "../../actions/AppAction";
@@ -16,6 +16,8 @@ import { RouteComponentProps, useHistory } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ExpensesThunkActions from "../../actions/ExpensesThunkActions";
+import { ExchangeQuote } from "../../types/ExchangeQuote";
+import ExchangeThunkAction from "../../actions/ExchangeThunkAction";
 
 
 type IdParams = { id: string };
@@ -43,17 +45,24 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<IdParams>) => {
 
 
 
-  const { sso, expense } = useSelector(
+  /**
+   * get values from global  application state
+   * 
+   */
+  const { sso, expense ,exchangeQuotes} = useSelector(
     (state: AppState) => {
         // console.log("use selector ExpensesForm: " +
         //  JSON.stringify(state.expensesState.newExpense));
           
       return {
         sso: state.ssoState.sso,
-        expense:state.expensesState.newExpense
+        expense:state.expensesState.newExpense,
+        exchangeQuotes: state.exchangeQuotesState.quotes,
      };
     }
   );
+
+
 
 
 
@@ -86,10 +95,19 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<IdParams>) => {
 
     
     try {
-      const amountAsNumber = convertStrToAmount(event.target.value);
-      console.debug("amount value:" + amountAsNumber)
-      setIsAmountValid(true)
-      setAmount(event.target.value)
+      
+      // 1 check if number
+      convertStrToAmount(event.target.value);
+      
+      // 2. check number after comma  
+       
+      const stringy = (event.target.value).split(".")[1]
+      if (stringy !== undefined && stringy.length > 2) {
+         setIsAmountValid(false)
+      }else{
+        setIsAmountValid(true)
+      }
+      setAmount(event.target.value);
 
     } catch {
        console.debug("error new amount value:" + event.target.value)
@@ -103,7 +121,7 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<IdParams>) => {
 
 
   const handleDateChange = (date: string) => {
-    console.debug("new-date: " + date)
+    // console.debug("new-date: " + date)
 
     setCreatedAT(formatDateStr(date));
     setIsDateValid(true)
@@ -128,7 +146,7 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<IdParams>) => {
        
         const reportId= routerProps.match.params.id.trim();
         const expense:Expense = {id:NaN,amount:convertStrToAmount(amount),description,createdAT:createdAT};
-        console.info(`add expnense ${JSON.stringify(expense)} to report ${reportId}`)
+        // console.info(`add expense ${JSON.stringify(expense)} to report ${reportId}`)
         dispatch(ExpensesThunkActions.addNewExpense(sso, reportId,expense));
        }
   
@@ -137,9 +155,22 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<IdParams>) => {
     }
   }
 
+
+  /**
+   * 
+   * exchange amount with given rate 
+   *  
+   * @param eventKey exchange currency pair 
+   */
   const handleRateSelect = (eventKey) => {
   
-    console.log("call convert to:" + eventKey)
+    console.log("call convert to:" + eventKey + " amount: " + amount)
+    exchangeQuotes.forEach(element => {
+      if (element.currencyPair === eventKey){
+          const convertedAmount = exchange(element.quote, convertStrToAmount(amount))
+          setAmount(convertAmountToStr(convertedAmount));
+      }
+    });
     
   }
 
@@ -149,10 +180,15 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<IdParams>) => {
    */
   const renderExchangeDropDown = () => { 
       return (
-          <DropdownButton disabled={!isAmountValid} id="dropdown-fx-btn" onSelect={handleRateSelect} title="Exchange Rate Conversion">
-              <Dropdown.Item eventKey="EUR_CHF">EUR_CHF</Dropdown.Item>
-              <Dropdown.Item eventKey="USD_CHF">USD_CHF</Dropdown.Item>
-              <Dropdown.Item eventKey="GBP_CHF">GBP_CHF</Dropdown.Item>
+        
+          <DropdownButton disabled={!isAmountValid || exchangeQuotes.length === 0} id="dropdown-fx-btn" 
+                onSelect={handleRateSelect} title="Exchange Rate Conversion">
+                 {exchangeQuotes.map((eq) => { 
+                    return(
+                     <Dropdown.Item key={eq.id} eventKey={eq.currencyPair}>{eq.currencyPair}</Dropdown.Item>
+                  );}
+                  )
+                }
           </DropdownButton>
       );
   };
@@ -175,6 +211,11 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<IdParams>) => {
 
         }
 
+        // fetch quotes
+        dispatch(
+          ExchangeThunkAction.fetchQuotesData()
+        );
+       
       }
     }, [dispatch]);
 

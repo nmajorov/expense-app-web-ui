@@ -4,6 +4,7 @@
     "workbench.colorTheme": "Visual Studio Light",
     "cSpell.words": [
         "buildah",
+        "emsg",
         "keycloak",
         "middlewares",
         "persistor"

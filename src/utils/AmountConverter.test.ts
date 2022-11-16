@@ -1,3 +1,4 @@
+import { exchange } from "./AmountConverter";
 import { convertStrToAmount , convertAmountToStr} from "./index";
 
 
@@ -30,12 +31,14 @@ test("test NaN amount", () => {
 })
 
 
-test("test too long amount", () => {
+test("convert too long precision amount as string to number ", () => {
     let amount = "18.2345"
     
-    expect(() => {
-        convertStrToAmount(amount);
-      }).toThrow(new Error("ToLong"))
+    console.log(`string amount ${amount} need to convert to Number`)
+    let result =  convertStrToAmount(amount);
+    // console.log(`converted result: ${result}`)
+
+    expect(result).toBe(18.23)
     
 })
 
@@ -64,3 +67,12 @@ test("test wrong point string to amount", () => {
       }).toThrow(new Error("NaN"))
     
 })
+
+
+test('exchange conversion test EUR_CHF', () => {
+    let quote: Number = 0.9758;
+    let amount: Number = 100;
+    let expectResult = 97.58;
+    console.log(`test exchange EUR_CHF  amount ${amount} with quote: ${quote}`);
+    expect(exchange(quote, 100)).toEqual(expectResult);
+});
