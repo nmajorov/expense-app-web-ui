@@ -171,7 +171,7 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<IdParams>) => {
           setAmount(convertAmountToStr(convertedAmount));
       }
     });
-    
+    dispatch(ExchangeThunkAction.doExchange());
   }
 
   /**
