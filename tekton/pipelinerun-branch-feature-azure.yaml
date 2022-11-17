@@ -1,8 +1,7 @@
-# run pipeline on master branch
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  generateName: expenses-webui-react17
+  generateName: web-ui-azure-branch-run
 spec:
   pipelineRef:
     name: build-expenses-web-ui
@@ -10,15 +9,11 @@ spec:
     - name: GIT_URL
       value: 'https://github.com/nmajorov/expenses-web-ui.git'
     - name: GIT_REVISION
-      value: "react17"
+      value: feature/azure
     - name: SSO_URL
-      value: 'http://sso-test-nm-demo.apps.ocp001.rhlab.ch/auth'
+      value: 'https://keycloak-nm-sso.apps.ocp001.rhlab.ch/auth/'
     - name: BACKEND_URL
-      value: 'http://expenses-backend-quarkus-nm-demo.apps.ocp001.rhlab.ch'
-  resources:
-    - name: ui-image
-      resourceRef:
-        name: ui-image
+      value: 'https://expenses-backend-quarkus-nm-demo.apps.ocp001.rhlab.ch'
   workspaces:
     - name: ui-workspace
       persistentVolumeClaim:
