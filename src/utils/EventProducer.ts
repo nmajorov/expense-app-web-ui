@@ -1,11 +1,12 @@
 import { AzureEvent } from "../types/AzureEvent";
 const { EventHubProducerClient } = require("@azure/event-hubs");
 
-const connectionString = "Endpoint=sb://event-hub-ns-ai-driven-testing.servicebus.windows.net/;SharedAccessKeyName=SendEventsSharedAccessKey;SharedAccessKey=PE17XDjEEdxshQKWjMIKpxnbFbqZaR0f4uVAkV16oJE=";
-const eventHubName = "user-events";
+const connectionString = `${process.env.REACT_APP_EVENT_HUB_KEY}`;
+const eventHubName = "userevents";
 
 export async function sendEvent( event: AzureEvent) {
-
+    console.debug("using event hub: " + connectionString)
+    console.debug("envent: " + JSON.stringify(event))
     // Create a producer client to send messages to the event hub.
     const producer = new EventHubProducerClient(connectionString, eventHubName);
 

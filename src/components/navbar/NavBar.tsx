@@ -93,7 +93,7 @@ export function NavigationBar() {
                         <NavDropdown.Item href="/profile">profile</NavDropdown.Item>
 
                         <NavDropdown.Divider />
-                        <NavDropdown.Item href="/logout">SING OUT</NavDropdown.Item>
+                        <NavDropdown.Item href="/logout">Sign out</NavDropdown.Item>
                     </NavDropdown>
 
 
