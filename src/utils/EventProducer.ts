@@ -6,7 +6,7 @@ const eventHubName = "userevents";
 
 export async function sendEvent( event: AzureEvent) {
     console.debug("using event hub: " + connectionString)
-    console.debug("envent: " + JSON.stringify(event))
+    console.debug("event: " + JSON.stringify(event))
     // Create a producer client to send messages to the event hub.
     const producer = new EventHubProducerClient(connectionString, eventHubName);
 

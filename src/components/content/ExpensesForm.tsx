@@ -1,10 +1,10 @@
 
-import { Button, Form, Row, Container, DropdownButton, Dropdown} from "react-bootstrap";
+import { Button, Form, Row, Container} from "react-bootstrap";
 import { Expense } from "../../types/Expense";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 // import {connect} from "react-redux";
-import { convertAmountToStr, convertStrToAmount, formatDateStr, formateStrToDate, exchange } from "../../utils";
+import { convertAmountToStr, convertStrToAmount, formatDateStr, formateStrToDate } from "../../utils";
 import { AppState } from "../../store/Store";
 // import {ThunkDispatch} from "redux-thunk";
 // import {AppAction} from "../../actions/AppAction";
@@ -16,7 +16,6 @@ import { RouteComponentProps, useHistory } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ExpensesThunkActions from "../../actions/ExpensesThunkActions";
-import { ExchangeQuote } from "../../types/ExchangeQuote";
 import ExchangeThunkAction from "../../actions/ExchangeThunkAction";
 
 
@@ -49,7 +48,7 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<IdParams>) => {
    * get values from global  application state
    * 
    */
-  const { sso, expense ,exchangeQuotes} = useSelector(
+  const { sso, expense} = useSelector(
     (state: AppState) => {
         // console.log("use selector ExpensesForm: " +
         //  JSON.stringify(state.expensesState.newExpense));
@@ -57,7 +56,6 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<IdParams>) => {
       return {
         sso: state.ssoState.sso,
         expense:state.expensesState.newExpense,
-        exchangeQuotes: state.exchangeQuotesState.quotes,
      };
     }
   );
@@ -156,43 +154,7 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<IdParams>) => {
   }
 
 
-  /**
-   * 
-   * exchange amount with given rate 
-   *  
-   * @param eventKey exchange currency pair 
-   */
-  const handleRateSelect = (eventKey) => {
   
-    console.log("call convert to:" + eventKey + " amount: " + amount)
-    exchangeQuotes.forEach(element => {
-      if (element.currencyPair === eventKey){
-          const convertedAmount = exchange(element.quote, convertStrToAmount(amount))
-          setAmount(convertAmountToStr(convertedAmount));
-      }
-    });
-    dispatch(ExchangeThunkAction.doExchange());
-  }
-
-  /**
-   * render drop down with currency conversion
-   * @returns Dropdown menu
-   */
-  const renderExchangeDropDown = () => { 
-      return (
-        
-          <DropdownButton disabled={!isAmountValid || exchangeQuotes.length === 0} id="dropdown-fx-btn" 
-                onSelect={handleRateSelect} title="Exchange Rate Conversion">
-                 {exchangeQuotes.map((eq) => { 
-                    return(
-                     <Dropdown.Item key={eq.id} eventKey={eq.currencyPair}>{eq.currencyPair}</Dropdown.Item>
-                  );}
-                  )
-                }
-          </DropdownButton>
-      );
-  };
-
 
 
 
@@ -285,13 +247,7 @@ export const ExpensesForm =  (routerProps: RouteComponentProps<IdParams>) => {
                  
                   </div>
                 </Form.Group>
-                <Form.Group>
-                  <div className="col-sm-5 mt-4">
-                  
-                    {renderExchangeDropDown()}
-
-                  </div>
-                </Form.Group>
+               
 
               
                 <div className="col-sm-6 mt-4">
