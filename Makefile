@@ -70,6 +70,8 @@ docker: clean ## build with container
 	#mv .env.local .env.docker
 	#mv .env.back_up .env.production
 	#${CONTAINER_ENGINE} build -t $(IMAGE_NAME) .
+	#
+
 
 
 docker-run: ## run locally app in  docker
@@ -90,6 +92,7 @@ clean: ## clean
 	 @if [ -d $(THIS_DIR)/build ] ;then \
 	 	rm -r $(THIS_DIR)/build ;\
 	 fi
+	deno clean
 
 ###################
 # Unit/CI Testing #
