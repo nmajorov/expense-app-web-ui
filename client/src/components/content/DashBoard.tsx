@@ -32,10 +32,10 @@ const DashBoard = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     // const keycloak = useContext(SecurityContext);
-
-    const { sso, reports } = useSelector((state: AppState) => {
+    const sso = {};
+    const { reports } = useSelector((state: AppState) => {
         return {
-            sso: state.ssoState.sso,
+            //    sso: state.ssoState.sso,
             reports: state.reportsState.reports,
         };
     });
@@ -144,10 +144,13 @@ const DashBoard = () => {
         renderReports()
     ) : (
         <Jumbotron>
-            <Container>
+            <Container className="py-5">
                 <h3>Better travel and expense management.</h3>
-                <h3>On OpenShift 4!</h3>
-                <p>This is an example of application running on OpenShift.</p>
+                <h3>Running on SUSE RKE2 or K3s Kubernetes !!</h3>
+                <p>
+                    This is an example of application built with React and Redux
+                    .
+                </p>
             </Container>
         </Jumbotron>
     );

@@ -1,24 +1,28 @@
 import React from 'react';
 import axios from 'axios';
 
-import DashBoard from './components/content/DashBoard';
-import { NavigationBar as Navigation } from './components/navbar/NavBar';
 import { Route, Routes as Switch } from 'react-router-dom';
-import { ExpensesForm } from './components/content/ExpensesForm';
 import { Container } from 'react-bootstrap';
-import Footer from './components/footer';
 import { Provider } from 'react-redux';
-import { history, persistor, store } from './store/ConfigStore';
+
 import { PersistGate } from 'redux-persist/lib/integration/react';
-import InitializingScreen from './InitializingScreen';
+import InitializingScreen from './InitializingScreen.tsx';
 import { ConnectedRouter } from 'connected-react-router';
-import GlobalAlert from './components/Alert';
-import ProfileView from './components/content/ProfileView';
-import Logout from './components/content/Logout';
-import ReportView from './components/content/ReportView';
-import { ReportForm } from './components/content/ReportForm';
-import { AlertActions } from './actions/AlertAction';
-import { AlertMessage, MessageType } from './types/AlertTypes';
+
+import { history, persistor, store } from './store/ConfigStore.ts';
+import GlobalAlert from './components/Alert.tsx';
+import ProfileView from './components/content/ProfileView.tsx';
+import Logout from './components/content/Logout.tsx';
+import ReportView from './components/content/ReportView.tsx';
+import { ReportForm } from './components/content/ReportForm.tsx';
+import { AlertActions } from './actions/AlertAction.ts';
+import { AlertMessage, MessageType } from './types/AlertTypes.ts';
+import { ExpensesForm } from './components/content/ExpensesForm.tsx';
+import Footer from './components/footer';
+
+import DashBoard from './components/content/DashBoard.tsx';
+import { NavigationBar as Navigation } from './components/navbar/NavBar.tsx';
+import './index.css';
 
 // intercept all Axios responses and dispatch the DECREMENT_LOADING_COUNTER Action
 axios.interceptors.response.use(
@@ -50,28 +54,24 @@ const App: React.FC = () => {
                     <Container fluid="md">
                         <GlobalAlert />
                         <Navigation />
-                        <main role="main">
+                        <main role="main" className="ml-20">
                             <Switch>
-                                <Route exact path="/" component={DashBoard} />
+                                <Route index path="/" element={<DashBoard />} />
                                 <Route
-                                    exact
                                     path="/report-add"
-                                    component={ReportForm}
+                                    element={<ReportForm />}
                                 />
                                 <Route
-                                    exact
                                     path="/report/edit/:id"
-                                    component={ReportForm}
+                                    element={<ReportForm />}
                                 />
                                 <Route
-                                    exact
                                     path="/report/:id"
                                     component={ReportView}
                                 />
                                 <Route
-                                    exact
                                     path="/expenses-add/:id"
-                                    component={ExpensesForm}
+                                    element={ExpensesForm}
                                 />
 
                                 <Route

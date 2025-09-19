@@ -7,14 +7,14 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import { Button, Form, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppState } from '../../store/Store';
-import ReportThunkActions from '../../actions/ReportThunkActions';
+import { AppState } from '../../store/Store.ts';
+import ReportThunkActions from '../../actions/ReportThunkActions.ts';
 
 import {
     RouteComponentProps,
     useNavigate as useHistory,
 } from 'react-router-dom';
-import { Report } from '../../types/Report';
+import { Report } from '../../types/Report.ts';
 
 type ReportParams = { id: string };
 
@@ -27,11 +27,11 @@ export const ReportForm = (routerProps: RouteComponentProps<ReportParams>) => {
 
     const [isValid, setValid] = useState(false);
 
-    const { sso } = useSelector((state: AppState) => {
-        return {
-            sso: state.ssoState.sso,
-        };
-    });
+    // const { sso } = useSelector((state: AppState) => {
+    //     return {
+    //         sso: state.ssoState.sso,
+    //     };
+    // });
 
     const reports: Array<Report> = useSelector((state: AppState) => {
         return state.reportsState.reports;
@@ -43,36 +43,17 @@ export const ReportForm = (routerProps: RouteComponentProps<ReportParams>) => {
      */
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
-        if (sso.authenticated) {
-            if (isEdit) {
-                reports[0].name = name;
+        // if (sso.authenticated) {
+        //     if (isEdit) {
+        //         reports[0].name = name;
 
-                dispatch(ReportThunkActions.updateReport(sso, reports[0]));
-            } else {
-                dispatch(ReportThunkActions.addReport(sso, name));
-            }
-            history.push('/');
-        }
+        //         dispatch(ReportThunkActions.updateReport(sso, reports[0]));
+        //     } else {
+        //         dispatch(ReportThunkActions.addReport(sso, name));
+        //     }
+        //     history('/');
+        // }
     }
-
-    /**
-     * hook to render
-     */
-    useEffect(() => {
-        if (sso.authenticated) {
-            if (history.location.pathname.endsWith('add')) {
-                // we adding the report
-            } else {
-                setIsEdit(true);
-                dispatch(
-                    ReportThunkActions.fetchOneReport(
-                        sso.token,
-                        routerProps.match.params.id
-                    )
-                );
-            }
-        }
-    }, [dispatch, history.location.pathname, routerProps.match.params.id, sso]);
 
     useEffect(() => {
         if (isEdit) {
@@ -121,7 +102,9 @@ export const ReportForm = (routerProps: RouteComponentProps<ReportParams>) => {
                                 </div>
                                 <Form.Group>
                                     <div className="col-sm-3">
-                                        <Button type="submit">Submit</Button>
+                                        <Button type="submit" variant="primary">
+                                            Submit
+                                        </Button>
                                     </div>
                                 </Form.Group>
                             </Form>
