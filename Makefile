@@ -9,7 +9,7 @@ THIS_DIR:=$(shell cd $(dir $(THIS_MAKEFILE_PATH));pwd)
 IMAGE_NAME = majorov.biz/expenses-ui
 
 PODMAN_CHECK=command -v podman
-CONTAINER_ENGINE := $(shell if [ -z $$(command -v podman) ];then echo docker;else echo podman; fi ) 
+CONTAINER_ENGINE := $(shell if [ -z $$(command -v podman) ];then echo docker;else echo podman; fi )
 
 ts := $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 
@@ -27,7 +27,7 @@ all: help
 
 
 .PHONY: lint
-lint: ##  run elint on code 
+lint: ##  run elint on code
 	@echo "elint code "
 	yarn lint
 
@@ -35,20 +35,15 @@ lint: ##  run elint on code
 .PHONY: run
 run: ##  run gui in dev mode
 	@echo "run	app"
-	# be sure you remove it from shell 
-	# to be able to pick up local .env files
-	unset REACT_APP_KEYCLOAK_URL
-	unset REACT_APP_KEYCLOAK_REALM
-	unset REACT_APP_KEYCLOAK_CLIENT_ID
-	unset REACT_APP_BACKEND_URL
-	yarn start
+
+	deno run dev
 
 
 .PHONY: test
 
 test: ##	run tests
 		@echo "run tests"
-		yarn test
+		deno test -A
 
 .PHONY: build
 build: ##  build everything
@@ -57,23 +52,23 @@ build: ##  build everything
 		unset REACT_APP_KEYCLOAK_REALM
 		unset REACT_APP_KEYCLOAK_CLIENT_ID
 		unset REACT_APP_BACKEND_URL
-		yarn build
+		deno run  build
 
 .PHONY: docker
 docker: clean ## build with container
 	@echo $(CONTAINER_ENGINE)
 	# back up real production file
-	mv .env.production .env.back_up
-	mv .env.docker .env.local
-	yarn build
-	mv .env.local .env.docker
-	mv .env.back_up .env.production
-	${CONTAINER_ENGINE} build -t $(IMAGE_NAME) .
+	#mv .env.production .env.back_up
+	#mv .env.docker .env.local
+	#yarn build
+	#mv .env.local .env.docker
+	#mv .env.back_up .env.production
+	#${CONTAINER_ENGINE} build -t $(IMAGE_NAME) .
 
 
-docker-run: ## run locally app in  docker 
+docker-run: ## run locally app in  docker
 	 @echo run container on port 3000
-	 ${CONTAINER_ENGINE} run -it --rm -p3000:8080 $(IMAGE_NAME)
+	 #${CONTAINER_ENGINE} run -it --rm -p3000:8080 $(IMAGE_NAME)
 
 
 

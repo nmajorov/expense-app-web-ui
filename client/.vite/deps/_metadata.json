@@ -1,0 +1,184 @@
+{
+  "hash": "ccce9447",
+  "configHash": "a3d17af5",
+  "lockfileHash": "e3b0c442",
+  "browserHash": "31aa1d96",
+  "optimized": {
+    "react/jsx-runtime": {
+      "src": "../../../node_modules/.deno/react@19.1.0/node_modules/react/jsx-runtime.js",
+      "file": "react_jsx-runtime.js",
+      "fileHash": "98eb5a8a",
+      "needsInterop": true
+    },
+    "react": {
+      "src": "../../../node_modules/.deno/react@19.1.0/node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "6d40e914",
+      "needsInterop": true
+    },
+    "react-dom": {
+      "src": "../../../node_modules/.deno/react-dom@19.1.0/node_modules/react-dom/index.js",
+      "file": "react-dom.js",
+      "fileHash": "64f50ff8",
+      "needsInterop": true
+    },
+    "react/jsx-dev-runtime": {
+      "src": "../../../node_modules/.deno/react@19.1.0/node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "7e4e1416",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../../node_modules/.deno/react-dom@19.1.0/node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "bef71045",
+      "needsInterop": true
+    },
+    "react-router-dom": {
+      "src": "../../../node_modules/.deno/react-router-dom@7.5.1/node_modules/react-router-dom/dist/index.mjs",
+      "file": "react-router-dom.js",
+      "fileHash": "cf2e8a64",
+      "needsInterop": false
+    },
+    "react-bootstrap": {
+      "src": "../../../node_modules/.deno/react-bootstrap@1.6.8/node_modules/react-bootstrap/esm/index.js",
+      "file": "react-bootstrap.js",
+      "fileHash": "a2a699e9",
+      "needsInterop": false
+    },
+    "react-bootstrap/Table": {
+      "src": "../../../node_modules/.deno/react-bootstrap@1.6.8/node_modules/react-bootstrap/esm/Table.js",
+      "file": "react-bootstrap_Table.js",
+      "fileHash": "e03932f7",
+      "needsInterop": false
+    },
+    "react-bootstrap/ModalHeader": {
+      "src": "../../../node_modules/.deno/react-bootstrap@1.6.8/node_modules/react-bootstrap/esm/ModalHeader.js",
+      "file": "react-bootstrap_ModalHeader.js",
+      "fileHash": "1b5187b5",
+      "needsInterop": false
+    },
+    "bootstrap": {
+      "src": "../../../node_modules/.deno/bootstrap@5.3.8/node_modules/bootstrap/dist/js/bootstrap.esm.js",
+      "file": "bootstrap.js",
+      "fileHash": "eeef1701",
+      "needsInterop": false
+    },
+    "axios": {
+      "src": "../../../node_modules/.deno/axios@0.21.4/node_modules/axios/index.js",
+      "file": "axios.js",
+      "fileHash": "0b991171",
+      "needsInterop": true
+    },
+    "react-redux": {
+      "src": "../../../node_modules/.deno/react-redux@7.2.9/node_modules/react-redux/es/index.js",
+      "file": "react-redux.js",
+      "fileHash": "66a3d4e6",
+      "needsInterop": false
+    },
+    "redux-persist/lib/integration/react": {
+      "src": "../../../node_modules/.deno/redux-persist@6.0.0/node_modules/redux-persist/lib/integration/react.js",
+      "file": "redux-persist_lib_integration_react.js",
+      "fileHash": "cab063a8",
+      "needsInterop": true
+    },
+    "redux-thunk": {
+      "src": "../../../node_modules/.deno/redux-thunk@2.4.2/node_modules/redux-thunk/es/index.js",
+      "file": "redux-thunk.js",
+      "fileHash": "b66cdb23",
+      "needsInterop": false
+    },
+    "redux-persist": {
+      "src": "../../../node_modules/.deno/redux-persist@6.0.0/node_modules/redux-persist/es/index.js",
+      "file": "redux-persist.js",
+      "fileHash": "343c84b0",
+      "needsInterop": false
+    },
+    "redux-persist/lib/storage": {
+      "src": "../../../node_modules/.deno/redux-persist@6.0.0/node_modules/redux-persist/lib/storage/index.js",
+      "file": "redux-persist_lib_storage.js",
+      "fileHash": "f4b31095",
+      "needsInterop": true
+    },
+    "connected-react-router": {
+      "src": "../../../node_modules/.deno/connected-react-router@6.9.3/node_modules/connected-react-router/esm/index.js",
+      "file": "connected-react-router.js",
+      "fileHash": "86bcc723",
+      "needsInterop": false
+    },
+    "typesafe-actions": {
+      "src": "../../../node_modules/.deno/typesafe-actions@5.1.0/node_modules/typesafe-actions/dist/typesafe-actions.es.production.js",
+      "file": "typesafe-actions.js",
+      "fileHash": "62a604b4",
+      "needsInterop": false
+    },
+    "@fortawesome/free-solid-svg-icons": {
+      "src": "../../../node_modules/.deno/@fortawesome+free-solid-svg-icons@6.7.2/node_modules/@fortawesome/free-solid-svg-icons/index.mjs",
+      "file": "@fortawesome_free-solid-svg-icons.js",
+      "fileHash": "656aaa58",
+      "needsInterop": false
+    },
+    "@fortawesome/react-fontawesome": {
+      "src": "../../../node_modules/.deno/@fortawesome+react-fontawesome@0.1.19/node_modules/@fortawesome/react-fontawesome/index.es.js",
+      "file": "@fortawesome_react-fontawesome.js",
+      "fileHash": "50e06852",
+      "needsInterop": false
+    },
+    "typestyle": {
+      "src": "../../../node_modules/.deno/typestyle@2.4.0/node_modules/typestyle/lib.es2015/index.js",
+      "file": "typestyle.js",
+      "fileHash": "454552da",
+      "needsInterop": false
+    },
+    "react-datepicker": {
+      "src": "../../../node_modules/.deno/react-datepicker@3.8.0/node_modules/react-datepicker/dist/es/index.js",
+      "file": "react-datepicker.js",
+      "fileHash": "ca28c2d5",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-BOQXABBW": {
+      "file": "chunk-BOQXABBW.js"
+    },
+    "chunk-CN7SLRY5": {
+      "file": "chunk-CN7SLRY5.js"
+    },
+    "chunk-WGTWVTAL": {
+      "file": "chunk-WGTWVTAL.js"
+    },
+    "chunk-AWNW2TEK": {
+      "file": "chunk-AWNW2TEK.js"
+    },
+    "chunk-QUN3FDUA": {
+      "file": "chunk-QUN3FDUA.js"
+    },
+    "chunk-B7HFHF7T": {
+      "file": "chunk-B7HFHF7T.js"
+    },
+    "chunk-EIHLNTL6": {
+      "file": "chunk-EIHLNTL6.js"
+    },
+    "chunk-FKN2KNP7": {
+      "file": "chunk-FKN2KNP7.js"
+    },
+    "chunk-MIU52A3V": {
+      "file": "chunk-MIU52A3V.js"
+    },
+    "chunk-I5SWOFQ3": {
+      "file": "chunk-I5SWOFQ3.js"
+    },
+    "chunk-BE2S24IY": {
+      "file": "chunk-BE2S24IY.js"
+    },
+    "chunk-TN7UL635": {
+      "file": "chunk-TN7UL635.js"
+    },
+    "chunk-6BNWFOCU": {
+      "file": "chunk-6BNWFOCU.js"
+    },
+    "chunk-DC5AMYBS": {
+      "file": "chunk-DC5AMYBS.js"
+    }
+  }
+}

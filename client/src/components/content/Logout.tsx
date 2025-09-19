@@ -1,9 +1,8 @@
-
-import React, {useContext, useEffect} from "react";
-import {useDispatch} from "react-redux";
-import SSOThunkActions from "../../actions/SSOThunkActions";
-import {useHistory} from "react-router-dom";
-import { SecurityContext } from "../../context/SecurityContext";
+import React, { useContext, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import SSOThunkActions from '../../actions/SSOThunkActions';
+import { useNavigate as useHistory } from 'react-router-dom';
+import { SecurityContext } from '../../context/SecurityContext';
 
 /**
  *   show user profile
@@ -14,19 +13,15 @@ const Logout = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        // TODO rewrite logout 
-        if (keycloak === undefined){
-            dispatch(SSOThunkActions.initKeycloak(keycloak)) 
-        }
-        dispatch(SSOThunkActions.signOut(keycloak))
-        history.push("/")
-        
-    }, [history,dispatch,keycloak])
+        // TODO rewrite logout
+        //   if (keycloak === undefined) {
+        //       dispatch(SSOThunkActions.initKeycloak(keycloak));
+        //   }
+        //   dispatch(SSOThunkActions.signOut(keycloak));
+        history.push('/');
+    }, [history, dispatch, keycloak]);
 
-
-    return (
-        <></>
-    );
+    return <></>;
 };
 
-export default Logout
+export default Logout;

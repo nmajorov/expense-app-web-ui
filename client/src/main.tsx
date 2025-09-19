@@ -1,17 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import App from './App';
+import { createRoot } from 'react-dom/client';
+import 'npm:bootstrap/dist/css/bootstrap.min.css';
+import { StrictMode } from 'react';
+import App from './App.tsx';
 // import * as serviceWorker from './serviceWorker';
 
-
-
-ReactDOM.render(
-                 <App />
-
-
-
-     document.getElementById('root'));
+createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+        <App />
+    </StrictMode>
+);
 
 // store.subscribe(() => console.log("current state", store.getState()))
 
