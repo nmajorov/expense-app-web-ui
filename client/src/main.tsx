@@ -4,23 +4,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
 // import * as serviceWorker from './serviceWorker';
 
-import init from "./context/keycloak";
-import { SecurityContext } from './context/SecurityContext';
 
 
-init().then((keycloak) => {
-      
 ReactDOM.render(
-        <SecurityContext.Provider value={keycloak}>
-    
-                 <App /> 
-  
-        </SecurityContext.Provider>,
-       
-   
+                 <App />
+
+
+
      document.getElementById('root'));
-});
-     
+
 // store.subscribe(() => console.log("current state", store.getState()))
 
 // If you want your app to work offline and load faster, you can change
