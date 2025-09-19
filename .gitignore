@@ -31,3 +31,4 @@ yarn-error.log*
 *.log
 
 client/dist
+client/.vite

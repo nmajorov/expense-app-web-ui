@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppState } from '../../store/Store';
+import { AppState } from '../../store/Store.ts';
 import {
     Card,
     Col,
@@ -9,16 +9,16 @@ import {
     Jumbotron,
     Row,
 } from 'react-bootstrap';
-import ReportThunkActions from '../../actions/ReportThunkActions';
+import ReportThunkActions from '../../actions/ReportThunkActions.ts';
 import {
     faTrashAlt,
     faEdit,
     faEllipsisH,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useConfirmDialog } from './ConfirmDialog';
+import { useConfirmDialog } from './ConfirmDialog.tsx';
 import { useNavigate as useHistory } from 'react-router-dom';
-import { SecurityContext } from '../../context/SecurityContext';
+// import { SecurityContext } from '../../context/SecurityContext';
 
 const trashIcon = <FontAwesomeIcon color="red" icon={faTrashAlt} />;
 const editIcon = <FontAwesomeIcon icon={faEdit} />;
@@ -31,7 +31,7 @@ const kebabIcon = <FontAwesomeIcon icon={faEllipsisH} />;
 const DashBoard = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const keycloak = useContext(SecurityContext);
+    // const keycloak = useContext(SecurityContext);
 
     const { sso, reports } = useSelector((state: AppState) => {
         return {
@@ -59,18 +59,7 @@ const DashBoard = () => {
 
     useEffect(() => {
         // update token to avoid error
-
-        if (sso.authenticated) {
-            keycloak
-                .updateToken(30)
-                .then(function () {
-                    dispatch(ReportThunkActions.fetchReports(sso));
-                })
-                .catch(function () {
-                    console.error('Failed to refresh token');
-                });
-        }
-    }, [sso, reportChanges, dispatch, keycloak]);
+    }, [sso, reportChanges, dispatch]);
 
     function openDeleteDialog(id: String) {
         setId(id);

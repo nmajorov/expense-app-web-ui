@@ -1,20 +1,17 @@
 import { ThunkDispatch } from 'redux-thunk';
-import { AppState } from '../store/Store';
-import { Expense } from '../types/Expense';
-import { AppAction } from './AppAction';
-import { ExpensesActions } from './ExpensesAction';
-import * as API from '../services/Api';
-import { AlertActions } from './AlertAction';
-import { AlertMessage, MessageType } from '../types/AlertTypes';
-import { SSO } from '../types/SSO';
-import { sendEvent } from '../utils/EventProducer';
+import { AppState } from '../store/Store.ts';
+import { Expense } from '../types/Expense.ts';
+import { AppAction } from './AppAction.ts';
+import { ExpensesActions } from './ExpensesAction.ts';
+import * as API from '../services/Api.ts';
+import { AlertActions } from './AlertAction.ts';
+import { AlertMessage, MessageType } from '../types/AlertTypes.ts';
+import { SSO } from '../types/SSO.ts';
 
 const ExpensesThunkActions = {
-   
-
-    fetchExpensesData: (token: string, reportID: string, sortBy?:string) => {
+    fetchExpensesData: (token: string, reportID: string, sortBy?: string) => {
         return (dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
-            return API.fetchExpenses(token, reportID,sortBy).then(
+            return API.fetchExpenses(token, reportID, sortBy).then(
                 (response) => {
                     const objArray = response.data;
                     const data: Array<Expense> = [];
@@ -29,7 +26,6 @@ const ExpensesThunkActions = {
                     });
                     // console.log("fetched data: " + JSON.stringify(data))
                     dispatch(ExpensesActions.fetchActionSuccess(data));
-                    
                 },
                 (error) => {
                     let emsg: string;
@@ -66,22 +62,10 @@ const ExpensesThunkActions = {
             return API.deleteExpense(token, id.toString()).then(
                 (_response) => {
                     dispatch(ExpensesActions.deleteActionSuccess());
-                    sendEvent({
-                        body: {
-                            timestamp: Date.now(),
-                            user_id: 11,
-                            event_name: 'expense_deleted',
-                            event_data: {},
-                        },
-                    }).then((response) => {
-                            console.log('event send to azure');
-                        })
-                        .catch(function () {
-                            console.error('error publish event');
-                    });
                 },
                 (error) => {
-                    const emsg = 'Cannot delete the expenses: ' + error.toString();
+                    const emsg =
+                        'Cannot delete the expenses: ' + error.toString();
 
                     dispatch(ExpensesActions.fetchError(emsg));
                     const alertMessage: AlertMessage = {
@@ -91,19 +75,18 @@ const ExpensesThunkActions = {
                     };
 
                     dispatch(AlertActions.addMessage(alertMessage));
-                    
                 }
             );
         };
     },
-    
+
     addNewExpense: (sso: SSO, reportID: string, newExpense: Expense) => {
         return (dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
             return API.addNewExpense(sso.token, reportID, newExpense).then(
                 (response) => {
                     dispatch(ExpensesActions.addNewExpenseSuccess());
                     const alertMessage: AlertMessage = {
-                        content: "Expense successfully added",
+                        content: 'Expense successfully added',
                         show_notification: true,
                         type: MessageType.SUCCESS,
                     };
@@ -115,12 +98,13 @@ const ExpensesThunkActions = {
                             event_name: 'expense_created',
                             event_data: {},
                         },
-                    }).then((response) => {
+                    })
+                        .then((response) => {
                             console.log('event send to azure');
                         })
                         .catch(function () {
                             console.error('error publish event');
-                    });
+                        });
                 },
                 (error) => {
                     const emsg = 'Cannot add the expenses: ' + error.toString();
@@ -162,13 +146,13 @@ const ExpensesThunkActions = {
         };
     },
 
-    updateExpense: (token:string, expense: Expense) => {
+    updateExpense: (token: string, expense: Expense) => {
         return (dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
             return API.updateExpense(token, expense).then(
                 (_response) => {
                     dispatch(ExpensesActions.addNewExpenseSuccess());
                     const alertMessage: AlertMessage = {
-                        content: "Expense successfully updated",
+                        content: 'Expense successfully updated',
                         show_notification: true,
                         type: MessageType.SUCCESS,
                     };
@@ -180,12 +164,13 @@ const ExpensesThunkActions = {
                             event_name: 'expense_updated',
                             event_data: {},
                         },
-                    }).then((response) => {
+                    })
+                        .then((response) => {
                             console.log('event send to azure');
                         })
                         .catch(function () {
                             console.error('error publish event');
-                    });
+                        });
                 },
                 (error) => {
                     const emsg = 'Cannot add the expenses: ' + error.toString();

@@ -9,16 +9,16 @@ import {
 
 import Table from 'react-bootstrap/Table';
 import { Button, Container, Row, Col } from 'react-bootstrap';
-import { AppState } from '../../store/Store';
+import { AppState } from '../../store/Store.ts';
 import { useDispatch, useSelector } from 'react-redux';
-import { ConfirmDialogModal } from './ConfirmDialog';
-import ExpensesThunkActions from '../../actions/ExpensesThunkActions';
-import { AlertMessage, MessageType } from '../../types/AlertTypes';
-import { AlertActions } from '../../actions/AlertAction';
+import { ConfirmDialogModal } from './ConfirmDialog.tsx';
+import ExpensesThunkActions from '../../actions/ExpensesThunkActions.ts';
+import { AlertMessage, MessageType } from '../../types/AlertTypes.ts';
+import { AlertActions } from '../../actions/AlertAction.ts';
 import { useContext, useEffect, useState } from 'react';
-import { Expense } from '../../types/Expense';
+import { Expense } from '../../types/Expense.ts';
 import { useNavigate as useHistory } from 'react-router-dom';
-import { SecurityContext } from '../../context/SecurityContext';
+//import { SecurityContext } from '../../context/SecurityContext';
 
 const trashIcon = <FontAwesomeIcon icon={faTrashAlt} />;
 const editIcon = <FontAwesomeIcon icon={faEdit} />;
@@ -28,7 +28,7 @@ const arrovDownIcon = <FontAwesomeIcon icon={faArrowDown} />;
 //
 
 const ReportView = () => {
-    const keycloak = useContext(SecurityContext);
+    //  const keycloak = useContext(SecurityContext);
     const { authenticated, expenses, sso, reportID, expensesChanged } =
         useSelector((state: AppState) => {
             // console.log("use selector expenses: " +
@@ -120,19 +120,18 @@ const ReportView = () => {
     // very important statements for use effect hook
     // https://stackoverflow.com/questions/56410369/can-i-call-separate-function-in-useeffect
     useEffect(() => {
-        if (authenticated) {
-            keycloak
-                .updateToken(30)
-                .then(function () {
-                    loadExpenses();
-                })
-                .catch(function () {
-                    console.error('Failed to refresh token');
-                });
-        }
-
+        // if (authenticated) {
+        //     keycloak
+        //         .updateToken(30)
+        //         .then(function () {
+        //             loadExpenses();
+        //         })
+        //         .catch(function () {
+        //             console.error('Failed to refresh token');
+        //         });
+        // }
         // use sso if client reload the page manually from browser
-    }, [authenticated, expensesChanged, dispatch, keycloak]);
+    }, [authenticated, expensesChanged, dispatch]);
 
     /**
      * render view

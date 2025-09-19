@@ -1,14 +1,14 @@
-import React, { useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import SSOThunkActions from '../../actions/SSOThunkActions';
+//import SSOThunkActions from '../../actions/SSOThunkActions';
 import { useNavigate as useHistory } from 'react-router-dom';
-import { SecurityContext } from '../../context/SecurityContext';
+//import { SecurityContext } from '../../context/SecurityContext';
 
 /**
  *   show user profile
  */
 const Logout = () => {
-    const keycloak = useContext(SecurityContext);
+    // const keycloak = useContext(SecurityContext);
     const history = useHistory();
     const dispatch = useDispatch();
 
@@ -18,10 +18,8 @@ const Logout = () => {
         //       dispatch(SSOThunkActions.initKeycloak(keycloak));
         //   }
         //   dispatch(SSOThunkActions.signOut(keycloak));
-        history.push('/');
+        history('/');
     }, [history, dispatch, keycloak]);
-
-    return <></>;
 };
 
 export default Logout;

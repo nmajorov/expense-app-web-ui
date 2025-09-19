@@ -1,12 +1,15 @@
 import { createRoot } from 'react-dom/client';
-import 'npm:bootstrap/dist/css/bootstrap.min.css';
 import { StrictMode } from 'react';
+import { BrowserRouter } from 'react-router-dom';
+
 import App from './App.tsx';
 // import * as serviceWorker from './serviceWorker';
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
-        <App />
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
     </StrictMode>
 );
 
