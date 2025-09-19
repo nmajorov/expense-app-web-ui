@@ -49,6 +49,9 @@ status: ##  run gui in dev mode for node-js version  <17
 	@echo "dep status dependencies"
 	deno outdated
 
+	# check dependencies list
+	# deno info  client/src/main.tsx
+
 
 
 
