@@ -29,7 +29,7 @@ all: help
 .PHONY: lint
 lint: ##  run elint on code
 	@echo "elint code "
-	yarn lint
+	deno lint
 
 
 .PHONY: run
@@ -39,16 +39,11 @@ run: ##  run gui in dev mode
 	deno run --env-file=.env.development --allow-net --allow-read dev
 
 
-.PHONY: run-old
-run-old: ##  run gui in dev mode for node-js version  <17
-	@echo "run	app for node version <17"
-	# be sure you remove it from shell 
-	# to be able to pick up local .env files
-	unset REACT_APP_KEYCLOAK_URL
-	unset REACT_APP_KEYCLOAK_REALM
-	unset REACT_APP_KEYCLOAK_CLIENT_ID
-	unset REACT_APP_BACKEND_URL
-	yarn start-old
+.PHONY: dep
+dep: ##  run gui in dev mode for node-js version  <17
+	@echo "install dependencies"
+	deno install --allow-scripts
+
 
 .PHONY: test
 
