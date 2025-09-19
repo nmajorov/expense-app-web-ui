@@ -44,6 +44,13 @@ dep: ##  run gui in dev mode for node-js version  <17
 	@echo "install dependencies"
 	deno install --allow-scripts
 
+.PHONY: status
+status: ##  run gui in dev mode for node-js version  <17
+	@echo "dep status dependencies"
+	deno outdated
+
+
+
 
 .PHONY: test
 
