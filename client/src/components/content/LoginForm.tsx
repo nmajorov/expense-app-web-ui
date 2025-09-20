@@ -9,14 +9,15 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { useNavigate as useHistory } from 'react-router-dom';
 
-export const ReportForm = () => {
+export const LoginForm = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
     const [name, setName] = useState(String(''));
     const [password, setPassword] = useState(String(''));
 
-    const [isValid, setValid] = useState(false);
+    const [isValidName, setValidName] = useState(false);
+     const [isValidPassword, setValidPassword] = useState(false);
 
     // const { sso } = useSelector((state: AppState) => {
     //     return {
@@ -53,9 +54,18 @@ export const ReportForm = () => {
     function checkName(input: string) {
         setName(input);
         if (input.length > 3) {
-            setValid(true);
+            setValidName(true);
         } else {
-            setValid(false);
+            setValidName(false);
+        }
+    }
+
+      function checkPassword(input: string) {
+        setPassword(input);
+        if (input.length > 3) {
+            setValidPassword(true);
+        } else {
+            setValidPassword(false);
         }
     }
 
@@ -65,15 +75,13 @@ export const ReportForm = () => {
                 <div className="col-lg-6">
                     <div className="card shadow mb-3">
                         <div className="card-header py-3">
-                            <h6 className="m-0 font-weight-bold text-primary">
-                                Login
-                            </h6>
+                         
                         </div>
                         <div className="card-body">
                             <Form onSubmit={handleSubmit}>
                                 <div className="col-sm-10">
                                     <Form.Group>
-                                        <Form.Label>username</Form.Label>
+                                        <Form.Label>Username</Form.Label>
                                         <Form.Control
                                             className="form-control"
                                             contentEditable
@@ -82,15 +90,28 @@ export const ReportForm = () => {
                                             onChange={(e) =>
                                                 checkName(e.target.value)
                                             }
-                                            isValid={isValid}
-                                            isInvalid={!isValid}
+                                            isValid={isValidName}
+                                           // isInvalid={!isValidName}
+                                        />
+                                         <Form.Label>Password</Form.Label>
+                                        <Form.Control
+                                            className="form-control"
+                                            contentEditable
+                                            id="password"
+                                            value={password}
+                                            type="password"
+                                            onChange={(e) =>
+                                                checkPassword(e.target.value)
+                                            }
+                                            isValid={isValidPassword}
+                                           // isInvalid={!isValidPassword}
                                         />
                                     </Form.Group>
                                 </div>
                                 <Form.Group>
                                     <div className="col-sm-3">
                                         <Button type="submit" variant="primary">
-                                            Submit
+                                            Log in
                                         </Button>
                                     </div>
                                 </Form.Group>

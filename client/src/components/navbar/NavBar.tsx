@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 //import { SecurityContext } from '../../context/SecurityContext.ts';
 
 enum MenuNames {
+    LOGIN = 'Login',
     ADD_REPORT = 'Create Report',
     ADD_EXPENSE = 'Add Expense',
 }
@@ -36,9 +37,12 @@ export function NavigationBar() {
         if (pathname === '/') {
             result = (
                 <Nav>
-                    <Nav.Link as={Link} to="/report-add">
-                        {MenuNames.ADD_REPORT}
+                    <Nav.Link as={Link} to="/login">
+                        {MenuNames.LOGIN}
                     </Nav.Link>
+                    {/* <Nav.Link as={Link} to="/report-add">
+                        {MenuNames.ADD_REPORT}
+                    </Nav.Link> */}
                 </Nav>
             );
         } else if (pathname.startsWith('/report')) {
