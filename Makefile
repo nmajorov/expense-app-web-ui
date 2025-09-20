@@ -32,7 +32,7 @@ lint: ##  run elint on code
 	deno lint
 
 
-.PHONY: run
+.PHONY: dev
 run: ##  run gui in dev mode
 	@echo "run	app"
 
