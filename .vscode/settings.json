@@ -1,7 +1,7 @@
 {
     "editor.fontSize": 16,
     "editor.fontLigatures": true,
-    "workbench.colorTheme": "Visual Studio Light",
+    "workbench.colorTheme": "Monokai",
     "cSpell.words": [
         "buildah",
         "keycloak",
