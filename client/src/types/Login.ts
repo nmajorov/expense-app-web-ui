@@ -7,6 +7,6 @@ export interface UserProfile {
  * define login 
  */
 export interface Login {
-    account: string;
+    username: string;
     password: string;
 }

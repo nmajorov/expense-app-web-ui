@@ -19,6 +19,13 @@ const LoginThunkActions = {
             return API.login(login).then(
                 (_response) => {
                     dispatch(LoginActions.loginActionSuccess(login));
+                    
+                    dispatch(AlertActions.addMessage({
+                        content: "login successful",
+                        show_notification: true,
+                        type: MessageType.SUCCESS,
+                    }));
+                    
                 },
                 (error) => {
                   let  errorMessage = "Cannot login: " + error.toString()

@@ -31,7 +31,7 @@ export const login = (login: Login) => {
         `${url}/auth/login`,
         {},
         {
-            account: login.account,
+            username: login.username,
             passwd: login.password,
         }
     );
