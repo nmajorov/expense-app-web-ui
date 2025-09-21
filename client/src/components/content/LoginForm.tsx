@@ -8,7 +8,7 @@ import { Button, Form, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useNavigate as useHistory } from 'react-router-dom';
-import LoginThunkActions from "../../actions/LoginThunkActions.ts";
+import LoginThunkActions from '../../actions/LoginThunkActions.ts';
 
 export const LoginForm = () => {
     const dispatch = useDispatch();
@@ -18,7 +18,7 @@ export const LoginForm = () => {
     const [password, setPassword] = useState(String(''));
 
     const [isValidName, setValidName] = useState(false);
-     const [isValidPassword, setValidPassword] = useState(false);
+    const [isValidPassword, setValidPassword] = useState(false);
 
     // const { sso } = useSelector((state: AppState) => {
     //     return {
@@ -32,8 +32,15 @@ export const LoginForm = () => {
      */
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
-        dispatch(LoginThunkActions.doLogin({account: name, password:password}));
-      //  history('/');
+        if (isValidName && isValidPassword) {
+            dispatch(
+                LoginThunkActions.doLogin({
+                    username: name,
+                    password: password,
+                })
+            );
+        }
+        //  history('/');
         // if (sso.authenticated) {
         //     if (isEdit) {
         //         reports[0].name = name;
@@ -46,8 +53,6 @@ export const LoginForm = () => {
         // }
     }
 
-
-
     function checkName(input: string) {
         setName(input);
         if (input.length > 3) {
@@ -57,7 +62,7 @@ export const LoginForm = () => {
         }
     }
 
-      function checkPassword(input: string) {
+    function checkPassword(input: string) {
         setPassword(input);
         if (input.length > 3) {
             setValidPassword(true);
@@ -71,9 +76,7 @@ export const LoginForm = () => {
             <Row>
                 <div className="col-lg-6">
                     <div className="card shadow mb-3">
-                        <div className="card-header py-3">
-                         
-                        </div>
+                        <div className="card-header py-3"></div>
                         <div className="card-body">
                             <Form onSubmit={handleSubmit}>
                                 <div className="col-sm-10">
@@ -88,9 +91,9 @@ export const LoginForm = () => {
                                                 checkName(e.target.value)
                                             }
                                             isValid={isValidName}
-                                           // isInvalid={!isValidName}
+                                            // isInvalid={!isValidName}
                                         />
-                                         <Form.Label>Password</Form.Label>
+                                        <Form.Label>Password</Form.Label>
                                         <Form.Control
                                             className="form-control"
                                             contentEditable
@@ -101,7 +104,7 @@ export const LoginForm = () => {
                                                 checkPassword(e.target.value)
                                             }
                                             isValid={isValidPassword}
-                                           // isInvalid={!isValidPassword}
+                                            // isInvalid={!isValidPassword}
                                         />
                                     </Form.Group>
                                 </div>
