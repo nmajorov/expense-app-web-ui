@@ -1,10 +1,11 @@
 import axios from 'axios';
 
-import { HTTP_VERBS } from '../types/Common';
+import { HTTP_VERBS } from '../types/Common.ts';
 /** API URLs */
-import { backEndUrl as url } from '../utils/backendUrl';
-import { Expense } from '../types/Expense';
-import { Report } from '../types/Report';
+import { backEndUrl as url } from '../utils/backendUrl.ts';
+import { Expense } from '../types/Expense.ts';
+import { Report } from '../types/Report.ts';
+import { Login } from "../types/Login.ts";
 
 const newRequest = <P>(
     method: HTTP_VERBS,
@@ -20,6 +21,20 @@ const newRequest = <P>(
         data: data,
         params: queryParams,
     });
+};
+
+
+export const login = (login: Login) => {
+    return newRequest<any>(
+        HTTP_VERBS.POST,
+        {},
+        `${url}/auth/login`,
+        {},
+        {
+            account: login.account,
+            passwd: login.password,
+        }
+    );
 };
 
 /**
@@ -82,7 +97,7 @@ export const addNewExpense = (
  * fetch an expense by id
  * @param expenseID an expense by id
  */
-export const fetchExpense = (token: string, expenseID) => {
+export const fetchExpense = (token: string, expenseID:number) => {
     return newRequest<Expense>(
         HTTP_VERBS.GET,
         {

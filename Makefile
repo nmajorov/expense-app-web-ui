@@ -33,9 +33,8 @@ lint: ##  run elint on code
 
 
 .PHONY: dev
-run: ##  run gui in dev mode
+dev: ##  run gui in dev mode
 	@echo "run	app"
-
 	deno run --env-file=.env.development --allow-net --allow-read dev
 
 

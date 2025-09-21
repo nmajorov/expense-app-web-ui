@@ -6,7 +6,8 @@
         "buildah",
         "keycloak",
         "middlewares",
-        "persistor"
+        "persistor",
+        "typesafe"
     ],
     "workbench.iconTheme": "eq-material-theme-icons",
 }

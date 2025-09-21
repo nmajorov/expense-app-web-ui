@@ -8,6 +8,7 @@ import { Button, Form, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useNavigate as useHistory } from 'react-router-dom';
+import LoginThunkActions from "../../actions/LoginThunkActions.ts";
 
 export const LoginForm = () => {
     const dispatch = useDispatch();
@@ -31,6 +32,8 @@ export const LoginForm = () => {
      */
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
+        dispatch(LoginThunkActions.doLogin({account: name, password:password}));
+      //  history('/');
         // if (sso.authenticated) {
         //     if (isEdit) {
         //         reports[0].name = name;
@@ -43,13 +46,7 @@ export const LoginForm = () => {
         // }
     }
 
-    // useEffect(() => {
-    //     if (isEdit) {
-    //         if (reports[0] !== undefined) {
-    //             checkName(reports[0].name);
-    //         }
-    //     }
-    // }, [reports, isEdit]);
+
 
     function checkName(input: string) {
         setName(input);

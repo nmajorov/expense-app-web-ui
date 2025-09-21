@@ -1,6 +1,6 @@
 import { ActionType, createAction, createCustomAction } from "typesafe-actions";
-import { Report } from "../types/Report";
-import { ActionKeys as C } from "../utils";
+import { Report } from "../types/Report.ts";
+import { ActionKeys as C } from "../utils/index.ts";
 
 export const ReportActions = {
   fetchReportsSuccess: createAction(C.FETCH_REPORTS_SUCCESS)<Array<Report>>(),
