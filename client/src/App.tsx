@@ -15,6 +15,7 @@ import ProfileView from './components/content/ProfileView.tsx';
 import Logout from './components/content/Logout.tsx';
 import ReportView from './components/content/ReportView.tsx';
 import { ReportForm } from './components/content/ReportForm.tsx';
+import { LoginForm} from './components/content/LoginForm.tsx';
 import { AlertActions } from './actions/AlertAction.ts';
 import { AlertMessage, MessageType } from './types/AlertTypes.ts';
 import { ExpensesForm } from './components/content/ExpensesForm.tsx';
@@ -57,10 +58,16 @@ const App: React.FC = () => {
                         <main role="main" className="ml-20">
                             <Switch>
                                 <Route index path="/" element={<DashBoard />} />
+                                 <Route
+                                    path="/login"
+                                    element={<LoginForm />}
+                                />
+
                                 <Route
                                     path="/report-add"
                                     element={<ReportForm />}
                                 />
+                                
                                 <Route
                                     path="/report/edit/:id"
                                     element={<ReportForm />}

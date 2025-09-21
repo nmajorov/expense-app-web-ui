@@ -29,26 +29,30 @@ all: help
 .PHONY: lint
 lint: ##  run elint on code
 	@echo "elint code "
-	yarn lint
+	deno lint
 
 
-.PHONY: run
-run: ##  run gui in dev mode
+.PHONY: dev
+dev: ##  run gui in dev mode
 	@echo "run	app"
-
 	deno run --env-file=.env.development --allow-net --allow-read dev
 
 
-.PHONY: run-old
-run-old: ##  run gui in dev mode for node-js version  <17
-	@echo "run	app for node version <17"
-	# be sure you remove it from shell 
-	# to be able to pick up local .env files
-	unset REACT_APP_KEYCLOAK_URL
-	unset REACT_APP_KEYCLOAK_REALM
-	unset REACT_APP_KEYCLOAK_CLIENT_ID
-	unset REACT_APP_BACKEND_URL
-	yarn start-old
+.PHONY: dep
+dep: ##  run gui in dev mode for node-js version  <17
+	@echo "install dependencies"
+	deno install --allow-scripts
+
+.PHONY: status
+status: ##  run gui in dev mode for node-js version  <17
+	@echo "dep status dependencies"
+	deno outdated
+
+	# check dependencies list
+	# deno info  client/src/main.tsx
+
+
+
 
 .PHONY: test
 
@@ -75,6 +79,8 @@ docker: clean ## build with container
 	#mv .env.local .env.docker
 	#mv .env.back_up .env.production
 	#${CONTAINER_ENGINE} build -t $(IMAGE_NAME) .
+	#
+
 
 
 docker-run: ## run locally app in  docker
@@ -95,6 +101,7 @@ clean: ## clean
 	 @if [ -d $(THIS_DIR)/build ] ;then \
 	 	rm -r $(THIS_DIR)/build ;\
 	 fi
+	deno clean
 
 ###################
 # Unit/CI Testing #
