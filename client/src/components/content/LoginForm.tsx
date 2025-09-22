@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { useNavigate as useHistory } from 'react-router-dom';
 import SecurityThunkActions from '../../actions/SecurityThunkActions.ts';
+import { useSecurity } from '../../context/SecurityContext.tsx';
 
 export const LoginForm = () => {
     const dispatch = useDispatch();
@@ -20,12 +21,13 @@ export const LoginForm = () => {
     const [isValidName, setValidName] = useState(false);
     const [isValidPassword, setValidPassword] = useState(false);
 
-    // const { sso } = useSelector((state: AppState) => {
-    //     return {
-    //         sso: state.ssoState.sso,
-    //     };
-    // });
+    const { isAuthenticated, checkSession } = useSecurity();
 
+    useEffect(() => {
+        if (isAuthenticated) {
+            history('/'); // Redirect to dashboard if already logged in
+        }
+    }, [isAuthenticated, history]);
     /**
      * handel form submit
      * @param event  a submitted form event
@@ -33,18 +35,14 @@ export const LoginForm = () => {
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
         if (isValidName && isValidPassword) {
-            dispatch(
-                SecurityThunkActions.doLogin({
+            dispatch(SecurityThunkActions.doLogin(
+                {
                     username: name,
                     password: password,
-                })
-            ).then(() => {
-                dispatch(SecurityThunkActions.loadUserProfile(name))
-                history('/');
-            });
+                },
+                checkSession // Pass the function to the thunk
+            ));
         }
-        //  history('/');
-        
     }
 
     function checkName(input: string) {

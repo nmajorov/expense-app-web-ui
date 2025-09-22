@@ -25,6 +25,8 @@
     "npm:axios@^1.12.2": "1.12.2",
     "npm:connected-react-router@^6.9.3": "6.9.3_history@4.10.1_react@19.1.1_react-redux@7.2.9__react@19.1.1_react-router@5.3.4__react@19.1.1_redux@4.2.1",
     "npm:history@^4.10.1": "4.10.1",
+    "npm:js-cookie@*": "3.0.5",
+    "npm:js-cookie@^3.0.5": "3.0.5",
     "npm:path-to-regexp@^6.3.0": "6.3.0",
     "npm:react-bootstrap@^1.6.8": "1.6.8_react@19.1.1_react-dom@19.1.1__react@19.1.1_@types+react@19.1.13",
     "npm:react-datepicker@^3.8.0": "3.8.0_react@19.1.1_react-dom@19.1.1__react@19.1.1",
@@ -1022,6 +1024,9 @@
     "isarray@0.0.1": {
       "integrity": "sha512-D2S+3GLxWH+uhrNEcoh/fnmYeP8E8/zHl644d/jdA0g2uyXvy3sb0qxotE+ne0LtccHknQzWwZEzhak7oJ0COQ=="
     },
+    "js-cookie@3.0.5": {
+      "integrity": "sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw=="
+    },
     "js-tokens@4.0.0": {
       "integrity": "sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ=="
     },
@@ -1489,6 +1494,7 @@
       "npm:axios@^1.12.2",
       "npm:connected-react-router@^6.9.3",
       "npm:history@^4.10.1",
+      "npm:js-cookie@^3.0.5",
       "npm:react-bootstrap@^1.6.8",
       "npm:react-datepicker@^3.8.0",
       "npm:react-dom@^19.1.1",

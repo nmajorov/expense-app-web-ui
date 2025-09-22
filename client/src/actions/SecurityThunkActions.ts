@@ -13,12 +13,13 @@ const SecurityThunkActions = {
     /**
      *login user
      */
-    doLogin: (login:Login) => {
+    doLogin: (login: Login, onLoginSuccess: () => void) => {
         return (dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
             return API.login(login).then(
                 (_response) => {
                     dispatch(SecurityActions.loginActionSuccess(login));
-                    
+                    onLoginSuccess(); // This will trigger the context update
+
                     dispatch(AlertActions.addMessage({
                         content: "login successful",
                         show_notification: true,

@@ -1,4 +1,6 @@
 {
+   " nodeModulesDir": "auto",
+
     "tasks": {
         "dev": "deno run -A --node-modules-dir=auto npm:vite",
         "build": "deno run -A --node-modules-dir=auto npm:vite build",
@@ -11,6 +13,7 @@
         "@std/assert": "jsr:@std/assert@^1.0.14",
         "@types/react": "npm:@types/react@^19.1.13",
         "@vitejs/plugin-react": "npm:@vitejs/plugin-react@^4.7.0",
+        "js-cookie": "npm:js-cookie@^3.0.5",
         "react": "npm:react@^19.1.1",
         "react-dom": "npm:react-dom@^19.1.1",
         "react-router-dom": "npm:react-router-dom@^7.9.1",

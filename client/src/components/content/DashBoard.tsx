@@ -17,7 +17,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useConfirmDialog } from './ConfirmDialog.tsx';
-import { useNavigate as useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // import { SecurityContext } from '../../context/SecurityContext';
 
 const trashIcon = <FontAwesomeIcon color="red" icon={faTrashAlt} />;
@@ -29,10 +29,10 @@ const kebabIcon = <FontAwesomeIcon icon={faEllipsisH} />;
  *  user see it just after login
  */
 const DashBoard = () => {
-    const history = useHistory();
+    const history = useNavigate();
     const dispatch = useDispatch();
-    // const keycloak = useContext(SecurityContext);
-    const sso = {};
+    // const { isAuthenticated, session } = useSecurity(); // Assuming useSecurity is from your context
+    const sso = { authenticated: true }; // Placeholder
     const { reports } = useSelector((state: AppState) => {
         return {
             //    sso: state.ssoState.sso,
@@ -91,7 +91,7 @@ const DashBoard = () => {
                         <Card.Title>
                             <Card.Link
                                 onClick={() => {
-                                    history.push(`/report/${rp.id}`);
+                                    history(`/report/${rp.id}`);
                                 }}
                                 href="#"
                             >
@@ -111,9 +111,7 @@ const DashBoard = () => {
                                         <Dropdown.Item
                                             href="#"
                                             onClick={() => {
-                                                history.push(
-                                                    '/report/edit/' + rp.id
-                                                );
+                                                history('/report/edit/' + rp.id);
                                             }}
                                         >
                                             Change Name {editIcon}
