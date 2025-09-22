@@ -37,6 +37,18 @@ export const login = (login: Login) => {
     );
 };
 
+
+export const fetchAccountInfo = (username: string) => {
+    return newRequest<any>(
+        HTTP_VERBS.GET,
+        {},
+        `${url}/account/info`,
+        {username: username},
+        {}
+    );
+}
+
+
 /**
  * fetch all available expenses
  */

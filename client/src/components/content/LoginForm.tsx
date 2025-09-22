@@ -8,7 +8,7 @@ import { Button, Form, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useNavigate as useHistory } from 'react-router-dom';
-import LoginThunkActions from '../../actions/LoginThunkActions.ts';
+import SecurityThunkActions from '../../actions/SecurityThunkActions.ts';
 
 export const LoginForm = () => {
     const dispatch = useDispatch();
@@ -34,28 +34,22 @@ export const LoginForm = () => {
         event.preventDefault();
         if (isValidName && isValidPassword) {
             dispatch(
-                LoginThunkActions.doLogin({
+                SecurityThunkActions.doLogin({
                     username: name,
                     password: password,
                 })
-            );
+            ).then(() => {
+                dispatch(SecurityThunkActions.loadUserProfile(name))
+                history('/');
+            });
         }
         //  history('/');
-        // if (sso.authenticated) {
-        //     if (isEdit) {
-        //         reports[0].name = name;
-
-        //         dispatch(ReportThunkActions.updateReport(sso, reports[0]));
-        //     } else {
-        //         dispatch(ReportThunkActions.addReport(sso, name));
-        //     }
-        //     history('/');
-        // }
+        
     }
 
     function checkName(input: string) {
         setName(input);
-        if (input.length > 3) {
+        if (input.length > 2) {
             setValidName(true);
         } else {
             setValidName(false);

@@ -1,6 +1,8 @@
 export interface UserProfile {
     email: string;
     username: string;
+    firstname: string;
+    lastname: string;
 }
 
 /**
