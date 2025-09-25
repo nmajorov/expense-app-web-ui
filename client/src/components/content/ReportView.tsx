@@ -28,7 +28,6 @@ const arrovDownIcon = <FontAwesomeIcon icon={faArrowDown} />;
 //
 
 const ReportView = () => {
-    //  const keycloak = useContext(SecurityContext);
     const { authenticated, expenses, sso, reportID, expensesChanged } =
         useSelector((state: AppState) => {
             // console.log("use selector expenses: " +

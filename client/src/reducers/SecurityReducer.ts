@@ -1,18 +1,17 @@
-import { SSOState } from '../store/Store.ts';
+import { LoginState, SSOState } from '../store/Store.ts';
 import { AppAction } from '../actions/AppAction.ts';
 import { SecurityActions } from '../actions/SecurityActions.ts';
 import { getType } from 'typesafe-actions';
 
-export const SECURITY_INITIAL_STATE: SSOState = {
-    sso: {
+export const SECURITY_INITIAL_STATE: LoginState = {
+ 
         authenticated: false,
-        // Other SSO properties can be initialized here
-    },
-    // keycloak: undefined, // If you are moving away from keycloak
-};
+        
+    }
+
 
 const securityReducer = (
-    state: SSOState = SECURITY_INITIAL_STATE,
+    state: LoginState = SECURITY_INITIAL_STATE,
     action: AppAction
 ): SSOState => {
     const newState: SSOState = {
@@ -21,11 +20,21 @@ const securityReducer = (
 
     switch (action.type) {
         case getType(SecurityActions.loginActionSuccess):
-            newState.sso = {
-                ...state.sso,
-                authenticated: true,
-            };
+            newState.user = action.payload.user;
+            newState.authenticated = true;
             break;
+
+        case getType(SecurityActions.singOutSuccess):
+            newState.Login = SECURITY_INITIAL_STATE;
+            break;
+
+        // case getType(SecurityActions.sessionExpired):
+        //     newState = {
+        //         ...state,
+        //         authenticated: false,
+        //         user: undefined
+        //     };
+        //     break;
 
         default:
             return state;

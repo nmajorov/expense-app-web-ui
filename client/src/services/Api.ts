@@ -19,7 +19,7 @@ const newRequest = <P>(
         url: url,
         headers: headers,
         data: data,
-        params: queryParams,
+        params: queryParams
     });
 };
 
@@ -38,7 +38,7 @@ export const login = (login: Login) => {
 };
 
 
-export const fetchAccountInfo = (username: string) => {
+export const fetchAccountInfo = (username: string, token:string) => {
     return newRequest<any>(
         HTTP_VERBS.GET,
         {},

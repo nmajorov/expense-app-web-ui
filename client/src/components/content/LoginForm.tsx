@@ -21,9 +21,10 @@ export const LoginForm = () => {
     const [isValidName, setValidName] = useState(false);
     const [isValidPassword, setValidPassword] = useState(false);
 
-    const { isAuthenticated, checkSession } = useSecurity();
+    const { isAuthenticated } = useSecurity();
 
     useEffect(() => {
+        console.log("is authenticated: " + isAuthenticated)
         if (isAuthenticated) {
             history('/'); // Redirect to dashboard if already logged in
         }
@@ -39,9 +40,9 @@ export const LoginForm = () => {
                 {
                     username: name,
                     password: password,
-                },
-                checkSession // Pass the function to the thunk
-            ));
+                }
+            )); 
+             history('/');
         }
     }
 

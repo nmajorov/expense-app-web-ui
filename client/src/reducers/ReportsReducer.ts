@@ -1,6 +1,6 @@
 import { ReportsState } from "../store/Store";
 import { AppAction } from "../actions/AppAction";
-import { ReportActions } from "../actions/ReportAction";
+import { ReportActions } from "../actions/ReportAction.ts";
 import { getType } from "typesafe-actions";
 import { Report } from "../types/Report";
 
