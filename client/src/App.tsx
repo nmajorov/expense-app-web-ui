@@ -1,19 +1,19 @@
 import React from 'react';
 import axios from 'axios';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import { Route, Routes as Switch } from 'react-router-dom';
-import { Container } from 'react-bootstrap';
+import { Container } from 'npm:react-bootstrap';
 import { Provider } from 'react-redux';
 
 import { PersistGate } from 'redux-persist/integration/react';
 
-import InitializingScreen from './InitializingScreen.tsx';
 import { ConnectedRouter } from 'connected-react-router';
 
 import { history, persistor, store } from './store/ConfigStore.ts';
 import GlobalAlert from './components/Alert.tsx';
 import ProfileView from './components/content/ProfileView.tsx';
-import Logout from './components/content/Logout.tsx';
 import ReportView from './components/content/ReportView.tsx';
 import { ReportForm } from './components/content/ReportForm.tsx';
 import { LoginForm } from './components/content/LoginForm.tsx';
@@ -54,7 +54,7 @@ const App: React.FC = () => {
         <Provider store={store}>
             <SecurityProvider>
                 <PersistGate
-                    loading={<InitializingScreen />}
+                   
                     persistor={persistor}
                 >
                     <ConnectedRouter history={history}>
@@ -84,22 +84,21 @@ const App: React.FC = () => {
                                     />
                                     <Route
                                         path="/report/:id"
-                                        element={<ReportView/>}
+                                        element={<ReportView />}
                                     />
                                     <Route
                                         path="/expenses-add/:id"
-                                        element={<ExpensesForm/>}
+                                        element={<ExpensesForm />}
                                     />
 
                                     <Route
-                                        
                                         path="/profile"
-                                        element={<ProfileView/>}
+                                        element={<ProfileView />}
                                     />
 
                                     <Route
                                         path="/expenses/edit/:id"
-                                        element={<ExpensesForm/>}
+                                        element={<ExpensesForm />}
                                     />
 
                                     {/* <Route

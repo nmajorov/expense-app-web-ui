@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../../store/Store.ts';
 import { Card, Col, Container, Dropdown, Row } from 'react-bootstrap';
@@ -13,6 +13,7 @@ import { useConfirmDialog } from './ConfirmDialog.tsx';
 import { useNavigate } from 'react-router-dom';
 import { useSecurity } from '../../context/SecurityContext.tsx';
 import { Report } from '../../types/Report.ts';
+import { reportSelector } from '../../selectors/ReportSelector.ts';
 
 const trashIcon = <FontAwesomeIcon color="red" icon={faTrashAlt} />;
 const editIcon = <FontAwesomeIcon icon={faEdit} />;
@@ -28,18 +29,7 @@ const DashBoard = () => {
     // Hooks must be called inside the component body.
     const { isAuthenticated, user } = useSecurity();
 
-    const { reports } = useSelector((state: AppState) => {
-        return {
-            //    sso: state.ssoState.sso,
-            reports: state.reportsState.reports,
-        };
-    });
-
-    const { reportChanges } = useSelector((state: AppState) => {
-        return {
-            reportChanges: state.reportsState.changes,
-        };
-    });
+    const { reports } = useSelector(reportSelector);
 
     const [id, setId] = useState<number | null>(null);
 
@@ -52,12 +42,12 @@ const DashBoard = () => {
         continueButtonVariant: 'danger',
     });
 
-    useEffect(() => {
-        // Code to be executed on component load
-        if (isAuthenticated) {
-            dispatch(ReportThunkActions.fetchReports(user?.token));
-        }
-    }, []); // Empty dependency array means it will run only once on component mount
+    // useEffect(() => {
+    //     // Code to be executed on component load
+    //     if (isAuthenticated) {
+    //         dispatch(ReportThunkActions.fetchReports(user?.token));
+    //     }
+    // }, []); // Empty dependency array means it will run only once on component mount
 
     function openDeleteDialog(id: number) {
         setId(id);

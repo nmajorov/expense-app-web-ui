@@ -29,19 +29,22 @@ export const LoginForm = () => {
             history('/'); // Redirect to dashboard if already logged in
         }
     }, [isAuthenticated, history]);
-    /**
+    
+       /**
      * handel form submit
      * @param event  a submitted form event
      */
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
         if (isValidName && isValidPassword) {
-            dispatch(SecurityThunkActions.doLogin(
-                {
+           const login = {
                     username: name,
                     password: password,
-                }
-            )); 
+                };
+
+            console.log("login: " + JSON.stringify(login));
+
+            dispatch(SecurityThunkActions.doLogin(login)); 
             
              
              history('/');
@@ -74,8 +77,8 @@ export const LoginForm = () => {
                         <div className="card-header py-3"></div>
                         <div className="card-body">
                             <Form onSubmit={handleSubmit}>
-                                <div className="col-sm-10">
-                                    <Form.Group>
+                                
+                                    <Form.Group className="mb-3">
                                         <Form.Label>Username</Form.Label>
                                         <Form.Control
                                             className="form-control"
@@ -88,9 +91,11 @@ export const LoginForm = () => {
                                             isValid={isValidName}
                                             // isInvalid={!isValidName}
                                         />
+                                        </Form.Group>
+                                         <Form.Group className="mb-3">
                                         <Form.Label>Password</Form.Label>
                                         <Form.Control
-                                            className="form-control"
+                                            className="form-control mt-2"
                                             contentEditable
                                             id="password"
                                             value={password}
@@ -101,15 +106,14 @@ export const LoginForm = () => {
                                             isValid={isValidPassword}
                                             // isInvalid={!isValidPassword}
                                         />
-                                    </Form.Group>
-                                </div>
-                                <Form.Group>
-                                    <div className="col-sm-3">
-                                        <Button type="submit" variant="primary">
-                                            Log in
-                                        </Button>
-                                    </div>
-                                </Form.Group>
+                                  
+                                  
+                                   </Form.Group>
+                                  
+                                    <Button type="submit" variant="primary">Login</Button> 
+
+                                  
+                               
                             </Form>
                         </div>
                     </div>

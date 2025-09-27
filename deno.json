@@ -3,18 +3,15 @@
 
     "tasks": {
         "dev": "deno run -A --node-modules-dir=auto npm:vite",
-        "build": "deno run -A --node-modules-dir npm:vite build",
-        "server:start": "deno run -A --node-modules-dir --watch ./server/main.ts",
-        "serve": "deno task build && deno task server:start"
+        "build": "deno run -A --node-modules-dir npm:vite build"
     },
     "imports": {
         "@deno/vite-plugin": "npm:@deno/vite-plugin@^1.0.5",
-        "@oak/oak": "jsr:@oak/oak@^17.1.6",
         "@reduxjs/toolkit": "npm:@reduxjs/toolkit@^2.9.0",
         "@std/assert": "jsr:@std/assert@^1.0.14",
         "@types/react": "npm:@types/react@^19.1.14",
         "@vitejs/plugin-react": "npm:@vitejs/plugin-react@^5.0.3",
-        "js-cookie": "npm:js-cookie@^3.0.5",
+        "bootstrap": "npm:bootstrap@^5.3.8",
         "react": "npm:react@^19.1.1",
         "react-dom": "npm:react-dom@^19.1.1",
         "react-router-dom": "npm:react-router-dom@^7.9.3",

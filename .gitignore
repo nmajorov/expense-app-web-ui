@@ -32,3 +32,4 @@ yarn-error.log*
 
 client/dist
 client/.vite
+.vite

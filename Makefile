@@ -19,9 +19,6 @@ help: ## This help message
 		@echo -e "$$(grep -hE '^\S+:.*##' $(MAKEFILE_LIST) | sed -e 's/:.*##\s*/:/' -e 's/^\(.\+\):\(.*\)/\\x1b[36m\1\\x1b[m:\2/')"
 
 
-.PHONY: status
-status: ## check dependencies status
-	yarn install --check-files
 
 all: help
 
@@ -41,15 +38,15 @@ dev: ##  run gui in dev mode
 .PHONY: dep
 dep: ##  run gui in dev mode for node-js version  <17
 	@echo "install dependencies"
-	deno install --allow-scripts 
+	deno install --allow-scripts
 
 .PHONY: status
 status: ##  run gui in dev mode for node-js version  <17
 	@echo "dep status dependencies"
 	deno outdated
 
-	# check dependencies list
-	# deno info  client/src/main.tsx
+# check dependencies list
+# deno info  client/src/main.tsx
 
 
 
@@ -98,9 +95,18 @@ test-container: ## test with container
 .PHONY: clean
 clean: ## clean
 	 @echo "run cleaning"
-	 @if [ -d $(THIS_DIR)/build ] ;then \
-	 	rm -r $(THIS_DIR)/build ;\
+	 @if [ -d $(THIS_DIR)/client/dist ] ;then \
+	 	rm -r $(THIS_DIR)/client/dist ;\
 	 fi
+
+	 @if [ -d $(THIS_DIR)/client/.vite ] ;then \
+	 	rm -r $(THIS_DIR)/client/.vite ;\
+	 fi
+
+	 @if [ -d $(THIS_DIR)/node_modules ] ;then \
+	 	rm -r $(THIS_DIR)/node_modules ;\
+	 fi
+
 	deno clean
 
 ###################

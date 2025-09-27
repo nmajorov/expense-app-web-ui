@@ -2,6 +2,7 @@ import { ReactElement, useContext, useEffect, useState } from 'react';
 import {
     Button,
     Collapse,
+    Container,
     Nav,
     Navbar,
     NavDropdown,
@@ -9,10 +10,11 @@ import {
 } from 'react-bootstrap';
 import { AppState } from '../../store/Store.ts';
 
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSecurity } from '../../context/SecurityContext.tsx';
 import SecurityThunkActions from '../../actions/SecurityThunkActions.ts';
+import { routerSelector } from '../../selectors/RouterSelector.ts';
 enum MenuNames {
     LOGIN = 'Login',
     ADD_REPORT = 'Create Report',
@@ -29,18 +31,13 @@ enum MenuNames {
 export function NavigationBar() {
     // Hooks must be called inside the component body.
     const { isAuthenticated, user } = useSecurity();
-    const history = useNavigate();
-    const { routerLocation } = useSelector((state: AppState) => {
-        return {
-            // sso: state.ssoState.sso,
-            routerLocation: state.router.location,
-        };
-    });
     const dispatch = useDispatch();
+    const history = useNavigate();
+    const { routerLocation } = useSelector(routerSelector);
 
-    const [isOpen, setIsOpen] = useState(false);
+    //const [isOpen, setIsOpen] = useState(false);
 
-    const toggle = () => setIsOpen(!isOpen);
+    // const toggle = () => setIsOpen(!isOpen);
 
     /**
      * render menu depends on the current location path
@@ -87,42 +84,49 @@ export function NavigationBar() {
     };
 
     return (
-        <div>
-            <Navbar bg="light" expand="md">
+        <Navbar expand="lg" className="bg-body-tertiary">
+            <Container>
                 <Nav.Link as={Link} to="/">
                     Home
                 </Nav.Link>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        {renderMenu(routerLocation.pathname)}
-                    </Nav>
-                    <Navbar.Collapse className="justify-content-end">
-                        {isAuthenticated ? (
-                            <NavDropdown
-                                title={'' + user?.firstname}
-                                id="basic-nav-dropdown"
-                            >
-                                <Nav.Link as={Link} to="/profile">
-                                    {MenuNames.SHOW_PROFILE}
-                                </Nav.Link>
-                               
-                                <NavDropdown.Divider />
-                                <a
-                                    className="dropdown-item"
-                                    onClick={handleLogout}
+                       <Nav.Link className="justify-content">
+                            {renderMenu(routerLocation.pathname)}
+                        </Nav.Link>
+
+                       <div className="justify-content-end">
+                            {isAuthenticated ? (
+                                <NavDropdown
+                                    title={'' + user?.firstname}
+                                    id="basic-nav-dropdown"
                                 >
-                                    SING OUT
-                                </a>
-                            </NavDropdown>
-                        ) : (
-                            <Nav.Link as={Link} to="/login">
-                                {MenuNames.LOGIN}
-                            </Nav.Link>
-                        )}
-                    </Navbar.Collapse>
+                                    <Nav.Link as={Link} to="/profile">
+                                        {MenuNames.SHOW_PROFILE}
+                                    </Nav.Link>
+
+                                    <NavDropdown.Divider />
+                                    <a
+                                        className="dropdown-item"
+                                        onClick={handleLogout}
+                                    >
+                                        SING OUT
+                                    </a>
+                                </NavDropdown>
+                            ) : (
+                                <Nav.Link
+                                    as={Link}
+                                    to="/login"
+                                    className="justify-content-end"
+                                >
+                                    {MenuNames.LOGIN}
+                                </Nav.Link>
+                            )}
+                        </div>
+                    </Nav>
                 </Navbar.Collapse>
-            </Navbar>
-        </div>
+            </Container>
+        </Navbar>
     );
 }
