@@ -11,7 +11,10 @@
   "reAttach": true,
   "name": "Launch localhost",
   "url": "http://localhost:3000/",
-  "webRoot": "${workspaceFolder}/client/src"
+  "webRoot": "${workspaceFolder}/client/src",
+  "pathMappings": [
+    {"${workspaceFolder}/client/src/index.html": "http://localhost:3000/index.html"}
+  ]
 },
 
         

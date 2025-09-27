@@ -1,7 +1,9 @@
-import { LoginState, SSOState } from '../store/Store.ts';
+import { LoginState } from '../store/Store.ts';
 import { AppAction } from '../actions/AppAction.ts';
 import { SecurityActions } from '../actions/SecurityActions.ts';
 import { getType } from 'typesafe-actions';
+
+import { UserProfile } from "../types/Login.ts";
 
 export const SECURITY_INITIAL_STATE: LoginState = {
  
@@ -13,20 +15,27 @@ export const SECURITY_INITIAL_STATE: LoginState = {
 const securityReducer = (
     state: LoginState = SECURITY_INITIAL_STATE,
     action: AppAction
-): SSOState => {
-    const newState: SSOState = {
-        ...state,
+): LoginState => {
+    const newState: LoginState = {
+        ...state
     };
 
     switch (action.type) {
         case getType(SecurityActions.loginActionSuccess):
-            newState.user = action.payload.user;
+            newState.user = action.payload  as UserProfile;
             newState.authenticated = true;
             break;
 
         case getType(SecurityActions.singOutSuccess):
-            newState.Login = SECURITY_INITIAL_STATE;
+            newState.authenticated =false,
+            newState.user = undefined;
             break;
+
+        // case getType(SecurityActions.userProfileLoadSuccess):
+        //     newState = {
+        //           user: undefined
+        //     };
+        //     break;
 
         // case getType(SecurityActions.sessionExpired):
         //     newState = {

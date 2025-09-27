@@ -1,4 +1,4 @@
-import {ActionKeys as C} from "../utils";
+import {ActionKeys as C} from "../utils/ActionKeys.ts";
 import { ActionType, createAction } from 'typesafe-actions';
 import {UserProfile } from "../types/Login.ts";
 

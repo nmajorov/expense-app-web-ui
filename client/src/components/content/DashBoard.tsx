@@ -18,7 +18,8 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useConfirmDialog } from './ConfirmDialog.tsx';
 import { useNavigate } from 'react-router-dom';
-// import { SecurityContext } from '../../context/SecurityContext';
+import { useSecurity } from '../../context/SecurityContext.tsx';
+import { Report } from "../../types/Report.ts";
 
 const trashIcon = <FontAwesomeIcon color="red" icon={faTrashAlt} />;
 const editIcon = <FontAwesomeIcon icon={faEdit} />;
@@ -31,8 +32,9 @@ const kebabIcon = <FontAwesomeIcon icon={faEllipsisH} />;
 const DashBoard = () => {
     const history = useNavigate();
     const dispatch = useDispatch();
-    // const { isAuthenticated, session } = useSecurity(); // Assuming useSecurity is from your context
-    const sso = { authenticated: true }; // Placeholder
+    // Hooks must be called inside the component body.
+    const { isAuthenticated, user } = useSecurity();
+
     const { reports } = useSelector((state: AppState) => {
         return {
             //    sso: state.ssoState.sso,
@@ -46,7 +48,7 @@ const DashBoard = () => {
         };
     });
 
-    const [id, setId] = useState<String | null>(null);
+    const [id, setId] = useState<number | null>(null);
 
     const [toggleDeleteDialog, DeleteConfirmDialog] = useConfirmDialog({
         titleKey: 'Delete Report ?',
@@ -57,32 +59,29 @@ const DashBoard = () => {
         continueButtonVariant: 'danger',
     });
 
-    useEffect(() => {
-        // update token to avoid error
-    }, [sso, reportChanges, dispatch]);
-
-    function openDeleteDialog(id: String) {
+   
+    function openDeleteDialog(id: number) {
         setId(id);
         toggleDeleteDialog();
     }
 
     function onDeleteConfirm() {
         if (id !== null) {
-            dispatch(ReportThunkActions.deleteReport(sso, id));
+            dispatch(ReportThunkActions.deleteReport(user?.token, id));
         }
     }
 
     function renderReports() {
         return (
             <Row>
-                {reports.map((rp) => {
+                {reports.map((rp: Report) => {
                     return renderReport(rp);
                 })}
             </Row>
         );
     }
 
-    function renderReport(rp) {
+    function renderReport(rp:Report) {
         return (
             <Col key={rp.id} md={6} className="mt-3">
                 <DeleteConfirmDialog />
@@ -111,7 +110,9 @@ const DashBoard = () => {
                                         <Dropdown.Item
                                             href="#"
                                             onClick={() => {
-                                                history('/report/edit/' + rp.id);
+                                                history(
+                                                    '/report/edit/' + rp.id
+                                                );
                                             }}
                                         >
                                             Change Name {editIcon}
@@ -138,7 +139,7 @@ const DashBoard = () => {
         );
     }
 
-    return sso.authenticated ? (
+    return isAuthenticated? (
         renderReports()
     ) : (
         <Jumbotron>

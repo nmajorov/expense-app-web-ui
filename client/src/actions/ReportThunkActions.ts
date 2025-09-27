@@ -49,13 +49,13 @@ const ReportThunkActions = {
         };
     },
 
-    addReport: (sso: SSO, name: String) => {
+    addReport: (token: string, name: string) => {
         return (
             dispatch: ThunkDispatch<AppState, undefined, AppAction>,
-            getState: () => AppState
+            _getState: () => AppState
         ) => {
-            return API.addReport(sso.token, name).then(
-                (response) => {
+            return API.addReport(token, name).then(
+                (_response) => {
                     dispatch(ReportActions.addReportSuccess());
                     const alertMessage: AlertMessage = {
                         content: `Report ${name} saved !`,
@@ -141,12 +141,12 @@ const ReportThunkActions = {
         };
     },
 
-    deleteReport: (sso: SSO, id: String) => {
+    deleteReport: (token, id: number) => {
         return (
             dispatch: ThunkDispatch<AppState, undefined, AppAction>,
             getState: () => AppState
         ) => {
-            return API.deleteReport(sso.token, id).then(
+            return API.deleteReport(token, id).then(
                 (response) => {
                     dispatch(ReportActions.deleteActionSuccess());
                     sendEvent({

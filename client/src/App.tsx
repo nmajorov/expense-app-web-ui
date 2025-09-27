@@ -5,7 +5,8 @@ import { Route, Routes as Switch } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import { Provider } from 'react-redux';
 
-import { PersistGate } from 'redux-persist/lib/integration/react';
+import { PersistGate } from 'redux-persist/integration/react';
+
 import InitializingScreen from './InitializingScreen.tsx';
 import { ConnectedRouter } from 'connected-react-router';
 
@@ -19,7 +20,7 @@ import { LoginForm } from './components/content/LoginForm.tsx';
 import { AlertActions } from './actions/AlertAction.ts';
 import { AlertMessage, MessageType } from './types/AlertTypes.ts';
 import { ExpensesForm } from './components/content/ExpensesForm.tsx';
-import Footer from './components/footer';
+import Footer from './components/footer/index.tsx';
 
 import DashBoard from './components/content/DashBoard.tsx';
 import { NavigationBar as Navigation } from './components/navbar/NavBar.tsx';

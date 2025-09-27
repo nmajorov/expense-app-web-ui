@@ -6,13 +6,14 @@ import expensesReducer from './ExpenseReducer.ts';
 import { connectRouter } from 'connected-react-router';
 import { History } from 'history';
 import reportsReducer from './ReportsReducer.ts';
-//import securityReducer from './SecurityReducer.ts';
+import securityReducer from './SecurityReducer.ts';
 
 const rootReducer = (history: History) =>
     combineReducers({
         alertState: alertMessageReducer,
         expensesState: expensesReducer,
         reportsState: reportsReducer,
+        loginState: securityReducer,
       //  ssoState: securityReducer,
         router: connectRouter(history),
     });

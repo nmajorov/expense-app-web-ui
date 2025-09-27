@@ -6,7 +6,7 @@ import { Login } from '../types/Login.ts';
 import * as API from '../services/Api.ts';
 import { AlertMessage, MessageType } from '../types/AlertTypes.ts';
 import { AlertActions } from './AlertAction.ts';
-import { UserProfile} from "../types/Login.ts";
+import { UserProfile } from '../types/Login.ts';
 
 const SecurityThunkActions = {
     /**
@@ -16,19 +16,17 @@ const SecurityThunkActions = {
         return (dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
             return API.login(login).then(
                 (response) => {
-                      if (response.data.accessToken) {
-                       const user: UserProfile = {
-                            token: response.data.accessToken,
+                 
+                    if (response?.data) {
+                        const user: UserProfile = {
+                            token: response.data.token,
                             email: response.data.email,
                             username: response.data.username,
                             firstname: response.data.firstname,
-                            lastname: response.data.lastname
-                        }
-                          dispatch(SecurityActions.loginActionSuccess(user));
-                          
-                      }
-
-                    
+                            lastname: response.data.lastname,
+                        };
+                        dispatch(SecurityActions.loginActionSuccess(user));
+                    }
 
                     dispatch(
                         AlertActions.addMessage({
@@ -56,11 +54,33 @@ const SecurityThunkActions = {
         };
     },
 
-    loadUserProfile: (username: string) => {
+      doLogout: () => {
+        return (dispatch: ThunkDispatch<AppState, undefined, AppAction>, getState: () => AppState) => {
+            const { token } = getState().loginState.user || {};
+
+            // Optional: Call a backend endpoint to invalidate the token/session
+            // if (token) {
+            //     API.logout(token).catch(err => console.error("Logout API call failed:", err));
+            // }
+
+            dispatch(SecurityActions.singOutSuccess());
+            dispatch(
+                AlertActions.addMessage({
+                    content: 'Sign out was successful! Bye bye!',
+                    show_notification: true,
+                    type: MessageType.SUCCESS,
+                })
+            );
+        };
+    },
+    
+    loadUserProfile: (username: string, token: string) => {
         return (dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
-            return API.fetchAccountInfo(username).then(
+            return API.fetchAccountInfo(username, token).then(
                 (_response) => {
-                    dispatch(SecurityActions.loginActionSuccess(username));
+                    dispatch(
+                        SecurityActions.userProfileLoadSuccess(_response?.data)
+                    );
                 },
                 (error) => {
                     const errorMessage =
