@@ -7,6 +7,7 @@ import * as API from '../services/Api.ts';
 import { AlertMessage, MessageType } from '../types/AlertTypes.ts';
 import { AlertActions } from './AlertAction.ts';
 import { UserProfile } from '../types/Login.ts';
+import ReportThunkActions from "./ReportThunkActions.ts";
 
 const SecurityThunkActions = {
     /**
@@ -26,6 +27,10 @@ const SecurityThunkActions = {
                             lastname: response.data.lastname,
                         };
                         dispatch(SecurityActions.loginActionSuccess(user));
+                        if (user?.token) {
+                            //load reports
+                            dispatch(ReportThunkActions.fetchReports(user.token));
+                        }
                     }
 
                     dispatch(

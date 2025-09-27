@@ -21,7 +21,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSecurity } from '../../context/SecurityContext.tsx';
 import { Report } from "../../types/Report.ts";
 
-const trashIcon = <FontAwesomeIcon color="red" icon={faTrashAlt} />;
+const trashIcon = <FontAwesomeIcon color="red"  icon={faTrashAlt} />;
 const editIcon = <FontAwesomeIcon icon={faEdit} />;
 const kebabIcon = <FontAwesomeIcon icon={faEllipsisH} />;
 
@@ -59,7 +59,13 @@ const DashBoard = () => {
         continueButtonVariant: 'danger',
     });
 
-   
+    useEffect(() => {
+        // Code to be executed on component load
+        if (isAuthenticated) {
+            dispatch(ReportThunkActions.fetchReports(user?.token));
+        }
+    }, []); // Empty dependency array means it will run only once on component mount
+
     function openDeleteDialog(id: number) {
         setId(id);
         toggleDeleteDialog();
@@ -81,7 +87,7 @@ const DashBoard = () => {
         );
     }
 
-    function renderReport(rp:Report) {
+    function renderReport(rp: Report) {
         return (
             <Col key={rp.id} md={6} className="mt-3">
                 <DeleteConfirmDialog />
@@ -139,7 +145,7 @@ const DashBoard = () => {
         );
     }
 
-    return isAuthenticated? (
+    return isAuthenticated ? (
         renderReports()
     ) : (
         <Jumbotron>
@@ -153,6 +159,7 @@ const DashBoard = () => {
             </Container>
         </Jumbotron>
     );
-};
+};;
 
 export default DashBoard;
+

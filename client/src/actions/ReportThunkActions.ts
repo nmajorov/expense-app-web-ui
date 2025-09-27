@@ -9,12 +9,12 @@ import { ReportActions } from './ReportAction.ts';
 import { SSO } from '../types/SSO.ts';
 
 const ReportThunkActions = {
-    fetchReports: (sso: SSO) => {
+    fetchReports: (token: string) => {
         return (
             dispatch: ThunkDispatch<AppState, undefined, AppAction>,
-            getState: () => AppState
+            _getState: () => AppState
         ) => {
-            return API.fetchReports(sso.token).then(
+            return API.fetchReports(token).then(
                 (response) => {
                     const objArray = response.data;
                     const data: Array<Report> = [];
@@ -34,7 +34,7 @@ const ReportThunkActions = {
                     console.log(error.response);
                     if (error.response && error.response.status === 401) {
                         errorMessage =
-                            'Cannot load the reports  unauthorized ..session expired ? ';
+                            'Cannot load the reports  unauthorized ';
                     } else {
                         errorMessage = 'Cannot load the reports: ' + error;
                     }
