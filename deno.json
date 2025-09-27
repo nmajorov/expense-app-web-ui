@@ -33,7 +33,7 @@
         "@fortawesome/free-solid-svg-icons": "npm:@fortawesome/free-solid-svg-icons@^7.0.1",
         "@fortawesome/react-fontawesome": "npm:@fortawesome/react-fontawesome@^3.0.2",
         "typestyle": "npm:typestyle@^2.4.0",
-        "history": "npm:history@^4.10.1"
+        "history": "npm:history@^5.3.0"
     },
     "compilerOptions": {
         "types": ["react", "react-dom", "@types/react"],
