@@ -52,6 +52,7 @@ export const ReportForm = () => {
             } else {
                 dispatch(ReportThunkActions.addReport(user?.token, name));
             }
+            
             history('/');
 
         }
@@ -88,10 +89,11 @@ export const ReportForm = () => {
                                 {isEdit ? 'Edit' : 'Add'} Report
                             </h6>
                         </div>
-                        <div className="card-body">
+                        <div className="card-body"> 
+                            <div className="col-sm-10">
                             <Form onSubmit={handleSubmit}>
-                                <div className="col-sm-10">
-                                    <Form.Group>
+                               
+                                    <Form.Group className="mb-3">
                                         <Form.Label>Name</Form.Label>
                                         <Form.Control
                                             className="form-control"
@@ -105,15 +107,15 @@ export const ReportForm = () => {
                                             isInvalid={!isValid}
                                         />
                                     </Form.Group>
-                                </div>
-                                <Form.Group>
-                                    <div className="col-sm-3">
+                                
+                               
                                         <Button type="submit" variant="primary">
                                             Submit
                                         </Button>
-                                    </div>
-                                </Form.Group>
+                                   
+                               
                             </Form>
+                            </div>
                         </div>
                     </div>
                 </div>

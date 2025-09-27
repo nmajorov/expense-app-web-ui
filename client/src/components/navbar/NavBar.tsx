@@ -84,7 +84,7 @@ export function NavigationBar() {
     };
 
     return (
-        <Navbar expand="lg" className="bg-body-tertiary">
+        <Navbar bg="light" data-bs-theme="light">
             <Container>
                 <Nav.Link as={Link} to="/">
                     Home
@@ -95,8 +95,8 @@ export function NavigationBar() {
                        <Nav.Link className="justify-content">
                             {renderMenu(routerLocation.pathname)}
                         </Nav.Link>
-
-                       <div className="justify-content-end">
+                        </Nav>
+                        <Nav className="justify-content-end">
                             {isAuthenticated ? (
                                 <NavDropdown
                                     title={'' + user?.firstname}
@@ -123,7 +123,7 @@ export function NavigationBar() {
                                     {MenuNames.LOGIN}
                                 </Nav.Link>
                             )}
-                        </div>
+                       
                     </Nav>
                 </Navbar.Collapse>
             </Container>

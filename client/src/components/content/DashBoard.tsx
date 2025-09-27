@@ -72,11 +72,13 @@ const DashBoard = () => {
 
     function renderReport(rp: Report) {
         return (
-            <Col key={rp.id} md={6} className="mt-3">
+            <Col key={rp.id} md={6} className="mt-5">
                 <DeleteConfirmDialog />
                 <Card key={rp.id}>
                     <Card.Body>
                         <Card.Title>
+                            <Row>
+                                <Col lg="9">
                             <Card.Link
                                 onClick={() => {
                                     history(`/report/${rp.id}`);
@@ -85,7 +87,8 @@ const DashBoard = () => {
                             >
                                 {rp.name}
                             </Card.Link>
-                            <div className="float-right">
+                            </Col>
+                            <Col md="auto">
                                 <Dropdown>
                                     <Dropdown.Toggle
                                         size="sm"
@@ -116,10 +119,11 @@ const DashBoard = () => {
                                         </Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
-                            </div>
+                                </Col>
+                            </Row>
                         </Card.Title>
                         <Card.Subtitle className="mb-2 text-muted">
-                            {' '}
+                            {'Created at: '}
                             {rp.createdAT}
                         </Card.Subtitle>
                     </Card.Body>

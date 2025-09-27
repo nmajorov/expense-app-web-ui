@@ -1,4 +1,4 @@
-import { Col, Row } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../store/Store.ts';
@@ -20,27 +20,28 @@ const ProfileView = () => {
 
     function renderUserProfile() {
         if (userProfile === undefined && isAuthenticated === false) {
-            return (<>profile not found</>);
+            return <>profile not found</>;
         }
 
         return (
-            <>
+            <Container fluid="md" className="mt-3">
                 <Row>
-                    <Col sm={4} md={8}>
-                        <h4>
-                            {userProfile.firstname} {userProfile.lastname}
-                        </h4>
+                    <Col sm={4} md={8} className="mt-3">
+                        Firstname: {userProfile?.firstname}
                     </Col>
                 </Row>
-                <Row>
+                <Row className="mt-3">
+                    <Col>Lastname: {userProfile?.lastname}</Col>
+                </Row>
+                <Row className="mt-3">
                     <Col sm={4} md={8}>
-                        <h4>{userProfile.username}</h4>
+                        username: {userProfile?.username}
                     </Col>
                 </Row>
-                <Row>
-                    <Col>Email: {userProfile.email}</Col>
+                <Row className="mt-3">
+                    <Col>Email: {userProfile?.email}</Col>
                 </Row>
-            </>
+            </Container>
         );
     }
 
