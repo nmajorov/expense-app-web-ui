@@ -1,14 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../../store/Store.ts';
-import {
-    Card,
-    Col,
-    Container,
-    Dropdown,
-    Jumbotron,
-    Row,
-} from 'react-bootstrap';
+import { Card, Col, Container, Dropdown, Row } from 'react-bootstrap';
 import ReportThunkActions from '../../actions/ReportThunkActions.ts';
 import {
     faTrashAlt,
@@ -19,9 +12,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useConfirmDialog } from './ConfirmDialog.tsx';
 import { useNavigate } from 'react-router-dom';
 import { useSecurity } from '../../context/SecurityContext.tsx';
-import { Report } from "../../types/Report.ts";
+import { Report } from '../../types/Report.ts';
 
-const trashIcon = <FontAwesomeIcon color="red"  icon={faTrashAlt} />;
+const trashIcon = <FontAwesomeIcon color="red" icon={faTrashAlt} />;
 const editIcon = <FontAwesomeIcon icon={faEdit} />;
 const kebabIcon = <FontAwesomeIcon icon={faEllipsisH} />;
 
@@ -148,18 +141,17 @@ const DashBoard = () => {
     return isAuthenticated ? (
         renderReports()
     ) : (
-        <Jumbotron>
-            <Container className="py-5">
+        <Container className="my-5 jumbotron">
+            <Container className="y-5  ">
                 <h3>Better travel and expense management.</h3>
                 <h3>Running on SUSE RKE2 or K3s Kubernetes !!</h3>
                 <p>
-                    This is an example of application built with React and Redux
-                    .
+                    This is an example of application built with{' '}
+                    <a href="https://reactjs.org/">React</a>.
                 </p>
             </Container>
-        </Jumbotron>
+        </Container>
     );
-};;
+};
 
 export default DashBoard;
-

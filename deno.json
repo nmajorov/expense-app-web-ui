@@ -19,7 +19,7 @@
         "react-dom": "npm:react-dom@^19.1.1",
         "react-router-dom": "npm:react-router-dom@^7.9.3",
         "vite": "npm:vite@^7.1.7",
-        "react-bootstrap": "npm:react-bootstrap@^1.6.8",
+        "react-bootstrap": "npm:react-bootstrap@^2.10.10",
         "react-datepicker": "npm:react-datepicker@^8.7.0",
         "axios": "npm:axios@^1.12.2",
         "react-redux": "npm:react-redux@^9.2.0",
