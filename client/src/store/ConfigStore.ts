@@ -1,7 +1,7 @@
 import { createBrowserHistory } from 'history';
 import { legacy_createStore as createStore, compose, applyMiddleware } from 'redux';
 import createRootReducer from '../reducers/index.ts';
-import thunk from 'redux-thunk';
+import thunk from 'npm:redux-thunk';
 import { routerMiddleware } from 'connected-react-router'
 import { persistStore, persistReducer } from 'redux-persist';
 
