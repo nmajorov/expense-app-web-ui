@@ -95,7 +95,7 @@ const ReportView = ()  => {
     }, []);
 
     useEffect(() => {
-        console.log("expenses:"  + JSON.stringify(expenses));
+       // console.log("expenses:"  + JSON.stringify(expenses));
     }, [expenses]);
 
 

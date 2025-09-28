@@ -7,6 +7,7 @@ import { AlertMessage, MessageType } from '../types/AlertTypes.ts';
 import { Report } from '../types/Report.ts';
 import { ReportActions } from './ReportAction.ts';
 import { SSO } from '../types/SSO.ts';
+import { SecurityActions } from "./SecurityActions.ts";
 
 const ReportThunkActions = {
     fetchReports: (token: string) => {
@@ -35,6 +36,7 @@ const ReportThunkActions = {
                     if (error.response && error.response.status === 401) {
                         errorMessage =
                             'Cannot load the reports  unauthorized ';
+                            
                     } else {
                         errorMessage = 'Cannot load the reports: ' + error;
                     }
@@ -44,6 +46,9 @@ const ReportThunkActions = {
                         type: MessageType.ERROR,
                     };
                     dispatch(AlertActions.addMessage(alertMessage));
+                    if (error.response && error.response.status === 401) {
+                        dispatch(SecurityActions.singOutSuccess())
+                    }
                 }
             );
         };
