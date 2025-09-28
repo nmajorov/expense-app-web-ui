@@ -1,7 +1,7 @@
 {
     "editor.fontSize": 16,
     "editor.fontLigatures": true,
-    "workbench.colorTheme": "Monokai",
+    "workbench.colorTheme": "Default Light Modern",
     "cSpell.words": [
         "buildah",
         "keycloak",

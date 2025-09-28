@@ -10,7 +10,7 @@ import {
 } from 'react-bootstrap';
 import { AppState } from '../../store/Store.ts';
 
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { href, Link, NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSecurity } from '../../context/SecurityContext.tsx';
 import SecurityThunkActions from '../../actions/SecurityThunkActions.ts';
@@ -92,38 +92,38 @@ export function NavigationBar() {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                       <Nav.Link className="justify-content">
+                    
                             {renderMenu(routerLocation.pathname)}
-                        </Nav.Link>
-                        </Nav>
-                        <Nav className="justify-content-end">
-                            {isAuthenticated ? (
-                                <NavDropdown
-                                    title={'' + user?.firstname}
-                                    id="basic-nav-dropdown"
-                                >
-                                    <Nav.Link as={Link} to="/profile">
-                                        {MenuNames.SHOW_PROFILE}
-                                    </Nav.Link>
+                    </Nav>
+                    <Nav className="justify-content-end">
+                        {isAuthenticated ? (
+                            <NavDropdown
+                                title={'' + user?.firstname}
+                                id="basic-nav-dropdown"
+                            >
+                                <NavDropdown.Item  href="/profile">
+                                    {MenuNames.SHOW_PROFILE}
+                                </NavDropdown.Item>
 
-                                    <NavDropdown.Divider />
-                                    <a
-                                        className="dropdown-item"
-                                        onClick={handleLogout}
-                                    >
-                                        SING OUT
-                                    </a>
-                                </NavDropdown>
-                            ) : (
-                                <Nav.Link
-                                    as={Link}
-                                    to="/login"
-                                    className="justify-content-end"
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item
+                                 
+                                    href="/"
+                                  
+                                    onClick={handleLogout}
                                 >
-                                    {MenuNames.LOGIN}
-                                </Nav.Link>
-                            )}
-                       
+                                    SING OUT
+                                </NavDropdown.Item>
+                            </NavDropdown>
+                        ) : (
+                            <Nav.Link
+                                as={Link}
+                                to="/login"
+                                className="justify-content-end"
+                            >
+                                {MenuNames.LOGIN}
+                            </Nav.Link>
+                        )}
                     </Nav>
                 </Navbar.Collapse>
             </Container>
