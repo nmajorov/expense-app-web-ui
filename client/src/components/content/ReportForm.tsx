@@ -4,7 +4,7 @@
  * https://rangle.io/blog/simplifying-controlled-inputs-with-hooks/
  * @constructor
  */
-import React, { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { Button, Form, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../../store/Store.ts';
@@ -29,7 +29,7 @@ export const ReportForm = () => {
 
 
     const [name, setName] = useState(String(''));
-    const [isEdit, setIsEdit] = React.useState(false);
+    const [isEdit, setIsEdit] = useState(false);
 
     const [isValid, setValid] = useState(false);
 
@@ -52,7 +52,7 @@ export const ReportForm = () => {
             } else {
                 dispatch(ReportThunkActions.addReport(user?.token, name));
             }
-            
+
             history('/');
 
         }

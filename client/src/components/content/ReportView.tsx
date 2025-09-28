@@ -100,6 +100,7 @@ const ReportView = () => {
         dispatch(ExpensesThunkActions.fetchExpensesData(user?.token, reportID));
     };
 
+    
     /**
      * sort expenses by id
      */
@@ -126,20 +127,27 @@ const ReportView = () => {
 
    
 
-    /**
-     * render view
-     */
-    return (
-        <Container fluid="md" className="mt-3">
-            <Row>
-                <Col>
-                    {expenses.length > 0
-                        ? renderTable(expenses)
-                        : emptyPlaceHolder()}
-                </Col>
-            </Row>
-        </Container>
-    );
+      if (!isAuthenticated) {
+          history('/');
+      } else {
+         // loadExpenses();
+
+          /**
+           * render view
+           */
+          return (
+              <Container fluid="md" className="mt-3">
+                  <Row>
+                      <Col>
+                          {expenses.length > 0
+                              ? renderTable(expenses)
+                              : emptyPlaceHolder()}
+                      </Col>
+                  </Row>
+              </Container>
+          );
+      }
+
 
     /**
      * Render  empty placeholder if no expenses assigned to report
