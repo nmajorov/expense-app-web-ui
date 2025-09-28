@@ -130,6 +130,7 @@ export const ExpensesForm = ({id,isEdit,reportId}:ExpenseParams) => {
                     id: NaN,
                     amount: convertStrToAmount(amount),
                     description,
+                    //TODO put it to separate utils method
                     createdAT: createdAT +"T20:22:00.467444548+02:00"
                 };
                 console.info(
