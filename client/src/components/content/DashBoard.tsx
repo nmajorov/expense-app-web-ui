@@ -1,14 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../../store/Store.ts';
-import {
-    Card,
-    Col,
-    Container,
-    Dropdown,
-    Jumbotron,
-    Row,
-} from 'react-bootstrap';
+import { Card, Col, Container, Dropdown, Row } from 'react-bootstrap';
 import ReportThunkActions from '../../actions/ReportThunkActions.ts';
 import {
     faTrashAlt,
@@ -17,8 +10,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useConfirmDialog } from './ConfirmDialog.tsx';
-import { useNavigate as useHistory } from 'react-router-dom';
-// import { SecurityContext } from '../../context/SecurityContext';
+import { useNavigate } from 'react-router-dom';
+import { useSecurity } from '../../context/SecurityContext.tsx';
+import { Report } from '../../types/Report.ts';
+import { reportSelector } from '../../selectors/ReportSelector.ts';
 
 const trashIcon = <FontAwesomeIcon color="red" icon={faTrashAlt} />;
 const editIcon = <FontAwesomeIcon icon={faEdit} />;
@@ -29,24 +24,14 @@ const kebabIcon = <FontAwesomeIcon icon={faEllipsisH} />;
  *  user see it just after login
  */
 const DashBoard = () => {
-    const history = useHistory();
+    const history = useNavigate();
     const dispatch = useDispatch();
-    // const keycloak = useContext(SecurityContext);
-    const sso = {};
-    const { reports } = useSelector((state: AppState) => {
-        return {
-            //    sso: state.ssoState.sso,
-            reports: state.reportsState.reports,
-        };
-    });
+    // Hooks must be called inside the component body.
+    const { isAuthenticated, user } = useSecurity();
 
-    const { reportChanges } = useSelector((state: AppState) => {
-        return {
-            reportChanges: state.reportsState.changes,
-        };
-    });
+    const { reports } = useSelector(reportSelector);
 
-    const [id, setId] = useState<String | null>(null);
+    const [id, setId] = useState<number | null>(null);
 
     const [toggleDeleteDialog, DeleteConfirmDialog] = useConfirmDialog({
         titleKey: 'Delete Report ?',
@@ -57,47 +42,53 @@ const DashBoard = () => {
         continueButtonVariant: 'danger',
     });
 
-    useEffect(() => {
-        // update token to avoid error
-    }, [sso, reportChanges, dispatch]);
+    // useEffect(() => {
+    //     // Code to be executed on component load
+    //     if (isAuthenticated) {
+    //         dispatch(ReportThunkActions.fetchReports(user?.token));
+    //     }
+    // }, []); // Empty dependency array means it will run only once on component mount
 
-    function openDeleteDialog(id: String) {
+    function openDeleteDialog(id: number) {
         setId(id);
         toggleDeleteDialog();
     }
 
     function onDeleteConfirm() {
         if (id !== null) {
-            dispatch(ReportThunkActions.deleteReport(sso, id));
+            dispatch(ReportThunkActions.deleteReport(user?.token, id));
         }
     }
 
     function renderReports() {
         return (
             <Row>
-                {reports.map((rp) => {
+                {reports.map((rp: Report) => {
                     return renderReport(rp);
                 })}
             </Row>
         );
     }
 
-    function renderReport(rp) {
+    function renderReport(rp: Report) {
         return (
-            <Col key={rp.id} md={6} className="mt-3">
+            <Col key={rp.id} md={6} className="mt-5">
                 <DeleteConfirmDialog />
                 <Card key={rp.id}>
                     <Card.Body>
                         <Card.Title>
+                            <Row>
+                                <Col lg="9">
                             <Card.Link
                                 onClick={() => {
-                                    history.push(`/report/${rp.id}`);
+                                    history(`/report/${rp.id}`);
                                 }}
                                 href="#"
                             >
                                 {rp.name}
                             </Card.Link>
-                            <div className="float-right">
+                            </Col>
+                            <Col md="auto">
                                 <Dropdown>
                                     <Dropdown.Toggle
                                         size="sm"
@@ -111,7 +102,7 @@ const DashBoard = () => {
                                         <Dropdown.Item
                                             href="#"
                                             onClick={() => {
-                                                history.push(
+                                                history(
                                                     '/report/edit/' + rp.id
                                                 );
                                             }}
@@ -128,10 +119,11 @@ const DashBoard = () => {
                                         </Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
-                            </div>
+                                </Col>
+                            </Row>
                         </Card.Title>
                         <Card.Subtitle className="mb-2 text-muted">
-                            {' '}
+                            {'Created at: '}
                             {rp.createdAT}
                         </Card.Subtitle>
                     </Card.Body>
@@ -140,19 +132,19 @@ const DashBoard = () => {
         );
     }
 
-    return sso.authenticated ? (
+    return isAuthenticated ? (
         renderReports()
     ) : (
-        <Jumbotron>
-            <Container className="py-5">
+        <Container className="my-5 jumbotron">
+            <Container className="y-5  ">
                 <h3>Better travel and expense management.</h3>
                 <h3>Running on SUSE RKE2 or K3s Kubernetes !!</h3>
                 <p>
-                    This is an example of application built with React and Redux
-                    .
+                    This is an example of application built with{' '}
+                    <a href="https://reactjs.org/">React</a>.
                 </p>
             </Container>
-        </Jumbotron>
+        </Container>
     );
 };
 

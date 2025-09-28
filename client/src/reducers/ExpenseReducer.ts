@@ -5,6 +5,7 @@ import { AppAction } from "../actions/AppAction";
 import { ExpensesActions } from "../actions/ExpensesAction";
 import { getType } from "typesafe-actions";
 import { Expense } from "../types/Expense";
+import { SecurityActions } from '../actions/SecurityActions.ts';
 
 export const EXPENSES_INITIAL_STATE: ExpensesState = {
   expenses: [],
@@ -46,6 +47,10 @@ const expensesReducer = (state: ExpensesState = EXPENSES_INITIAL_STATE,
       // newState.expenses = []
       newState.newExpense = action.payload as Expense;
       break;
+
+    case getType(SecurityActions.singOutSuccess):
+      // When user logs out, reset to the initial state
+      return EXPENSES_INITIAL_STATE;
 
     default:
       break;

@@ -1,8 +1,8 @@
-import { AlertsState } from "../store/Store";
-import { AlertActions } from "../actions/AlertAction";
-import { AlertMessage, MessageType } from "../types/AlertTypes";
+import { AlertsState } from "../store/Store.ts";
+import { AlertActions } from "../actions/AlertAction.ts";
+import { AlertMessage, MessageType } from "../types/AlertTypes.ts";
 import { getType } from 'typesafe-actions';
-import { AppAction } from "../actions/AppAction";
+import { AppAction } from "../actions/AppAction.ts";
 
 
 export const ALERT_MESSAGE_INITIAL_STATE: AlertsState = {

@@ -4,34 +4,35 @@
  * https://rangle.io/blog/simplifying-controlled-inputs-with-hooks/
  * @constructor
  */
-import React, { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { Button, Form, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../../store/Store.ts';
 import ReportThunkActions from '../../actions/ReportThunkActions.ts';
+import { useSecurity } from '../../context/SecurityContext.tsx';
 
 import {
-    RouteComponentProps,
+    useParams,
     useNavigate as useHistory,
 } from 'react-router-dom';
 import { Report } from '../../types/Report.ts';
 
 type ReportParams = { id: string };
 
-export const ReportForm = (routerProps: RouteComponentProps<ReportParams>) => {
+export const ReportForm = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
+     //const params = useParams();
+
+     const { isAuthenticated, user } = useSecurity();
+
+
     const [name, setName] = useState(String(''));
-    const [isEdit, setIsEdit] = React.useState(false);
+    const [isEdit, setIsEdit] = useState(false);
 
     const [isValid, setValid] = useState(false);
 
-    // const { sso } = useSelector((state: AppState) => {
-    //     return {
-    //         sso: state.ssoState.sso,
-    //     };
-    // });
 
     const reports: Array<Report> = useSelector((state: AppState) => {
         return state.reportsState.reports;
@@ -43,19 +44,25 @@ export const ReportForm = (routerProps: RouteComponentProps<ReportParams>) => {
      */
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
-        // if (sso.authenticated) {
-        //     if (isEdit) {
-        //         reports[0].name = name;
+        if (isAuthenticated) {
+            if (isEdit) {
+                reports[0].name = name;
 
-        //         dispatch(ReportThunkActions.updateReport(sso, reports[0]));
-        //     } else {
-        //         dispatch(ReportThunkActions.addReport(sso, name));
-        //     }
-        //     history('/');
-        // }
+                dispatch(ReportThunkActions.updateReport(user?.token, reports[0]));
+            } else {
+                dispatch(ReportThunkActions.addReport(user?.token, name));
+            }
+
+            history('/');
+
+        }
     }
 
     useEffect(() => {
+         if (!isAuthenticated) {
+             history('/');
+
+         }
         if (isEdit) {
             if (reports[0] !== undefined) {
                 checkName(reports[0].name);
@@ -82,10 +89,11 @@ export const ReportForm = (routerProps: RouteComponentProps<ReportParams>) => {
                                 {isEdit ? 'Edit' : 'Add'} Report
                             </h6>
                         </div>
-                        <div className="card-body">
+                        <div className="card-body"> 
+                            <div className="col-sm-10">
                             <Form onSubmit={handleSubmit}>
-                                <div className="col-sm-10">
-                                    <Form.Group>
+                               
+                                    <Form.Group className="mb-3">
                                         <Form.Label>Name</Form.Label>
                                         <Form.Control
                                             className="form-control"
@@ -99,15 +107,15 @@ export const ReportForm = (routerProps: RouteComponentProps<ReportParams>) => {
                                             isInvalid={!isValid}
                                         />
                                     </Form.Group>
-                                </div>
-                                <Form.Group>
-                                    <div className="col-sm-3">
+                                
+                               
                                         <Button type="submit" variant="primary">
                                             Submit
                                         </Button>
-                                    </div>
-                                </Form.Group>
+                                   
+                               
                             </Form>
+                            </div>
                         </div>
                     </div>
                 </div>

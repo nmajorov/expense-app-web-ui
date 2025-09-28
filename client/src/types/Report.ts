@@ -2,7 +2,7 @@
  * represent Report types in backend
  */
 export type Report = {
-    id: Number;
+    id: number;
     name: string;
     createdAT: string;
     tstamp?: string; // (last modified date)

@@ -10,20 +10,15 @@ import {
     formateStrToDate,
 } from '../../utils';
 import { AppState } from '../../store/Store';
-// import {ThunkDispatch} from "redux-thunk";
-// import {AppAction} from "../../actions/AppAction";
-// import ExpensesThunkActions from "../../actions/ExpensesThunkActions";
-// import { Report } from "../../types/Report";
-// import { SSO } from "../../types/SSO";
-// import ReportThunkActions from "../../actions/ReportThunkActions";
+
 import {
     RouteComponentProps,
     useNavigate as useHistory,
 } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import ExpensesThunkActions from '../../actions/ExpensesThunkActions';
-
+import ExpensesThunkActions from '../../actions/ExpensesThunkActions.ts';
+   import { useSecurity } from '../../context/SecurityContext.tsx';
 type IdParams = { id: string };
 
 /**
@@ -33,6 +28,9 @@ type IdParams = { id: string };
 export const ExpensesForm = (routerProps: RouteComponentProps<IdParams>) => {
     const history = useHistory();
     const dispatch = useDispatch();
+
+
+    const { isAuthenticated, user } = useSecurity();
 
     // const [id, setId] = useState<String | null>(null);
 
@@ -44,6 +42,10 @@ export const ExpensesForm = (routerProps: RouteComponentProps<IdParams>) => {
     const [createdAT, setCreatedAT] = useState(formatDateStr(new Date()));
     const [isDateValid, setIsDateValid] = useState(true);
     const [isEdit, setIsEdit] = useState(false);
+
+ 
+
+
 
     const { sso, expense } = useSelector((state: AppState) => {
         console.log(
@@ -131,7 +133,7 @@ export const ExpensesForm = (routerProps: RouteComponentProps<IdParams>) => {
                     `add expnense ${JSON.stringify(expense)} to report ${reportId}`
                 );
                 dispatch(
-                    ExpensesThunkActions.addNewExpense(sso, reportId, expense)
+                    ExpensesThunkActions.addNewExpense(user?.token, reportId, expense)
                 );
             }
 
@@ -143,13 +145,13 @@ export const ExpensesForm = (routerProps: RouteComponentProps<IdParams>) => {
      * hook to render
      */
     useEffect(() => {
-        if (sso.authenticated) {
+        if (isAuthenticated) {
             if (!history.location.pathname.match('expenses-add')) {
                 // we adding the report
                 setIsEdit(true);
                 dispatch(
                     ExpensesThunkActions.fetchOneExpense(
-                        sso.token,
+                        user?.token,
                         routerProps.match.params.id
                     )
                 );

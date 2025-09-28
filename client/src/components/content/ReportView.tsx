@@ -18,7 +18,10 @@ import { AlertActions } from '../../actions/AlertAction.ts';
 import { useContext, useEffect, useState } from 'react';
 import { Expense } from '../../types/Expense.ts';
 import { useNavigate as useHistory } from 'react-router-dom';
-//import { SecurityContext } from '../../context/SecurityContext';
+
+import { useSecurity } from '../../context/SecurityContext.tsx';
+import { expensesSelector } from "../../selectors/ExpensesSelector.ts";
+import { reportIDSelector, routerSelector } from "../../selectors/RouterSelector.ts";
 
 const trashIcon = <FontAwesomeIcon icon={faTrashAlt} />;
 const editIcon = <FontAwesomeIcon icon={faEdit} />;
@@ -28,23 +31,27 @@ const arrovDownIcon = <FontAwesomeIcon icon={faArrowDown} />;
 //
 
 const ReportView = () => {
-    //  const keycloak = useContext(SecurityContext);
-    const { authenticated, expenses, sso, reportID, expensesChanged } =
-        useSelector((state: AppState) => {
-            // console.log("use selector expenses: " +
-            //   JSON.stringify(state.expensesState.expenses));
 
-            return {
-                authenticated: state.ssoState.sso.authenticated,
-                sso: state.ssoState.sso,
-                expenses: state.expensesState.expenses,
-                expensesChanged: state.expensesState.changed,
-                reportID: state.router.location.pathname.replace(
-                    '/report/',
-                    ''
-                ),
-            };
-        });
+         const { isAuthenticated, user } = useSecurity();
+         const expenses = useSelector(expensesSelector);
+        const reportID = useSelector(reportIDSelector);
+
+
+    
+    // const { authenticated, expenses, sso, reportID, expensesChanged } =
+    //     useSelector((state: AppState) => {
+    //         // console.log("use selector expenses: " +
+    //         //   JSON.stringify(state.expensesState.expenses));
+
+    //         return {
+    //             expenses: state.expensesState.expenses,
+    //             expensesChanged: state.expensesState.changed,
+    //             reportID: state.router.location.pathname.replace(
+    //                 '/report/',
+    //                 ''
+    //             ),
+    //         };
+    //     });
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -79,10 +86,10 @@ const ReportView = () => {
     const deleteExpense = () => {
         console.log('delete expense: ' + toDeleteId);
         if (!Number.isNaN(toDeleteId)) {
-            dispatch(ExpensesThunkActions.deleteExpense(sso.token, toDeleteId));
+            dispatch(ExpensesThunkActions.deleteExpense(user?.token, toDeleteId));
         }
 
-        history.push('/report/' + reportID);
+        history('/report/' + reportID);
     };
 
     /**
@@ -90,16 +97,17 @@ const ReportView = () => {
      */
     const loadExpenses = () => {
         startLoading();
-        dispatch(ExpensesThunkActions.fetchExpensesData(sso.token, reportID));
+        dispatch(ExpensesThunkActions.fetchExpensesData(user?.token, reportID));
     };
 
+    
     /**
      * sort expenses by id
      */
     const sortBy = (sort: string) => {
         startLoading();
         dispatch(
-            ExpensesThunkActions.fetchExpensesData(sso.token, reportID, sort)
+            ExpensesThunkActions.fetchExpensesData(user?.token, reportID, sort)
         );
     };
 
@@ -117,36 +125,29 @@ const ReportView = () => {
             .toFixed(2);
     };
 
-    // very important statements for use effect hook
-    // https://stackoverflow.com/questions/56410369/can-i-call-separate-function-in-useeffect
-    useEffect(() => {
-        // if (authenticated) {
-        //     keycloak
-        //         .updateToken(30)
-        //         .then(function () {
-        //             loadExpenses();
-        //         })
-        //         .catch(function () {
-        //             console.error('Failed to refresh token');
-        //         });
-        // }
-        // use sso if client reload the page manually from browser
-    }, [authenticated, expensesChanged, dispatch]);
+   
 
-    /**
-     * render view
-     */
-    return (
-        <Container fluid="md" className="mt-3">
-            <Row>
-                <Col>
-                    {expenses.length > 0
-                        ? renderTable(expenses)
-                        : emptyPlaceHolder()}
-                </Col>
-            </Row>
-        </Container>
-    );
+      if (!isAuthenticated) {
+          history('/');
+      } else {
+         // loadExpenses();
+
+          /**
+           * render view
+           */
+          return (
+              <Container fluid="md" className="mt-3">
+                  <Row>
+                      <Col>
+                          {expenses.length > 0
+                              ? renderTable(expenses)
+                              : emptyPlaceHolder()}
+                      </Col>
+                  </Row>
+              </Container>
+          );
+      }
+
 
     /**
      * Render  empty placeholder if no expenses assigned to report
@@ -169,36 +170,38 @@ const ReportView = () => {
             <>
                 <ConfirmDialogModal
                     continueButtonLabel="yes"
-                    titleKey={'Delete this item ?'}
+                    titleKey="Delete this item ?"
                     open={deleteExpenseDialogOpen}
-                    continueButtonVariant={'danger'}
+                    continueButtonVariant="danger"
+                    messageKey="Are you sure you want to delete this item ?"
                     toggleDialog={openDeleteModalWindow}
                     onConfirm={deleteExpense}
                 ></ConfirmDialogModal>
+                
                 <Table striped bordered hover size="sm">
                     <thead>
                         <tr>
                             <th>
                                 #{' '}
-                                <button onClick={() => sortBy('id_asc')}>
+                                <Button onClick={() => sortBy('id_asc')}>
                                     {arrovUpIcon}
-                                </button>
+                                </Button>
                                 &nbsp; &nbsp;
-                                <button onClick={() => sortBy('id_desc')}>
+                                <Button onClick={() => sortBy('id_desc')}>
                                     {arrovDownIcon}
-                                </button>
+                                </Button>
                             </th>
                             <th>Description</th>
                             <th>Amount</th>
                             <th>
                                 Date{' '}
-                                <button onClick={() => sortBy('created_asc')}>
+                                <Button onClick={() => sortBy('created_asc')}>
                                     {arrovUpIcon}
-                                </button>
+                                </Button>
                                 &nbsp; &nbsp;
-                                <button onClick={() => sortBy('created_desc')}>
+                                <Button onClick={() => sortBy('created_desc')}>
                                     {arrovDownIcon}
-                                </button>
+                                </Button>
                             </th>
                             <th>Last Modified</th>
                             <th>Actions</th>

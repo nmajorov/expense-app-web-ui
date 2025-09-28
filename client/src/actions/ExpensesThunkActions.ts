@@ -6,7 +6,7 @@ import { ExpensesActions } from './ExpensesAction.ts';
 import * as API from '../services/Api.ts';
 import { AlertActions } from './AlertAction.ts';
 import { AlertMessage, MessageType } from '../types/AlertTypes.ts';
-import { SSO } from '../types/SSO.ts';
+
 
 const ExpensesThunkActions = {
     fetchExpensesData: (token: string, reportID: string, sortBy?: string) => {
@@ -80,9 +80,9 @@ const ExpensesThunkActions = {
         };
     },
 
-    addNewExpense: (sso: SSO, reportID: string, newExpense: Expense) => {
+    addNewExpense: (token: string, reportID: string, newExpense: Expense) => {
         return (dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
-            return API.addNewExpense(sso.token, reportID, newExpense).then(
+            return API.addNewExpense(token, reportID, newExpense).then(
                 (response) => {
                     dispatch(ExpensesActions.addNewExpenseSuccess());
                     const alertMessage: AlertMessage = {
@@ -91,20 +91,7 @@ const ExpensesThunkActions = {
                         type: MessageType.SUCCESS,
                     };
                     dispatch(AlertActions.addMessage(alertMessage));
-                    sendEvent({
-                        body: {
-                            timestamp: Date.now(),
-                            user_id: 11,
-                            event_name: 'expense_created',
-                            event_data: {},
-                        },
-                    })
-                        .then((response) => {
-                            console.log('event send to azure');
-                        })
-                        .catch(function () {
-                            console.error('error publish event');
-                        });
+                   
                 },
                 (error) => {
                     const emsg = 'Cannot add the expenses: ' + error.toString();

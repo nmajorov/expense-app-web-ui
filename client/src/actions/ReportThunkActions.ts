@@ -9,12 +9,12 @@ import { ReportActions } from './ReportAction.ts';
 import { SSO } from '../types/SSO.ts';
 
 const ReportThunkActions = {
-    fetchReports: (sso: SSO) => {
+    fetchReports: (token: string) => {
         return (
             dispatch: ThunkDispatch<AppState, undefined, AppAction>,
-            getState: () => AppState
+            _getState: () => AppState
         ) => {
-            return API.fetchReports(sso.token).then(
+            return API.fetchReports(token).then(
                 (response) => {
                     const objArray = response.data;
                     const data: Array<Report> = [];
@@ -34,7 +34,7 @@ const ReportThunkActions = {
                     console.log(error.response);
                     if (error.response && error.response.status === 401) {
                         errorMessage =
-                            'Cannot load the reports  unauthorized ..session expired ? ';
+                            'Cannot load the reports  unauthorized ';
                     } else {
                         errorMessage = 'Cannot load the reports: ' + error;
                     }
@@ -49,13 +49,13 @@ const ReportThunkActions = {
         };
     },
 
-    addReport: (sso: SSO, name: String) => {
+    addReport: (token: string, name: string) => {
         return (
             dispatch: ThunkDispatch<AppState, undefined, AppAction>,
-            getState: () => AppState
+            _getState: () => AppState
         ) => {
-            return API.addReport(sso.token, name).then(
-                (response) => {
+            return API.addReport(token, name).then(
+                (_response) => {
                     dispatch(ReportActions.addReportSuccess());
                     const alertMessage: AlertMessage = {
                         content: `Report ${name} saved !`,
@@ -63,6 +63,8 @@ const ReportThunkActions = {
                         type: MessageType.SUCCESS,
                     };
                     dispatch(AlertActions.addMessage(alertMessage));
+                    dispatch(ReportThunkActions.fetchReports(token));
+
                 },
                 (error) => {
                     const alertMessage: AlertMessage = {
@@ -112,20 +114,7 @@ const ReportThunkActions = {
                         show_notification: true,
                         type: MessageType.SUCCESS,
                     };
-                    sendEvent({
-                        body: {
-                            timestamp: Date.now(),
-                            user_id: 11,
-                            event_name: 'report_updated',
-                            event_data: {},
-                        },
-                    })
-                        .then((response) => {
-                            console.log('event send to azure');
-                        })
-                        .catch(function () {
-                            console.error('error publish event');
-                        });
+                  
                     dispatch(AlertActions.addMessage(alertMessage));
                 },
                 (error) => {
@@ -141,28 +130,16 @@ const ReportThunkActions = {
         };
     },
 
-    deleteReport: (sso: SSO, id: String) => {
+    deleteReport: (token, id: number) => {
         return (
             dispatch: ThunkDispatch<AppState, undefined, AppAction>,
             getState: () => AppState
         ) => {
-            return API.deleteReport(sso.token, id).then(
+            return API.deleteReport(token, id).then(
                 (response) => {
                     dispatch(ReportActions.deleteActionSuccess());
-                    sendEvent({
-                        body: {
-                            timestamp: Date.now(),
-                            user_id: 11,
-                            event_name: 'report_deleted',
-                            event_data: {},
-                        },
-                    })
-                        .then((response) => {
-                            console.log('event send to azure');
-                        })
-                        .catch(function () {
-                            console.error('error publish event');
-                        });
+                    dispatch(ReportThunkActions.fetchReports(token));
+                    
                 },
                 (error) => {
                     dispatch(

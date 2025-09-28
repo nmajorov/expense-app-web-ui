@@ -19,7 +19,7 @@ const newRequest = <P>(
         url: url,
         headers: headers,
         data: data,
-        params: queryParams,
+        params: queryParams
     });
 };
 
@@ -36,6 +36,18 @@ export const login = (login: Login) => {
         }
     );
 };
+
+
+export const fetchAccountInfo = (username: string, token:string) => {
+    return newRequest<any>(
+        HTTP_VERBS.GET,
+        {},
+        `${url}/account/info`,
+        {username: username},
+        {}
+    );
+}
+
 
 /**
  * fetch all available expenses
@@ -129,7 +141,7 @@ export const updateExpense = (token: string, expense: Expense) => {
  * fetch Reports
  * @param token an OIDC token from a current keycloak session
  */
-export const fetchReports = (token: String) => {
+export const fetchReports = (token: string) => {
     return newRequest<Array<Report>>(
         HTTP_VERBS.GET,
         {
@@ -146,7 +158,7 @@ export const fetchReports = (token: String) => {
  * @param token an OIDC token from a current keycloak session
  * @param id the report id
  */
-export const fetchOneReport = (token: String, id: String) => {
+export const fetchOneReport = (token: string, id: number) => {
     return newRequest<Report>(
         HTTP_VERBS.GET,
         {
@@ -164,7 +176,7 @@ export const fetchOneReport = (token: String, id: String) => {
  * @param report the report to update
  *
  */
-export const updateReport = (token: String, report: Report) => {
+export const updateReport = (token: string, report: Report) => {
     return newRequest<Report>(
         HTTP_VERBS.PUT,
         {
@@ -181,7 +193,7 @@ export const updateReport = (token: String, report: Report) => {
  * @param token an OIDC token from a current keycloak session
  * @param id the report id
  */
-export const deleteReport = (token: String, id: String) => {
+export const deleteReport = (token: string, id: number) => {
     return newRequest<Report>(
         HTTP_VERBS.DELETE,
         {
@@ -198,7 +210,7 @@ export const deleteReport = (token: String, id: String) => {
  * @param token an OIDC token from a current keycloak session
  * @param name the name of report
  */
-export const addReport = (token: String, name: String) => {
+export const addReport = (token: string, name: string) => {
     return newRequest<any>(
         HTTP_VERBS.POST,
         {

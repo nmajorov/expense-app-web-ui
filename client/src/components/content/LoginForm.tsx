@@ -8,7 +8,8 @@ import { Button, Form, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useNavigate as useHistory } from 'react-router-dom';
-import LoginThunkActions from "../../actions/LoginThunkActions.ts";
+import SecurityThunkActions from '../../actions/SecurityThunkActions.ts';
+import { useSecurity } from '../../context/SecurityContext.tsx';
 
 export const LoginForm = () => {
     const dispatch = useDispatch();
@@ -18,46 +19,48 @@ export const LoginForm = () => {
     const [password, setPassword] = useState(String(''));
 
     const [isValidName, setValidName] = useState(false);
-     const [isValidPassword, setValidPassword] = useState(false);
+    const [isValidPassword, setValidPassword] = useState(false);
 
-    // const { sso } = useSelector((state: AppState) => {
-    //     return {
-    //         sso: state.ssoState.sso,
-    //     };
-    // });
+    const { isAuthenticated } = useSecurity();
 
-    /**
+    useEffect(() => {
+        console.log("is authenticated: " + isAuthenticated)
+        if (isAuthenticated) {
+            history('/'); // Redirect to dashboard if already logged in
+        }
+    }, [isAuthenticated, history]);
+    
+       /**
      * handel form submit
      * @param event  a submitted form event
      */
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
-        dispatch(LoginThunkActions.doLogin({account: name, password:password}));
-      //  history('/');
-        // if (sso.authenticated) {
-        //     if (isEdit) {
-        //         reports[0].name = name;
+        if (isValidName && isValidPassword) {
+           const login = {
+                    username: name,
+                    password: password,
+                };
 
-        //         dispatch(ReportThunkActions.updateReport(sso, reports[0]));
-        //     } else {
-        //         dispatch(ReportThunkActions.addReport(sso, name));
-        //     }
-        //     history('/');
-        // }
+            console.log("login: " + JSON.stringify(login));
+
+            dispatch(SecurityThunkActions.doLogin(login)); 
+            
+             
+             history('/');
+        }
     }
-
-
 
     function checkName(input: string) {
         setName(input);
-        if (input.length > 3) {
+        if (input.length > 2) {
             setValidName(true);
         } else {
             setValidName(false);
         }
     }
 
-      function checkPassword(input: string) {
+    function checkPassword(input: string) {
         setPassword(input);
         if (input.length > 3) {
             setValidPassword(true);
@@ -71,13 +74,11 @@ export const LoginForm = () => {
             <Row>
                 <div className="col-lg-6">
                     <div className="card shadow mb-3">
-                        <div className="card-header py-3">
-                         
-                        </div>
+                        <div className="card-header py-3"></div>
                         <div className="card-body">
                             <Form onSubmit={handleSubmit}>
-                                <div className="col-sm-10">
-                                    <Form.Group>
+                                
+                                    <Form.Group className="mb-3">
                                         <Form.Label>Username</Form.Label>
                                         <Form.Control
                                             className="form-control"
@@ -88,11 +89,13 @@ export const LoginForm = () => {
                                                 checkName(e.target.value)
                                             }
                                             isValid={isValidName}
-                                           // isInvalid={!isValidName}
+                                            // isInvalid={!isValidName}
                                         />
-                                         <Form.Label>Password</Form.Label>
+                                        </Form.Group>
+                                         <Form.Group className="mb-3">
+                                        <Form.Label>Password</Form.Label>
                                         <Form.Control
-                                            className="form-control"
+                                            className="form-control mt-2"
                                             contentEditable
                                             id="password"
                                             value={password}
@@ -101,17 +104,16 @@ export const LoginForm = () => {
                                                 checkPassword(e.target.value)
                                             }
                                             isValid={isValidPassword}
-                                           // isInvalid={!isValidPassword}
+                                            // isInvalid={!isValidPassword}
                                         />
-                                    </Form.Group>
-                                </div>
-                                <Form.Group>
-                                    <div className="col-sm-3">
-                                        <Button type="submit" variant="primary">
-                                            Log in
-                                        </Button>
-                                    </div>
-                                </Form.Group>
+                                  
+                                  
+                                   </Form.Group>
+                                  
+                                    <Button type="submit" variant="primary">Login</Button> 
+
+                                  
+                               
                             </Form>
                         </div>
                     </div>

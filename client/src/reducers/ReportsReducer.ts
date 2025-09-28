@@ -1,8 +1,9 @@
-import { ReportsState } from "../store/Store";
-import { AppAction } from "../actions/AppAction";
-import { ReportActions } from "../actions/ReportAction";
+import { ReportsState } from "../store/Store.ts";
+import { AppAction } from "../actions/AppAction.ts";
+import { ReportActions } from "../actions/ReportAction.ts";
 import { getType } from "typesafe-actions";
-import { Report } from "../types/Report";
+import { Report } from "../types/Report.ts";
+import { SecurityActions } from '../actions/SecurityActions.ts';
 
 export const REPORTS_INITIAL_STATE: ReportsState = {
   reports: [],
@@ -42,6 +43,10 @@ const reportsReducer = (
       // just to trigger report state
       newState.changes = !newState.changes;
       break;
+
+    case getType(SecurityActions.singOutSuccess):
+      // When user logs out, reset to the initial state
+      return REPORTS_INITIAL_STATE;
 
     default:
       break;

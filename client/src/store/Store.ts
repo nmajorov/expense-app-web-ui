@@ -1,10 +1,9 @@
-import { Expense } from '../types/Expense';
-import { TimeInMilliseconds } from '../types/Common';
-import { AlertMessage } from '../types/AlertTypes';
-import { SSO } from '../types/SSO';
+import { Expense } from '../types/Expense.ts';
+import { TimeInMilliseconds } from '../types/Common.ts';
+import { AlertMessage } from '../types/AlertTypes.ts';
 import { RouterState } from 'connected-react-router';
-import { Report } from '../types/Report';
-import { KeycloakInstance } from 'keycloak-js';
+import { Report } from '../types/Report.ts';
+import { UserProfile } from "../types/Login.ts";
 /**
  * state of  warning or info messages
  */
@@ -12,6 +11,10 @@ export interface AlertsState {
     alertMessage: AlertMessage;
 }
 
+export interface LoginState {
+      authenticated: boolean;
+      user?: UserProfile;
+}
 /**
  * state of expenses in dashboard
  */
@@ -24,10 +27,7 @@ export interface ExpensesState {
     changed: boolean;
 }
 
-export interface SSOState {
-    sso: SSO;
-    keycloak: KeycloakInstance;
-}
+
 
 export interface ReportsState {
     reports: Array<Report>;
@@ -37,7 +37,7 @@ export interface ReportsState {
 export interface AppState {
     expensesState: ExpensesState;
     alertState: AlertsState;
-    ssoState: SSOState;
     reportsState: ReportsState;
+    loginState: LoginState;
     router: RouterState;
 }
