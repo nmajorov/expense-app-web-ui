@@ -26,6 +26,7 @@ import DashBoard from './components/content/DashBoard.tsx';
 import { NavigationBar as Navigation } from './components/navbar/NavBar.tsx';
 import './index.css';
 import { SecurityProvider } from './context/SecurityContext.tsx';
+import { AddExpense, EditExpense, Expense } from "./components/content/Expenses.tsx";
 
 // intercept all Axios responses and dispatch the DECREMENT_LOADING_COUNTER Action
 axios.interceptors.response.use(
@@ -87,8 +88,8 @@ const App: React.FC = () => {
                                         element={<ReportView />}
                                     />
                                     <Route
-                                        path="/expenses-add/:id"
-                                        element={<ExpensesForm />}
+                                        path="/expenses/add/:id"
+                                        element={<AddExpense/>}
                                     />
 
                                     <Route
@@ -98,7 +99,7 @@ const App: React.FC = () => {
 
                                     <Route
                                         path="/expenses/edit/:id"
-                                        element={<ExpensesForm />}
+                                        element={<EditExpense />}
                                     />
 
                                     {/* <Route

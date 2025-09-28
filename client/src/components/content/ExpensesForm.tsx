@@ -1,5 +1,5 @@
 import { Button, Form, Row, Container } from 'react-bootstrap';
-import { Expense } from '../../types/Expense';
+import { Expense } from '../../types/Expense.ts';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 // import {connect} from "react-redux";
@@ -8,24 +8,27 @@ import {
     convertStrToAmount,
     formatDateStr,
     formateStrToDate,
-} from '../../utils';
-import { AppState } from '../../store/Store';
+} from '../../utils/index.ts';
+import { AppState } from '../../store/Store.ts';
 
 import {
-    RouteComponentProps,
     useNavigate as useHistory,
 } from 'react-router-dom';
 import  { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ExpensesThunkActions from '../../actions/ExpensesThunkActions.ts';
    import { useSecurity } from '../../context/SecurityContext.tsx';
-type IdParams = { id: string };
+type ExpenseParams = { 
+    id?: number
+    isEdit:boolean
+    reportId?:number
+};
 
 /**
  *
  * main content wrapper
  */
-export const ExpensesForm = (routerProps: RouteComponentProps<IdParams>) => {
+export const ExpensesForm = ({id,isEdit,reportId}:ExpenseParams) => {
     const history = useHistory();
     const dispatch = useDispatch();
 
@@ -41,23 +44,21 @@ export const ExpensesForm = (routerProps: RouteComponentProps<IdParams>) => {
     const [isAmountValid, setIsAmountValid] = useState(false);
     const [createdAT, setCreatedAT] = useState(formatDateStr(new Date()));
     const [isDateValid, setIsDateValid] = useState(true);
-    const [isEdit, setIsEdit] = useState(false);
-
- 
+    
 
 
 
-    const { sso, expense } = useSelector((state: AppState) => {
-        console.log(
-            'use selector ExpensesForm: ' +
-                JSON.stringify(state.expensesState.newExpense)
-        );
+    // const { sso, expense } = useSelector((state: AppState) => {
+    //     console.log(
+    //         'use selector ExpensesForm: ' +
+    //             JSON.stringify(state.expensesState.newExpense)
+    //     );
 
-        return {
-            sso: state.ssoState.sso,
-            expense: state.expensesState.newExpense,
-        };
-    });
+    //     return {
+    //         sso: state.ssoState.sso,
+    //         expense: state.expensesState.newExpense,
+    //     };
+    // });
 
     /**
      * change description of item
@@ -109,25 +110,27 @@ export const ExpensesForm = (routerProps: RouteComponentProps<IdParams>) => {
      */
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (sso.authenticated) {
+        if (isAuthenticated) {
             if (isEdit) {
-                const expenseId = routerProps.match.params.id.trim();
-                const expense: Expense = {
-                    id: Number(expenseId),
+                  
+                    const expense: Expense = {
+                    id: Number(id),
                     amount: convertStrToAmount(amount),
                     description,
                     createdAT: createdAT,
                 };
                 dispatch(
-                    ExpensesThunkActions.updateExpense(sso.token, expense)
+                    ExpensesThunkActions.updateExpense(user?.token, expense)
                 );
             } else {
-                const reportId = routerProps.match.params.id.trim();
+                
+                //call to iso string to be compliant with golang time
+                // https://pkg.go.dev/time
                 const expense: Expense = {
                     id: NaN,
                     amount: convertStrToAmount(amount),
                     description,
-                    createdAT: createdAT,
+                    createdAT: formateStrToDate(createdAT).toISOString(),
                 };
                 console.info(
                     `add expnense ${JSON.stringify(expense)} to report ${reportId}`
@@ -137,7 +140,7 @@ export const ExpensesForm = (routerProps: RouteComponentProps<IdParams>) => {
                 );
             }
 
-            history.push('/');
+            history('/');
         }
     };
 
@@ -146,28 +149,26 @@ export const ExpensesForm = (routerProps: RouteComponentProps<IdParams>) => {
      */
     useEffect(() => {
         if (isAuthenticated) {
-            if (!history.location.pathname.match('expenses-add')) {
-                // we adding the report
-                setIsEdit(true);
-                dispatch(
-                    ExpensesThunkActions.fetchOneExpense(
-                        user?.token,
-                        routerProps.match.params.id
-                    )
-                );
+                if (isEdit && id !== undefined){
+                    dispatch(
+                        ExpensesThunkActions.fetchOneExpense(
+                            user?.token,
+                            id)
+                    );  
+                }
+            
             }
-        }
-    }, [dispatch]);
+        }, [dispatch]);
 
-    useEffect(() => {
-        if (expense.id > 0) {
-            setDescription(expense.description);
-            setIsDescriptionValid(true);
-            setAmount(convertAmountToStr(expense.amount));
-            setIsAmountValid(true);
-            setCreatedAT(expense.createdAT);
-        }
-    }, [expense]);
+    // useEffect(() => {
+    //     if (expense.id > 0) {
+    //         setDescription(expense.description);
+    //         setIsDescriptionValid(true);
+    //         setAmount(convertAmountToStr(expense.amount));
+    //         setIsAmountValid(true);
+    //         setCreatedAT(expense.createdAT);
+    //     }
+    // }, [expense]);
 
     const renderForm = () => {
         return (

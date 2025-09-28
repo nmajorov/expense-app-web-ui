@@ -8,8 +8,6 @@ import {UserProfile } from "../types/Login.ts";
 export const SecurityActions = {
     // not easy to check login cause it do callback
     loginActionSuccess: createAction(C.LOGIN_SUCCESS)<UserProfile>(),
-   // loginFail: createAction(C.)<String>(),
- //   ssoInitializedSuccess:createAction(C.SSO_INITIALIZED)<SSO>(),
     userProfileLoadSuccess:createAction(C.USER_PROFILE_LOADED)<UserProfile>(),
     singOutSuccess: createAction(C.SIGN_OUT)(),
     sessionExpired: createAction(C.SESSION_EXPIRED)()

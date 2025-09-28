@@ -102,3 +102,5 @@ export const formateStrToDate = (input:string) : Date  =>{
 
     return result;
 }
+
+

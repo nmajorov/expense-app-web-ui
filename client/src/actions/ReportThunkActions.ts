@@ -78,7 +78,7 @@ const ReportThunkActions = {
         };
     },
 
-    fetchOneReport: (token: string, id: string) => {
+    fetchOneReport: (token: string, id: number) => {
         return (
             dispatch: ThunkDispatch<AppState, undefined, AppAction>,
             getState: () => AppState
@@ -154,6 +154,8 @@ const ReportThunkActions = {
             );
         };
     },
+
+   
 };
 
 export default ReportThunkActions;

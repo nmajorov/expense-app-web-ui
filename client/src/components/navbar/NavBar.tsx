@@ -10,7 +10,7 @@ import {
 } from 'react-bootstrap';
 import { AppState } from '../../store/Store.ts';
 
-import { href, Link, NavLink, useNavigate } from 'react-router-dom';
+import { href, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSecurity } from '../../context/SecurityContext.tsx';
 import SecurityThunkActions from '../../actions/SecurityThunkActions.ts';
@@ -33,7 +33,7 @@ export function NavigationBar() {
     const { isAuthenticated, user } = useSecurity();
     const dispatch = useDispatch();
     const history = useNavigate();
-    const { routerLocation } = useSelector(routerSelector);
+    const routerLocation  =  useLocation();
 
     //const [isOpen, setIsOpen] = useState(false);
 
@@ -57,14 +57,8 @@ export function NavigationBar() {
             );
         } else if (pathname.startsWith('/report')) {
             result = (
-                <Nav.Link
-                    as={Link}
-                    to={
-                        '/expenses-add/' +
-                        routerLocation.pathname.replace('/report/', '')
-                    }
-                >
-                    {MenuNames.ADD_EXPENSE}
+                <Nav.Link as={Link} to="/">
+                    List reports
                 </Nav.Link>
             );
         }
