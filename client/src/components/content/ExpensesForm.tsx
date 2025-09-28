@@ -130,7 +130,7 @@ export const ExpensesForm = ({id,isEdit,reportId}:ExpenseParams) => {
                     id: NaN,
                     amount: convertStrToAmount(amount),
                     description,
-                    createdAT: formateStrToDate(createdAT).toISOString(),
+                    createdAT: createdAT +"T20:22:00.467444548+02:00"
                 };
                 console.info(
                     `add expnense ${JSON.stringify(expense)} to report ${reportId}`
