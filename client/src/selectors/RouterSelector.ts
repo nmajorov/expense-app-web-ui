@@ -12,3 +12,11 @@ export const  routerSelector  = createSelector(
     }
 );
 
+export const  reportIDSelector  = createSelector(
+    [(state: AppState) => state.router],
+    (routerState) => {
+        return {
+            routerLocation: routerState.location.pathname.replace('/report/', ''),
+        };
+    }
+);
