@@ -18,6 +18,8 @@ import  { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ExpensesThunkActions from '../../actions/ExpensesThunkActions.ts';
    import { useSecurity } from '../../context/SecurityContext.tsx';
+import { expensesSelector } from '../../selectors/ExpensesSelector.ts';
+import { formatDateISOStr } from '../../utils/DateConverter.ts';
 type ExpenseParams = { 
     id?: number
     isEdit:boolean
@@ -31,7 +33,7 @@ type ExpenseParams = {
 export const ExpensesForm = ({id,isEdit,reportId}:ExpenseParams) => {
     const history = useHistory();
     const dispatch = useDispatch();
-
+    const {expenses} = useSelector(expensesSelector);
 
     const { isAuthenticated, user } = useSecurity();
 
@@ -117,7 +119,8 @@ export const ExpensesForm = ({id,isEdit,reportId}:ExpenseParams) => {
                     id: Number(id),
                     amount: convertStrToAmount(amount),
                     description,
-                    createdAT: createdAT,
+                    createdAT: createdAT +"T20:22:00.467444548+02:00",
+                     
                 };
                 dispatch(
                     ExpensesThunkActions.updateExpense(user?.token, expense)
@@ -151,15 +154,18 @@ export const ExpensesForm = ({id,isEdit,reportId}:ExpenseParams) => {
     useEffect(() => {
         if (isAuthenticated) {
                 if (isEdit && id !== undefined){
-                    dispatch(
-                        ExpensesThunkActions.fetchOneExpense(
-                            user?.token,
-                            id)
-                    );  
-                }
-            
+                    const exp = expenses?.find((e) => e.id === id);
+                    if (exp !== undefined){
+                        setDescription(exp.description);
+                        setIsDescriptionValid(true);
+                        setAmount(convertAmountToStr(exp.amount));
+                        setIsAmountValid(true);
+                        setCreatedAT(formatDateISOStr( exp.createdAT));
+                        
+                    }
+                }           
             }
-        }, [dispatch]);
+        }, []);
 
     // useEffect(() => {
     //     if (expense.id > 0) {

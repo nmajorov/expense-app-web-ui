@@ -86,7 +86,7 @@ const ReportView = ()  => {
             );
         }
 
-        history('/report/' + reportID);
+        loadExpenses();
     };
 
 
@@ -94,11 +94,7 @@ const ReportView = ()  => {
         loadExpenses();
     }, []);
 
-    // useEffect(() => {
-    //    // console.log("expenses:"  + JSON.stringify(expenses));
-    // }, [expenses]);
-
-
+  
     /**
      * load expenses to report
      */
