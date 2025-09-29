@@ -2,6 +2,7 @@ import React, { createContext, useContext, ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 import { UserProfile } from '../types/Login.ts';
 import { AppState } from '../store/Store.ts';
+import { securitySelector } from '../selectors/SecuritySelectors.ts';
 
 // Define the shape of the context data
 interface SecurityContextType {
@@ -28,15 +29,10 @@ export const SecurityProvider: React.FC<SecurityProviderProps> = ({
     children,
 }) => {
     // Read the login state directly from the Redux store
-    const { isAuthenticated, user } = useSelector((state: AppState) => ({
-        isAuthenticated: state.loginState.authenticated,
-        user: state.loginState.user,
-    }));
-
-    const value = { isAuthenticated, user };
+    const { isAuthenticated, user } = useSelector(securitySelector);
 
     return (
-        <SecurityContext.Provider value={value}>
+        <SecurityContext.Provider value={{ isAuthenticated, user }}>
             {children}
         </SecurityContext.Provider>
     );
