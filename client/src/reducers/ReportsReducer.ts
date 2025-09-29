@@ -37,12 +37,13 @@ const reportsReducer = (
 
     case getType(ReportActions.deleteActionSuccess):
       // just to trigger report state
-      newState.activeReport = undefined;
+      newState.reports = REPORTS_INITIAL_STATE.reports;
       break;
 
     case getType(SecurityActions.singOutSuccess):
       // When user logs out, reset to the initial state
-      return REPORTS_INITIAL_STATE;
+      newState.reports = REPORTS_INITIAL_STATE.reports;
+      break;
 
     default:
       break;

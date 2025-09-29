@@ -24,7 +24,7 @@ const composeEnhancers =
 const persistConfig = {
     key: 'primary',
     storage: storage,
-    whitelist: ['loginState','reportsState'],
+    whitelist: ['loginState'],
 };
 
 

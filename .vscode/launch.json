@@ -6,7 +6,7 @@
     "configurations": [
         // created by VS Code
 {
-  "type": "firefox",
+  "type": "chrome",
   "request": "launch",
   "reAttach": true,
   "name": "Launch localhost",

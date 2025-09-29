@@ -94,9 +94,9 @@ const ReportView = ()  => {
         loadExpenses();
     }, []);
 
-    useEffect(() => {
-       // console.log("expenses:"  + JSON.stringify(expenses));
-    }, [expenses]);
+    // useEffect(() => {
+    //    // console.log("expenses:"  + JSON.stringify(expenses));
+    // }, [expenses]);
 
 
     /**
@@ -162,7 +162,7 @@ const ReportView = ()  => {
                     </Row>
                 <Row className="mt-2">
                     <Col>
-                    <Button variant="primary"  onClick={() => history('/expenses/add/1')}>
+                    <Button variant="primary"  onClick={() => history('/expenses/add/' + reportID)}>
                              Add Expense
                         </Button>
                     </Col>  
