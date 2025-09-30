@@ -221,7 +221,15 @@ const ReportView = ()  => {
                                 </Button>
                             </th>
                             <th>Description</th>
-                            <th>Amount</th>
+                            <th>Amount{' '}
+                                <Button onClick={() => sortBy('amount_asc')}>
+                                    {arrovUpIcon}
+                                </Button>
+                                &nbsp; &nbsp;
+                                <Button onClick={() => sortBy('amount_desc')}>
+                                    {arrovDownIcon}
+                                </Button>
+                            </th>
                             <th>
                                 Date{' '}
                                 <Button onClick={() => sortBy('created_asc')}>
