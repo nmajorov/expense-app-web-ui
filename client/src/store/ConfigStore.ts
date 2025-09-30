@@ -24,8 +24,9 @@ const composeEnhancers =
 const persistConfig = {
     key: 'primary',
     storage: storage,
-    whitelist: ['ssoState', 'router'],
+    whitelist: ['loginState'],
 };
+
 
 const configureStore = (preloadedState?: any) => {
     // configure middlewares

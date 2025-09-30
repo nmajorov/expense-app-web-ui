@@ -8,6 +8,7 @@ export const ReportActions = {
   fetchOneReportSuccess: createAction(C.FETCH_ONE_REPORT_SUCCESS)<Report>(),
   deleteActionSuccess: createCustomAction(C.REMOVE_REPORT),
   updateActionSuccess: createCustomAction(C.UPDATE_REPORT_SUCCESS),
+//  setActiveReport: createAction(C.SET_ACTIVE_REPORT)<Report>(),
 };
 
 export type ReportAction = ActionType<typeof ReportActions>;

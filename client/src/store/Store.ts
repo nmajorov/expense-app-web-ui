@@ -31,7 +31,6 @@ export interface ExpensesState {
 
 export interface ReportsState {
     reports: Array<Report>;
-    changes?: boolean; // helper for trigger changes in state
 }
 
 export interface AppState {

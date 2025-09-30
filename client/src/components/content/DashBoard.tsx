@@ -42,12 +42,14 @@ const DashBoard = () => {
         continueButtonVariant: 'danger',
     });
 
-    // useEffect(() => {
-    //     // Code to be executed on component load
-    //     if (isAuthenticated) {
-    //         dispatch(ReportThunkActions.fetchReports(user?.token));
-    //     }
-    // }, []); // Empty dependency array means it will run only once on component mount
+    useEffect(() => {
+         // Code to be executed on component load
+         if (isAuthenticated) {
+           
+                dispatch(ReportThunkActions.fetchReports(user?.token));
+            }
+         
+     }, []); 
 
     function openDeleteDialog(id: number) {
         setId(id);

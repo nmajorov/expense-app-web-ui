@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import { Route, Routes as Switch } from 'react-router-dom';
+import { Outlet, Route, Routes, Routes as Switch } from 'react-router-dom';
 import { Container } from 'npm:react-bootstrap';
 import { Provider } from 'react-redux';
 
@@ -15,7 +15,7 @@ import { history, persistor, store } from './store/ConfigStore.ts';
 import GlobalAlert from './components/Alert.tsx';
 import ProfileView from './components/content/ProfileView.tsx';
 import ReportView from './components/content/ReportView.tsx';
-import { ReportForm } from './components/content/ReportForm.tsx';
+import { AddReport, EditReport, ReportForm } from './components/content/ReportForm.tsx';
 import { LoginForm } from './components/content/LoginForm.tsx';
 import { AlertActions } from './actions/AlertAction.ts';
 import { AlertMessage, MessageType } from './types/AlertTypes.ts';
@@ -26,6 +26,11 @@ import DashBoard from './components/content/DashBoard.tsx';
 import { NavigationBar as Navigation } from './components/navbar/NavBar.tsx';
 import './index.css';
 import { SecurityProvider } from './context/SecurityContext.tsx';
+import {
+    AddExpense,
+    EditExpense,
+    Expense,
+} from './components/content/Expenses.tsx';
 
 // intercept all Axios responses and dispatch the DECREMENT_LOADING_COUNTER Action
 axios.interceptors.response.use(
@@ -48,73 +53,70 @@ axios.interceptors.response.use(
         return Promise.reject(error);
     }
 );
-
+/**
+ *
+ *
+ * @return {*}
+ */
 const App: React.FC = () => {
     return (
         <Provider store={store}>
             <SecurityProvider>
-                <PersistGate
-                   
-                    persistor={persistor}
-                >
-                    <ConnectedRouter history={history}>
-                        <Container fluid="md">
-                            <GlobalAlert />
-                            <Navigation />
-                            <main role="main" className="ml-20">
-                                <Switch>
-                                    <Route
-                                        index
-                                        path="/"
-                                        element={<DashBoard />}
-                                    />
-                                    <Route
-                                        path="/login"
-                                        element={<LoginForm />}
-                                    />
+                <PersistGate persistor={persistor}>
+                    <Routes>
+                        <Route path="/" element={<Layout />}>
+                            <Route index element={<DashBoard />} />
+                            <Route path="/login" element={<LoginForm />} />
 
-                                    <Route
-                                        path="/report-add"
-                                        element={<ReportForm />}
-                                    />
+                            <Route
+                                path="/report-add"
+                                element={<AddReport />}
+                            />
 
-                                    <Route
-                                        path="/report/edit/:id"
-                                        element={<ReportForm />}
-                                    />
-                                    <Route
-                                        path="/report/:id"
-                                        element={<ReportView />}
-                                    />
-                                    <Route
-                                        path="/expenses-add/:id"
-                                        element={<ExpensesForm />}
-                                    />
+                            <Route
+                                path="/report/edit/:id"
+                                element={<EditReport />}
+                            />
+                            <Route
+                                path="/report/:id"
+                                element={<ReportView />}
+                            />
+                            <Route
+                                path="/expenses/add/:id"
+                                element={<AddExpense />}
+                            />
 
-                                    <Route
-                                        path="/profile"
-                                        element={<ProfileView />}
-                                    />
+                            <Route path="/profile" element={<ProfileView />} />
 
-                                    <Route
-                                        path="/expenses/edit/:id"
-                                        element={<ExpensesForm />}
-                                    />
-
-                                    {/* <Route
-                                        path="/logout"
-                                        element={<Logout/>}
-                                    /> */}
-                                </Switch>
-                            </main>
-
-                            <Footer />
-                        </Container>
-                    </ConnectedRouter>
+                            <Route
+                                path="/expenses/edit/:id"
+                                element={<EditExpense />}
+                            />
+                        </Route>
+                    </Routes>
                 </PersistGate>
             </SecurityProvider>
         </Provider>
     );
 };
 
+/**
+ *  Layout component that includes the navigation bar and footer
+ */
+function Layout() {
+    return (
+        <Container fluid="md">
+            <GlobalAlert />
+            <Navigation />
+            <main role="main" className="ml-20">
+                {/* An <Outlet> renders whatever child route is currently active,
+          so you can think about this <Outlet> as a placeholder for
+          the child routes we defined above. */}
+                <Outlet />
+            </main>
+
+            <Footer />
+        </Container>
+    );
+}
 export default App;

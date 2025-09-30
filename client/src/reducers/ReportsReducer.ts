@@ -6,8 +6,7 @@ import { Report } from "../types/Report.ts";
 import { SecurityActions } from '../actions/SecurityActions.ts';
 
 export const REPORTS_INITIAL_STATE: ReportsState = {
-  reports: [],
-  changes: false
+  reports: []
 };
 
 const reportsReducer = (
@@ -20,33 +19,31 @@ const reportsReducer = (
   switch (action.type) {
     case getType(ReportActions.fetchReportsSuccess):
       newState.reports = action.payload as Array<Report>;
-      newState.changes = true;
+     
       break;
 
     case getType(ReportActions.fetchOneReportSuccess):
       newState.reports = [action.payload as Report];
-      newState.changes = true;
       break;
 
     case getType(ReportActions.addReportSuccess):
-      newState.changes = !newState.changes;
       newState.reports = [];
       break;
 
     case getType(ReportActions.updateActionSuccess):
       console.log("updateActionSuccess reducer called");
-      newState.changes = !newState.changes;
       newState.reports = [];
       break;
 
     case getType(ReportActions.deleteActionSuccess):
       // just to trigger report state
-      newState.changes = !newState.changes;
+      newState.reports = REPORTS_INITIAL_STATE.reports;
       break;
 
     case getType(SecurityActions.singOutSuccess):
       // When user logs out, reset to the initial state
-      return REPORTS_INITIAL_STATE;
+      newState.reports = REPORTS_INITIAL_STATE.reports;
+      break;
 
     default:
       break;

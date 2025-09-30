@@ -21,10 +21,10 @@ const ExpensesThunkActions = {
                             id: element.id,
                             amount: element.amount,
                             createdAT: element.createdAT,
-                            tstamp: element.tstamp,
+                            UpdatedAt: element?.UpdatedAt,
                         });
                     });
-                    // console.log("fetched data: " + JSON.stringify(data))
+                    console.log("fetched data: " + JSON.stringify(data))
                     dispatch(ExpensesActions.fetchActionSuccess(data));
                 },
                 (error) => {
@@ -108,7 +108,7 @@ const ExpensesThunkActions = {
         };
     },
 
-    fetchOneExpense: (token: string, id: string) => {
+    fetchOneExpense: (token: string, id: number) => {
         return (dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
             return API.fetchExpense(token, id).then(
                 (response) => {
@@ -144,20 +144,7 @@ const ExpensesThunkActions = {
                         type: MessageType.SUCCESS,
                     };
                     dispatch(AlertActions.addMessage(alertMessage));
-                    sendEvent({
-                        body: {
-                            timestamp: Date.now(),
-                            user_id: 11,
-                            event_name: 'expense_updated',
-                            event_data: {},
-                        },
-                    })
-                        .then((response) => {
-                            console.log('event send to azure');
-                        })
-                        .catch(function () {
-                            console.error('error publish event');
-                        });
+                
                 },
                 (error) => {
                     const emsg = 'Cannot add the expenses: ' + error.toString();
@@ -173,6 +160,8 @@ const ExpensesThunkActions = {
             );
         };
     },
+
+  
 };
 
 export default ExpensesThunkActions;

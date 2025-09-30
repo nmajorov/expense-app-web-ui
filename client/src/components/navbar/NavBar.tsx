@@ -10,7 +10,7 @@ import {
 } from 'react-bootstrap';
 import { AppState } from '../../store/Store.ts';
 
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { href, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSecurity } from '../../context/SecurityContext.tsx';
 import SecurityThunkActions from '../../actions/SecurityThunkActions.ts';
@@ -33,7 +33,7 @@ export function NavigationBar() {
     const { isAuthenticated, user } = useSecurity();
     const dispatch = useDispatch();
     const history = useNavigate();
-    const { routerLocation } = useSelector(routerSelector);
+    const routerLocation  =  useLocation();
 
     //const [isOpen, setIsOpen] = useState(false);
 
@@ -57,14 +57,8 @@ export function NavigationBar() {
             );
         } else if (pathname.startsWith('/report')) {
             result = (
-                <Nav.Link
-                    as={Link}
-                    to={
-                        '/expenses-add/' +
-                        routerLocation.pathname.replace('/report/', '')
-                    }
-                >
-                    {MenuNames.ADD_EXPENSE}
+                <Nav.Link as={Link} to="/">
+                    List reports
                 </Nav.Link>
             );
         }
@@ -92,38 +86,38 @@ export function NavigationBar() {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                       <Nav.Link className="justify-content">
+                    
                             {renderMenu(routerLocation.pathname)}
-                        </Nav.Link>
-                        </Nav>
-                        <Nav className="justify-content-end">
-                            {isAuthenticated ? (
-                                <NavDropdown
-                                    title={'' + user?.firstname}
-                                    id="basic-nav-dropdown"
-                                >
-                                    <Nav.Link as={Link} to="/profile">
-                                        {MenuNames.SHOW_PROFILE}
-                                    </Nav.Link>
+                    </Nav>
+                    <Nav className="justify-content-end">
+                        {isAuthenticated ? (
+                            <NavDropdown
+                                title={'' + user?.firstname}
+                                id="basic-nav-dropdown"
+                            >
+                                <NavDropdown.Item  href="/profile">
+                                    {MenuNames.SHOW_PROFILE}
+                                </NavDropdown.Item>
 
-                                    <NavDropdown.Divider />
-                                    <a
-                                        className="dropdown-item"
-                                        onClick={handleLogout}
-                                    >
-                                        SING OUT
-                                    </a>
-                                </NavDropdown>
-                            ) : (
-                                <Nav.Link
-                                    as={Link}
-                                    to="/login"
-                                    className="justify-content-end"
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item
+                                 
+                                    href="/"
+                                  
+                                    onClick={handleLogout}
                                 >
-                                    {MenuNames.LOGIN}
-                                </Nav.Link>
-                            )}
-                       
+                                    SING OUT
+                                </NavDropdown.Item>
+                            </NavDropdown>
+                        ) : (
+                            <Nav.Link
+                                as={Link}
+                                to="/login"
+                                className="justify-content-end"
+                            >
+                                {MenuNames.LOGIN}
+                            </Nav.Link>
+                        )}
                     </Nav>
                 </Navbar.Collapse>
             </Container>

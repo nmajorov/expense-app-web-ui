@@ -1,10 +1,11 @@
-import * as React from 'react';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faTrashAlt,
     faEdit,
     faArrowUp,
     faArrowDown,
+    faUtensilSpoon,
 } from '@fortawesome/free-solid-svg-icons';
 
 import Table from 'react-bootstrap/Table';
@@ -15,44 +16,28 @@ import { ConfirmDialogModal } from './ConfirmDialog.tsx';
 import ExpensesThunkActions from '../../actions/ExpensesThunkActions.ts';
 import { AlertMessage, MessageType } from '../../types/AlertTypes.ts';
 import { AlertActions } from '../../actions/AlertAction.ts';
-import { useContext, useEffect, useState } from 'react';
+import { use, useContext, useEffect, useState } from 'react';
 import { Expense } from '../../types/Expense.ts';
-import { useNavigate as useHistory } from 'react-router-dom';
+import { NavLink, useNavigate as useHistory, useParams } from 'react-router-dom';
 
 import { useSecurity } from '../../context/SecurityContext.tsx';
-import { expensesSelector } from "../../selectors/ExpensesSelector.ts";
-import { reportIDSelector, routerSelector } from "../../selectors/RouterSelector.ts";
+import { expensesSelector } from '../../selectors/ExpensesSelector.ts';
+import { reportSelector } from "../../selectors/ReportSelector.ts";
+
 
 const trashIcon = <FontAwesomeIcon icon={faTrashAlt} />;
 const editIcon = <FontAwesomeIcon icon={faEdit} />;
 const arrovUpIcon = <FontAwesomeIcon icon={faArrowUp} />;
 const arrovDownIcon = <FontAwesomeIcon icon={faArrowDown} />;
 
-//
-
-const ReportView = () => {
-
-         const { isAuthenticated, user } = useSecurity();
-         const expenses = useSelector(expensesSelector);
-        const reportID = useSelector(reportIDSelector);
 
 
-    
-    // const { authenticated, expenses, sso, reportID, expensesChanged } =
-    //     useSelector((state: AppState) => {
-    //         // console.log("use selector expenses: " +
-    //         //   JSON.stringify(state.expensesState.expenses));
 
-    //         return {
-    //             expenses: state.expensesState.expenses,
-    //             expensesChanged: state.expensesState.changed,
-    //             reportID: state.router.location.pathname.replace(
-    //                 '/report/',
-    //                 ''
-    //             ),
-    //         };
-    //     });
-
+const ReportView = ()  => {
+    const { isAuthenticated, user } = useSecurity();
+    const {expenses} = useSelector(expensesSelector);
+    const { id } = useParams();
+    const reportID =Number(id);
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -60,6 +45,16 @@ const ReportView = () => {
         useState(false);
 
     const [toDeleteId, setToDeleteId] = useState(Number.NaN);
+
+    const { reports } = useSelector(reportSelector);
+
+
+
+     if (isNaN(reportID)) {
+        // If the ID is not a number, redirect to a "Not Found" page
+         history('/');
+         return null; // Don't render anything in this component
+    }
 
     const startLoading = () => {
         const loadMessage: AlertMessage = {
@@ -76,7 +71,7 @@ const ReportView = () => {
     };
 
     function callEdit(id: Number): void {
-        history.push(`/expenses/edit/${id}`);
+        history(`/expenses/edit/${id}`);
     }
 
     /**
@@ -86,12 +81,20 @@ const ReportView = () => {
     const deleteExpense = () => {
         console.log('delete expense: ' + toDeleteId);
         if (!Number.isNaN(toDeleteId)) {
-            dispatch(ExpensesThunkActions.deleteExpense(user?.token, toDeleteId));
+            dispatch(
+                ExpensesThunkActions.deleteExpense(user?.token, toDeleteId)
+            );
         }
 
-        history('/report/' + reportID);
+        loadExpenses();
     };
 
+
+    useEffect(() => {
+        loadExpenses();
+    }, []);
+
+  
     /**
      * load expenses to report
      */
@@ -100,7 +103,6 @@ const ReportView = () => {
         dispatch(ExpensesThunkActions.fetchExpensesData(user?.token, reportID));
     };
 
-    
     /**
      * sort expenses by id
      */
@@ -125,29 +127,52 @@ const ReportView = () => {
             .toFixed(2);
     };
 
-   
+    function getReportByID(){
+     
+        if (reports !== undefined) {
+            for (const report of reports) {
+                if (report.id === reportID) {
+                    return report;
+                }
+            }
+        }
+      
+    }
 
-      if (!isAuthenticated) {
-          history('/');
-      } else {
-         // loadExpenses();
-
-          /**
-           * render view
-           */
-          return (
-              <Container fluid="md" className="mt-3">
-                  <Row>
-                      <Col>
-                          {expenses.length > 0
-                              ? renderTable(expenses)
-                              : emptyPlaceHolder()}
-                      </Col>
-                  </Row>
-              </Container>
-          );
-      }
-
+    if (!isAuthenticated || reports === undefined || reports.length === 0){
+        history('/');
+    } else {
+        console.log("reportID: " + JSON.stringify(reportID));
+        
+        /**
+         * render view
+         */
+        return (
+            
+         
+            <Container fluid="md" className="mt-3">
+                <Row>
+                    <Col>
+                        <h4>Report: {getReportByID()?.name}</h4>
+                    </Col>
+                    </Row>
+                <Row className="mt-2">
+                    <Col>
+                    <Button variant="primary"  onClick={() => history('/expenses/add/' + reportID)}>
+                             Add Expense
+                        </Button>
+                    </Col>  
+                </Row>   
+                <Row className="mt-3">   
+                    <Col>
+                        {(expenses !== undefined && expenses.length> 0)
+                            ? renderTable(expenses)
+                            : emptyPlaceHolder()}
+                    </Col>
+                </Row>
+            </Container>
+        );
+    }
 
     /**
      * Render  empty placeholder if no expenses assigned to report
@@ -155,7 +180,11 @@ const ReportView = () => {
      * @returns JSX empty placeholder
      */
     function emptyPlaceHolder() {
-        return <p>There is no expenses in this report.</p>;
+
+        return (
+            <p>There is no expenses in this report.</p>
+          
+        );
     }
 
     /**
@@ -177,7 +206,7 @@ const ReportView = () => {
                     toggleDialog={openDeleteModalWindow}
                     onConfirm={deleteExpense}
                 ></ConfirmDialogModal>
-                
+
                 <Table striped bordered hover size="sm">
                     <thead>
                         <tr>
@@ -216,7 +245,7 @@ const ReportView = () => {
                                     <td>{pr.description}</td>
                                     <td>{pr.amount}</td>
                                     <td>{pr.createdAT}</td>
-                                    <td>{pr.tstamp}</td>
+                                    <td>{pr.UpdatedAt}</td>
                                     <td>
                                         <Button onClick={() => callEdit(pr.id)}>
                                             {editIcon}
