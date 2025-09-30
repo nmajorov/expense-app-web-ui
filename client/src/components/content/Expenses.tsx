@@ -29,7 +29,7 @@ export const EditExpense=() =>{
         // If the ID is not a number, redirect to a "Not Found" page
          return (<>
          <p>
-            Error  Can´t find report number
+            Error  Can´t find expense number
 
          </p>
          </>);

@@ -11,32 +11,90 @@ import { AppState } from '../../store/Store.ts';
 import ReportThunkActions from '../../actions/ReportThunkActions.ts';
 import { useSecurity } from '../../context/SecurityContext.tsx';
 
-import {
-    useParams,
-    useNavigate as useHistory,
-} from 'react-router-dom';
+import { useParams, useNavigate as useHistory } from 'react-router-dom';
 import { Report } from '../../types/Report.ts';
+import { reportSelector } from '../../selectors/ReportSelector.ts';
+import { AlertActions } from '../../actions/AlertAction.ts';
+import { MessageType } from '../../types/AlertTypes.ts';
 
-type ReportParams = { id: string };
+type ReportProps = {
+    reportToEdit?: Report;
+};
 
-export const ReportForm = () => {
+export const AddReport = () => {
+    const dispatch = useDispatch();
+
+    const { isAuthenticated, user } = useSecurity();
+    if (!isAuthenticated) {
+        dispatch(
+            AlertActions.addMessage({
+                content: 'Not authenticated!',
+                show_notification: true,
+                type: MessageType.ERROR,
+            })
+        );
+        return <></>;
+    }
+    return <ReportForm />;
+};
+
+export const EditReport = () => {
+    const dispatch = useDispatch();
+
+    const { id } = useParams();
+    const reportID = Number(id);
+
+    const { isAuthenticated, user } = useSecurity();
+
+    const { reports } = useSelector(reportSelector);
+
+    function getReportById(id: number): Report | undefined {
+        for (let i = 0; i < reports.length; i++) {
+            if (reports[i].id === id) {
+                return reports[i];
+            }
+        }
+        return undefined;
+    }
+
+    if (!isAuthenticated) {
+        dispatch(
+            AlertActions.addMessage({
+                content: 'Not authenticated!',
+                show_notification: true,
+                type: MessageType.ERROR,
+            })
+        );
+        return <></>;
+    }
+
+    const reportToEdit = getReportById(reportID);
+
+    if (isNaN(reportID) && reportToEdit === undefined) {
+        // If the ID is not a number, redirect to a "Not Found" page
+        dispatch(
+            AlertActions.addMessage({
+                content: "Can't find report to edit",
+                show_notification: true,
+                type: MessageType.ERROR,
+            })
+        );
+
+        return <></>;
+    } else {
+        return <ReportForm reportToEdit={reportToEdit}></ReportForm>;
+    }
+};
+
+export const ReportForm = ({ reportToEdit }: ReportProps) => {
+
+    const { isAuthenticated, user } = useSecurity();
+
     const dispatch = useDispatch();
     const history = useHistory();
 
-     //const params = useParams();
-
-     const { isAuthenticated, user } = useSecurity();
-
-
     const [name, setName] = useState(String(''));
-    const [isEdit, setIsEdit] = useState(false);
-
     const [isValid, setValid] = useState(false);
-
-
-    const reports: Array<Report> = useSelector((state: AppState) => {
-        return state.reportsState.reports;
-    });
 
     /**
      * handel form submit
@@ -44,31 +102,18 @@ export const ReportForm = () => {
      */
     function handleSubmit(event: FormEvent) {
         event.preventDefault();
-        if (isAuthenticated) {
-            if (isEdit) {
-                reports[0].name = name;
 
-                dispatch(ReportThunkActions.updateReport(user?.token, reports[0]));
-            } else {
-                dispatch(ReportThunkActions.addReport(user?.token, name));
-            }
-
-            history('/');
-
+        if (reportToEdit === undefined) {
+            dispatch(ReportThunkActions.addReport(user?.token, name));
+        } else {
+            reportToEdit.name = name;
+            dispatch(
+                ReportThunkActions.updateReport(user?.token, reportToEdit)
+            );
         }
+
+        history('/');
     }
-
-    useEffect(() => {
-         if (!isAuthenticated) {
-             history('/');
-
-         }
-        if (isEdit) {
-            if (reports[0] !== undefined) {
-                checkName(reports[0].name);
-            }
-        }
-    }, [reports, isEdit]);
 
     function checkName(input: string) {
         setName(input);
@@ -86,15 +131,16 @@ export const ReportForm = () => {
                     <div className="card shadow mb-3">
                         <div className="card-header py-3">
                             <h6 className="m-0 font-weight-bold text-primary">
-                                {isEdit ? 'Edit' : 'Add'} Report
+                                {reportToEdit ? 'Edit' : 'Add'} Report
                             </h6>
                         </div>
-                        <div className="card-body"> 
+                        <div className="card-body">
                             <div className="col-sm-10">
-                            <Form onSubmit={handleSubmit}>
-                               
+                                <Form onSubmit={handleSubmit}>
                                     <Form.Group className="mb-3">
-                                        <Form.Label>Name</Form.Label>
+                                        <Form.Label>
+                                            {reportToEdit ? 'New Name' : 'Name'}
+                                        </Form.Label>
                                         <Form.Control
                                             className="form-control"
                                             contentEditable
@@ -107,14 +153,11 @@ export const ReportForm = () => {
                                             isInvalid={!isValid}
                                         />
                                     </Form.Group>
-                                
-                               
-                                        <Button type="submit" variant="primary">
-                                            Submit
-                                        </Button>
-                                   
-                               
-                            </Form>
+
+                                    <Button type="submit" variant="primary">
+                                        Submit
+                                    </Button>
+                                </Form>
                             </div>
                         </div>
                     </div>

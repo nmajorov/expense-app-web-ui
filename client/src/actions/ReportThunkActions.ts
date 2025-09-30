@@ -109,9 +109,9 @@ const ReportThunkActions = {
     /**
      * update report
      */
-    updateReport: (sso: SSO, report: Report) => {
+    updateReport: (token:string, report: Report) => {
         return (dispatch: ThunkDispatch<AppState, undefined, AppAction>) => {
-            return API.updateReport(sso.token, report).then(
+            return API.updateReport(token, report).then(
                 (response) => {
                     dispatch(ReportActions.updateActionSuccess());
                     const alertMessage: AlertMessage = {
@@ -119,13 +119,23 @@ const ReportThunkActions = {
                         show_notification: true,
                         type: MessageType.SUCCESS,
                     };
-                  
+
                     dispatch(AlertActions.addMessage(alertMessage));
                 },
                 (error) => {
+                    let errorMessage:string = 'Error updating the report. ';
+                    
+
+                    if (error?.response && error.response.status === 401) {
+                       errorMessage += 'Unauthorized ';
+                    } else {
+                        errorMessage  += error.toString();
+                    }
+
+                   // console.log(errorMessage);
+
                     const alertMessage: AlertMessage = {
-                        content:
-                            'Cannot update the report: ' + error.toString(),
+                        content: errorMessage,
                         show_notification: true,
                         type: MessageType.ERROR,
                     };
@@ -135,7 +145,7 @@ const ReportThunkActions = {
         };
     },
 
-    deleteReport: (token, id: number) => {
+    deleteReport: (token:string, id: number) => {
         return (
             dispatch: ThunkDispatch<AppState, undefined, AppAction>,
             getState: () => AppState
@@ -147,10 +157,18 @@ const ReportThunkActions = {
                     
                 },
                 (error) => {
+                     let errorMessage = "Error deleting report. ";
+
+                     if (error.response && error.response.status === 401) {
+                         errorMessage + 'unauthorized ';
+                     } else {
+                         errorMessage + error.toString();
+                     }
+
+
                     dispatch(
                         AlertActions.addMessage({
-                            content:
-                                'Cannot delete the report: ' + error.toString(),
+                            content: errorMessage,
                             show_notification: true,
                             type: MessageType.ERROR,
                         })

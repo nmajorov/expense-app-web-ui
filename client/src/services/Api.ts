@@ -182,7 +182,7 @@ export const updateReport = (token: string, report: Report) => {
         {
             Authorization: 'Bearer ' + token,
         },
-        `${url}/reports/`,
+        `${url}/reports`,
         {},
         report
     );
