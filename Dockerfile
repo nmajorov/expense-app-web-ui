@@ -1,0 +1,12 @@
+FROM docker.io/library/nginx:1.29.3
+
+WORKDIR /usr/src/app/
+
+
+##COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+COPY ./client/dist  /usr/share/nginx/html/
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
