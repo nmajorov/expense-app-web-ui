@@ -115,6 +115,24 @@ spec:
             }
 
 
+            stage('Vulnerability Scanning')
+            {
+                  steps
+                  {
+                      // run the docker we declare above
+                      container('docker-builder')
+                      {
+                          script
+                          {
+                             neuvector controllerEndpointUrlSelection: 'local', nameOfVulnerabilityToExemptFour: '', nameOfVulnerabilityToExemptOne: '', nameOfVulnerabilityToExemptThree: '', nameOfVulnerabilityToExemptTwo: '', nameOfVulnerabilityToFailFour: '', nameOfVulnerabilityToFailOne: '', nameOfVulnerabilityToFailThree: '', nameOfVulnerabilityToFailTwo: '', numberOfHighSeverityToFail: '', numberOfMediumSeverityToFail: '', registrySelection: 'harbor', repository: 'library/expense-app-web-ui', scanTimeout: 10, sendReportToController: true, standaloneScanner: false, tag: "${IMAGE_TAG}"
+
+                          }
+                      }
+                  }
+              }
+
+
+
         }
 
 
