@@ -8,7 +8,7 @@ class Footer extends React.Component {
                     <div className="copyright text-center my-auto">
                         <span>
                             Copyright &copy;
-                            <a href="mailto:nikolaj.majorov@majorov.biz">
+                            <a href="http://www.majorov.biz">
                                 {' '}
                                 Nikolaj Majorov{' '}
                             </a>{' '}
