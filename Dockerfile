@@ -1,3 +1,13 @@
+FROM denoland/deno:latest AS builder
+
+WORKDIR /usr/src/app
+
+COPY deno.json deno.lock vite.config.ts ./
+COPY client ./client
+
+RUN deno install --allow-scripts
+RUN deno task build
+
 FROM docker.io/library/nginx:1.29.3
 
 WORKDIR /usr/src/app/
@@ -12,7 +22,7 @@ ENV NGINX_ENTRYPOINT_LOCAL_RESOLVERS=1
 # built-in envsubst-on-templates entrypoint script
 COPY default.conf.template /etc/nginx/templates/default.conf.template
 
-COPY ./client/dist  /usr/share/nginx/html/
+COPY --from=builder /usr/src/app/client/dist /usr/share/nginx/html/
 
 EXPOSE 8080
 

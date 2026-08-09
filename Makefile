@@ -6,7 +6,7 @@ THIS_MAKEFILE_PATH:=$(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 THIS_DIR:=$(shell cd $(dir $(THIS_MAKEFILE_PATH));pwd)
 
 # docker image name
-IMAGE_NAME = majorov.biz/expenses-ui
+IMAGE_NAME = docker.io/nmajorov/expenses-ui
 
 # app version, read from deno.json
 VERSION := $(shell grep -m1 '"version"' deno.json | sed -E 's/.*"version"[[:space:]]*:[[:space:]]*"([^"]+)".*/\1/')
