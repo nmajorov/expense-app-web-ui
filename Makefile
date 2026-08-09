@@ -8,6 +8,9 @@ THIS_DIR:=$(shell cd $(dir $(THIS_MAKEFILE_PATH));pwd)
 # docker image name
 IMAGE_NAME = majorov.biz/expenses-ui
 
+# app version, read from deno.json
+VERSION := $(shell grep -m1 '"version"' deno.json | sed -E 's/.*"version"[[:space:]]*:[[:space:]]*"([^"]+)".*/\1/')
+
 PODMAN_CHECK=command -v podman
 CONTAINER_ENGINE := $(shell if [ -z $$(command -v podman) ];then echo docker;else echo podman; fi )
 
@@ -32,7 +35,7 @@ lint: ##  run elint on code
 .PHONY: dev
 dev: ##  run gui in dev mode
 	@echo "run	app"
-	deno run --env-file=.env.development --allow-net --allow-read dev
+	deno run --allow-net --allow-read dev
 
 
 .PHONY: dep
@@ -44,6 +47,10 @@ dep: ##  run gui in dev mode for node-js version  <17
 status: ##  run gui in dev mode for node-js version  <17
 	@echo "dep status dependencies"
 	deno outdated
+
+.PHONY: version
+version: ## show current app version
+	@echo $(VERSION)
 
 # check dependencies list
 # deno info  client/src/main.tsx
@@ -60,24 +67,13 @@ test: ##	run tests
 .PHONY: build
 build: ##  build everything
 		@echo "run js build"
-		unset REACT_APP_KEYCLOAK_URL
-		unset REACT_APP_KEYCLOAK_REALM
-		unset REACT_APP_KEYCLOAK_CLIENT_ID
-		unset REACT_APP_BACKEND_URL
 		deno run  build
 
 .PHONY: docker
 docker: clean ## build with container
 	@echo $(CONTAINER_ENGINE)
-	# back up real production file
-	#mv .env.production .env.back_up
-	#mv .env.docker .env.local
-	#yarn build
-	#mv .env.local .env.docker
-	#mv .env.back_up .env.production
-	#${CONTAINER_ENGINE} build -t $(IMAGE_NAME) .
-	#
-
+	${CONTAINER_ENGINE} build -t $(IMAGE_NAME):$(VERSION) .
+	
 
 
 docker-run: ## run locally app in  docker
@@ -88,7 +84,7 @@ docker-run: ## run locally app in  docker
 
 .PHONY: test-container
 test-container: ## test with container
-	#${CONTAINER_ENGINE} build -t $(IMAGE_NAME)-candidate .
+	#${CONTAINER_ENGINE} build -t $(IMAGE_NAME)-candidate:$(VERSION) .
 	 #IMAGE_NAME=$(IMAGE_NAME)-candidate test/run
 
 

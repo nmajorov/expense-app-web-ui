@@ -1,2 +1,2 @@
-//export const backEndUrl = `${env.get('REACT_APP_BACKEND_URL')}`;
-export const backEndUrl = `http://127.0.0.1:7000`;
+// relative path: nginx (see default.conf.template) proxies /api to the backend service
+export const backEndUrl = `/api`;
