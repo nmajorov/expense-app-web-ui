@@ -22,9 +22,13 @@ spec:
             - name: http
               containerPort: 8080
           env:
-            # consumed by default.conf.template to proxy /api/ to the backend Service
+            # consumed by default.conf.template to proxy /api/ to the backend Service.
+            # Must be namespace-qualified: nginx's `resolver` directive does a raw
+            # DNS query with no /etc/resolv.conf search-domain suffixing, so the bare
+            # short name (which works for kubectl/curl/etc via libc's resolver) gets
+            # NXDOMAIN from CoreDNS here.
             - name: BACKEND_HOST
-              value: expense-app-backend
+              value: expense-app-backend.expense-app-web-ui.svc.cluster.local
             - name: BACKEND_PORT
               value: "7000"
           readinessProbe:
