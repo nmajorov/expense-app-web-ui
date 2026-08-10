@@ -17,7 +17,7 @@ spec:
       containers:
         - name: expense-app-web-ui
           # tag pushed by jenkins-pipline-example.groovy (BUILD_ID); override per release
-          image: docker.io/nmajorov/expense-app-web-ui:latest
+          image: docker.io/nmajorov/expenses-ui:latest
           ports:
             - name: http
               containerPort: 8080
