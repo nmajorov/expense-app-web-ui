@@ -20,7 +20,12 @@ server {
     # BACKEND_HOST/BACKEND_PORT point at the k8s Service (or docker link) by name
     location /api/ {
         set $backend "http://${BACKEND_HOST}:${BACKEND_PORT}";
-        proxy_pass $backend/;
+        # proxy_pass to a variable skips nginx's usual location-prefix
+        # rewriting, so without this the full "/api/..." path would reach
+        # the backend unstripped - its routes are registered without an
+        # /api prefix (see /alive, /auth, /account, ...).
+        rewrite ^/api/(.*)$ /$1 break;
+        proxy_pass $backend;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
