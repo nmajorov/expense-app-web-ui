@@ -254,7 +254,7 @@ const ReportView = ()  => {
                                     <td>{pr.description}</td>
                                     <td>{pr.amount}</td>
                                     <td>{formatDateTimeShort(pr.createdAT)}</td>
-                                    <td>{pr.UpdatedAt}</td>
+                                    <td>{pr.UpdatedAt ? formatDateTimeShort(pr.UpdatedAt) : ''}</td>
                                     <td>
                                         <Button onClick={() => callEdit(pr.id)}>
                                             {editIcon}
