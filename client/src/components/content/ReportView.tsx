@@ -84,7 +84,9 @@ const ReportView = ()  => {
         if (!Number.isNaN(toDeleteId)) {
             dispatch(
                 ExpensesThunkActions.deleteExpense(user?.token, toDeleteId)
-            );
+            ).then(() => {
+                history(`/report/${reportID}`);
+            });
         }
 
         loadExpenses();
