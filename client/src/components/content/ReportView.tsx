@@ -23,6 +23,7 @@ import { NavLink, useNavigate as useHistory, useParams } from 'react-router-dom'
 import { useSecurity } from '../../context/SecurityContext.tsx';
 import { expensesSelector } from '../../selectors/ExpensesSelector.ts';
 import { reportSelector } from "../../selectors/ReportSelector.ts";
+import { formatDateTimeShort } from '../../utils/index.ts';
 
 
 const trashIcon = <FontAwesomeIcon icon={faTrashAlt} />;
@@ -252,7 +253,7 @@ const ReportView = ()  => {
                                     <td>{pr.id}</td>
                                     <td>{pr.description}</td>
                                     <td>{pr.amount}</td>
-                                    <td>{pr.createdAT}</td>
+                                    <td>{formatDateTimeShort(pr.createdAT)}</td>
                                     <td>{pr.UpdatedAt}</td>
                                     <td>
                                         <Button onClick={() => callEdit(pr.id)}>

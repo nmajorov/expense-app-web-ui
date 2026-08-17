@@ -89,6 +89,30 @@ export const formatDateISOStr = (input: string):string => {
 }
 
 /**
+ * Format an ISO timestamp to a short EU date/time string: dd.mm.yyyy HH:MM
+ *
+ * @param input ISO timestamp, e.g. "2020-04-19T22:00:00.000Z"
+ */
+export const formatDateTimeShort = (input: string): string => {
+  if (!input) {
+    return '';
+  }
+
+  const nd = new Date(input);
+  if (isNaN(nd.getTime())) {
+    return input;
+  }
+
+  const dd = String(nd.getDate()).padStart(2, '0');
+  const mm = String(nd.getMonth() + 1).padStart(2, '0');
+  const yyyy = nd.getFullYear();
+  const hh = String(nd.getHours()).padStart(2, '0');
+  const min = String(nd.getMinutes()).padStart(2, '0');
+
+  return `${dd}.${mm}.${yyyy} ${hh}:${min}`;
+}
+
+/**
  * Format string to date object
  * @param input string
  * @returns Date object
