@@ -218,6 +218,6 @@ export const addReport = (token: string, name: string) => {
         },
         url + '/reports',
         {},
-        name
+        { name }
     );
 };
