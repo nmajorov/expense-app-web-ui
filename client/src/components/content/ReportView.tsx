@@ -85,11 +85,10 @@ const ReportView = ()  => {
             dispatch(
                 ExpensesThunkActions.deleteExpense(user?.token, toDeleteId)
             ).then(() => {
+                loadExpenses();
                 history(`/report/${reportID}`);
             });
         }
-
-        loadExpenses();
     };
 
 
