@@ -32,7 +32,7 @@ export const login = (login: Login) => {
         {},
         {
             username: login.username,
-            passwd: login.password,
+            password: login.password,
         }
     );
 };
