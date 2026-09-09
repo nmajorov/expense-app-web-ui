@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSecurity } from '../../context/SecurityContext.tsx';
 import { Report } from '../../types/Report.ts';
 import { reportSelector } from '../../selectors/ReportSelector.ts';
+import { formatDateTimeShort } from '../../utils/index.ts';
 
 const trashIcon = <FontAwesomeIcon color="red" icon={faTrashAlt} />;
 const editIcon = <FontAwesomeIcon icon={faEdit} />;
@@ -126,7 +127,7 @@ const DashBoard = () => {
                         </Card.Title>
                         <Card.Subtitle className="mb-2 text-muted">
                             {'Created at: '}
-                            {rp.createdAT}
+                            {formatDateTimeShort(rp.createdAT)}
                         </Card.Subtitle>
                     </Card.Body>
                 </Card>

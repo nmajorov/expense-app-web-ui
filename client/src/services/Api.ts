@@ -32,8 +32,22 @@ export const login = (login: Login) => {
         {},
         {
             username: login.username,
-            passwd: login.password,
+            password: login.password,
         }
+    );
+};
+
+
+/**
+ * fetch the backend server version
+ */
+export const fetchVersion = () => {
+    return newRequest<any>(
+        HTTP_VERBS.GET,
+        {},
+        `${url}/version`,
+        {},
+        {}
     );
 };
 
@@ -218,6 +232,6 @@ export const addReport = (token: string, name: string) => {
         },
         url + '/reports',
         {},
-        name
+        { name }
     );
 };

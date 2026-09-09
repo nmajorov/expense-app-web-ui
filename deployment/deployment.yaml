@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expense-app-web-ui
+  labels:
+    app: expense-app-web-ui
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: expense-app-web-ui
+  template:
+    metadata:
+      labels:
+        app: expense-app-web-ui
+    spec:
+      containers:
+        - name: expense-app-web-ui
+          # tag pushed by jenkins-pipline-example.groovy (BUILD_ID); override per release
+          image: docker.io/nmajorov/expenses-ui:latest
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            # consumed by default.conf.template to proxy /api/ to the backend Service.
+            # Must be namespace-qualified: nginx's `resolver` directive does a raw
+            # DNS query with no /etc/resolv.conf search-domain suffixing, so the bare
+            # short name (which works for kubectl/curl/etc via libc's resolver) gets
+            # NXDOMAIN from CoreDNS here.
+            - name: BACKEND_HOST
+              value: expense-app-backend.expense-app-web-ui.svc.cluster.local
+            - name: BACKEND_PORT
+              value: "7000"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: expense-app-web-ui
+  labels:
+    app: expense-app-web-ui
+spec:
+  type: ClusterIP
+  selector:
+    app: expense-app-web-ui
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
