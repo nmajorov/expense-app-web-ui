@@ -38,6 +38,20 @@ export const login = (login: Login) => {
 };
 
 
+/**
+ * fetch the backend server version
+ */
+export const fetchVersion = () => {
+    return newRequest<any>(
+        HTTP_VERBS.GET,
+        {},
+        `${url}/version`,
+        {},
+        {}
+    );
+};
+
+
 export const fetchAccountInfo = (username: string, token:string) => {
     return newRequest<any>(
         HTTP_VERBS.GET,
