@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git commit -m ' *)",
+      "Bash(deno --version)",
+      "Bash(deno check *)",
+      "Bash(deno eval *)"
+    ]
+  }
+}
